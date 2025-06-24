@@ -43,22 +43,60 @@
 
     <!-- Desktop Navigation -->
     <nav class="hidden lg:flex space-x-6 text-sm font-medium">
-      @foreach($sections as $section)
-        <a class="hover:text-gray-300 transition-colors duration-200" href="{{ url('/section/' . Str::slug($section->name)) }}">
-          {{ $section->name }}
-        </a>
-      @endforeach
+      <a class="hover:text-gray-300 transition-colors duration-200" href="{{ url('/') }}#pemerintahan">Pemerintahan</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/arsitektur">Arsitektur</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/tempatibadah">Tempat Ibadah</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/budaya">Budaya</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/tokoh">Tokoh</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/situs-kota-lama">Situs Kota Lama</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/makan">Makanan</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/wisata">Pariwisata</a>
     </nav>
 
-    <!-- Mobile Navigation Menu -->
+    <!-- Mobile Menu Button -->
+    <button class="lg:hidden text-2xl" id="menuButton">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <button onclick="scrollToFooter()" 
+    class="hidden lg:block bg-red-600 hover:bg-red-800 text-white px-4 py-2 rounded-lg shadow-md transition-transform transform hover:scale-105">
+    Contact
+</button>
+
+<script>
+    function scrollToFooter() {
+        const footer = document.getElementById('footer');
+        if (footer) {
+            footer.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.location.href = "#footer"; // Jika footer belum termuat
+        }
+    }
+</script>
+  </header>
+
+  <!-- Mobile Navigation Menu -->
+  <div class="mobile-menu fixed top-0 left-0 h-full w-64 bg-red-800 text-white z-50 p-4 shadow-lg lg:hidden">
+    <div class="flex justify-between items-center mb-8">
+      <span class="font-bold">Menu</span>
+      <button class="text-2xl" id="closeMenu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
     <nav class="flex flex-col space-y-4">
-      @foreach($sections as $section)
-        <a class="hover:text-gray-300 transition-colors duration-200" href="{{ url('/section/' . Str::slug($section->name)) }}">
-          {{ $section->name }}
-        </a>
-      @endforeach
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/pemerintahan">Pemerintahan</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/arsitektur">Arsitektur</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/tempatibadah">Tempat Ibadah</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/budaya">Budaya</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/tokoh">Tokoh</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/situs-kota-lama">Situs Kota Lama</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/makan">Makanan</a>
+      <a class="hover:text-gray-300 transition-colors duration-200" href="/wisatasmg">Pariwisata</a>
     </nav>
-
+    <button class="mt-8 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition-transform transform hover:scale-105">
+      Contact
+    </button>
+  </div>
 
   <script>
     // Header scroll effect

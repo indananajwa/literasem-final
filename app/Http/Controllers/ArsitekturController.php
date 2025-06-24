@@ -14,7 +14,7 @@ class ArsitekturController extends Controller
     public function index()
     {
         $arsitektur = Arsitektur::all();
-        return view('content-manage.arsitektur', compact('arsitektur'));
+        return view('pengunjung.sections.arsitektur', compact('arsitektur'));
     }
 
     /**
@@ -33,7 +33,7 @@ class ArsitekturController extends Controller
     public function listForVisitors()
     {
         $arsitektur = Arsitektur::all();
-        return view('pengunjung.architecture', compact('arsitektur'));
+        return view('pengunjung.sections.arsitektur', compact('arsitektur'));
     }
 
     /**
@@ -41,7 +41,7 @@ class ArsitekturController extends Controller
      */
     public function create()
     {
-        return view('content-manage.arsitektur-create');
+        return view('pengunjung.sections.arsitektur-create');
     }
 
     /**
@@ -74,7 +74,7 @@ class ArsitekturController extends Controller
     public function edit(string $id)
     {
         $arsitektur = Arsitektur::findOrFail($id);
-        return view('content-manage.arsitektur-edit', compact('arsitektur'));
+        return view('pengunjung.sections.arsitektur-edit', compact('arsitektur'));
     }
 
     /**

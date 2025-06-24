@@ -14,7 +14,7 @@ class TokohController extends Controller
     public function index()
     {
         $tokoh = Tokoh::all();
-        return view('content-manage.tokoh', compact('tokoh'));
+        return view('pengunjung.sections.tokoh', compact('tokoh'));
     }
 
     /**
@@ -41,7 +41,7 @@ class TokohController extends Controller
      */
     public function create()
     {
-        return view('content-manage.tokoh-create');
+        return view('pengunjung.sections.tokoh-create');
     }
 
     /**
@@ -74,7 +74,7 @@ class TokohController extends Controller
     public function edit(string $id)
     {
         $tokoh = Tokoh::findOrFail($id);
-        return view('content-manage.tokoh-edit', compact('tokoh'));
+        return view('pengunjung.sections.tokoh-edit', compact('tokoh'));
     }
 
     /**

@@ -14,7 +14,7 @@ class MakananController extends Controller
     public function index()
     {
         $makanan = Makanan::all();
-        return view('content-manage.makanan', compact('makanan'));
+        return view('pengunjung.sections.makanan', compact('makanan'));
     }
 
     /**
@@ -41,7 +41,7 @@ class MakananController extends Controller
      */
     public function create()
     {
-        return view('content-manage.makanan-create');
+        return view('pengunjung.sections.makanan-create');
     }
 
     /**
@@ -74,7 +74,7 @@ class MakananController extends Controller
     public function edit(string $id)
     {
         $makanan = Makanan::findOrFail($id);
-        return view('content-manage.makanan-edit', compact('makanan'));
+        return view('pengunjung.sections.makanan-edit', compact('makanan'));
     }
 
     /**

@@ -22,7 +22,7 @@
         </a>
       </li>
       <li>
-        <a href="#" class="flex items-center gap-3 hover:translate-x-1 transition-all duration-200">
+        <a href="{{ route('manajemen_konten') }}" class="flex items-center gap-3 hover:translate-x-1 transition-all duration-200">
           <i data-lucide="file-pen-line" class="w-5 h-5 text-white"></i>
           Manajemen Konten
         </a>

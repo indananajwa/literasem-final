@@ -14,7 +14,7 @@ class BudayaController extends Controller
     public function index()
     {
         $budaya = Budaya::all();
-        return view('content-manage.budaya', compact('budaya'));
+        return view('pengunjung.sections.budaya', compact('budaya'));
     }
 
     /**
@@ -41,7 +41,7 @@ class BudayaController extends Controller
      */
     public function create()
     {
-        return view('content-manage.budaya-create');
+        return view('pengunjung.sections.budaya-create');
     }
 
     /**
@@ -82,7 +82,7 @@ class BudayaController extends Controller
     public function edit(string $id)
     {
         $budaya = Budaya::findOrFail($id);
-        return view('content-manage.budaya-edit', compact('budaya'));
+        return view('pengunjung.sections.budaya-edit', compact('budaya'));
     }
 
     /**
