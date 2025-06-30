@@ -9,14 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('tokoh', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_tokoh');
-            $table->text('deskripsi_tokoh');
-            $table->string('image_tokoh');
-            $table->timestamps();
+        Schema::table('konten', function (Blueprint $table) {
+            $table->tinyInteger('tampilan')->nullable()->after('mime_type'); // 1 atau 2
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tokoh');
+        Schema::table('konten', function (Blueprint $table) {
+            $table->dropColumn('tampilan');
+        });
     }
 };

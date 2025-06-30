@@ -26,11 +26,6 @@
 
     <!-- Tabel Daftar Section -->
             <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-lg font-semibold text-gray-700">Daftar Laporan Aduan</h4>
-                    <a href="{{ route('feedback.download') }}" class="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">
-                        <i class="fas fa-download mr-1"></i> Download Semua
-                    </a>
                 </div>
 
             <div class="overflow-x-auto">

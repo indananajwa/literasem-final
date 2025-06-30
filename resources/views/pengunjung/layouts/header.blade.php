@@ -51,6 +51,13 @@
       <a class="hover:text-gray-300 transition-colors duration-200" href="/situs-kota-lama">Situs Kota Lama</a>
       <a class="hover:text-gray-300 transition-colors duration-200" href="/makan">Makanan</a>
       <a class="hover:text-gray-300 transition-colors duration-200" href="/wisata">Pariwisata</a>
+    
+      @foreach ($additional_sections as $section)
+        <a class="hover:text-gray-300 transition-colors duration-200" href="{{ url('/section/' . $section->slug) }}">
+          {{ $section->name }}
+        </a>
+      @endforeach
+
     </nav>
 
     <!-- Mobile Menu Button -->
