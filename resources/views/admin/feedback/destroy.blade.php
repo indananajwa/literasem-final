@@ -8,9 +8,14 @@ use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {
+    public function index()
+    {
+        $feedback = DB::table('feedback')->orderBy('tanggal_kirim', 'desc')->get();
+        return view('admin.feedback.index', compact('feedback'));
+    }
+
     public function store(Request $request)
     {
-        // Validasi input
         $validator = Validator::make($request->all(), [
             'nama_pengunjung' => 'required|string|max:32',
             'email' => 'nullable|email|max:64',
@@ -30,7 +35,6 @@ class FeedbackController extends Controller
         }
 
         try {
-            // Simpan ke database
             DB::table('feedback')->insert([
                 'nama_pengunjung' => $request->nama_pengunjung,
                 'email' => $request->email,
@@ -43,10 +47,14 @@ class FeedbackController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
         }
     }
-    public function index()
-    {
-        $feedback = DB::table('feedback')->orderBy('tanggal_kirim', 'desc')->get();
-        return view('admin.feedback.index', compact('feedback'));
-    }
 
+    public function destroy($id)
+    {
+        try {
+            DB::table('feedback')->where('id', $id)->delete();
+            return redirect()->back()->with('success', 'Feedback berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus feedback.');
+        }
+    }
 }

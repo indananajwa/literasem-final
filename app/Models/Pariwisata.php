@@ -2,23 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pariwisata extends Model
 {
-    use HasFactory;
+    protected $table = 'pariwisata'; // 👈 Tambahkan baris ini
+    public $timestamps = true;
 
     protected $fillable = [
-        'nama', 
-        'deskripsi', 
-        'foto', 
-        'lokasi'
+        'nama',
+        'deskripsi',
+        'foto',
+        'mime_type',
+        'url_maps',
+        'lat',
+        'lng',
     ];
-
-    // Accessor untuk foto
-    public function getFotoAttribute($value)
-    {
-        return asset('storage/' . $value);
-    }
 }

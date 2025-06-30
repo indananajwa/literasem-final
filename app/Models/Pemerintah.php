@@ -14,7 +14,7 @@ class Pemerintah extends Model
     protected $fillable = [
         'nama', 
         'jabatan', 
-        'tahun_berkuasa', 
+        'tahun_awal', 
         'tahun_akhir', 
         'foto'
     ];

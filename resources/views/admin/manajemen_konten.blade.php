@@ -68,6 +68,55 @@
                 </div>
             </div>
 
-        
+            <!-- Daftar Kategori Khusus -->
+<div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <div class="flex justify-between items-center mb-4">
+        <h4 class="text-lg font-semibold text-gray-700">Daftar Kategori Khusus</h4>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kategori</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <!-- Pariwisata -->
+                <tr>
+                    <td class="px-4 py-2 text-gray-700">1</td>
+                    <td class="px-4 py-2 text-gray-700">Pariwisata</td>
+                    <td class="px-4 py-2 space-x-2">
+                        <a href="{{ route('admin.pariwisata.konten') }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Konten</a>
+                        <a href="{{ route('admin.pariwisata.create') }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</a>
+                        <form action="{{ route('admin.pariwisata.destroy', 1) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus semua data pariwisata?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+
+                <!-- Pemerintah -->
+                <tr>
+                    <td class="px-4 py-2 text-gray-700">2</td>
+                    <td class="px-4 py-2 text-gray-700">Pemerintah</td>
+                    <td class="px-4 py-2 space-x-2">
+                        <a href="{{ route('admin.pemerintah.konten') }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Konten</a>
+                        <a href="{{ route('admin.pemerintah.konten') }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</a>
+                        <form action="{{ route('pemerintah.destroy', 1) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus data pemerintah ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 </body>
 </html>

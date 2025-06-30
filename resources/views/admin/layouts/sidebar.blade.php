@@ -1,7 +1,7 @@
 <!-- Tambahkan Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
 
-<div class="w-64 min-h-screen bg-red-800 text-white flex flex-col justify-between py-8 px-5">
+<div class="w-64 fixed top-0 left-0 h-screen bg-red-800 text-white flex flex-col justify-between py-8 px-5 z-50">
   <!-- Logo & Judul -->
   <div>
     <div class="flex items-center space-x-3 mb-7">

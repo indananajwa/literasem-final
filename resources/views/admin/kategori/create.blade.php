@@ -33,6 +33,13 @@
             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
+    <!-- Judul Kategori -->
+    <div>
+        <label for="judul_kategori" class="block text-sm font-medium text-gray-700 mb-1">Judul Kategori</label>
+        <input type="text" id="judul_kategori" name="judul_kategori" required
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
     <!-- Nama Kategori -->
     <div>
         <label for="nama_kategori" class="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
@@ -96,8 +103,8 @@
           <label for="tampilan" class="block mb-1">Tampilan</label>
           <select name="tampilan" id="tampilan" class="w-full border p-2 rounded">
               <option value="">Pilih Tampilan</option>
-              <option value="1" {{ old('tampilan', $kategori->tampilan ?? '') == 1 ? 'selected' : '' }}>Tampilan 1</option>
-              <option value="2" {{ old('tampilan', $kategori->tampilan ?? '') == 2 ? 'selected' : '' }}>Tampilan 2</option>
+              <option value="1" {{ old('tampilan', $kategori->tampilan ?? '') == 0 ? 'selected' : '' }}>Tampilan 1</option>
+              <option value="2" {{ old('tampilan', $kategori->tampilan ?? '') == 1 ? 'selected' : '' }}>Tampilan 2</option>
           </select>
       </div>
 

@@ -2,15 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Pariwisata;
 use Illuminate\Http\Request;
 
 class PariwisataController extends Controller
 {
+    // Untuk halaman publik
     public function index()
     {
-        $pariwisata = Pariwisata::all();
-        return view('pengunjung.sections.pariwisata', compact('pariwisata'));
+        $data = Pariwisata::all();
+        $highlight = Pariwisata::limit(5)->get();
+        return view('pengunjung.pariwisata', compact('data', 'highlight'));
+    }
+
+    public function adminView()
+    {
+        $pariwisataList = Pariwisata::all();
+        return view('admin.manajemen_konten', compact('pariwisataList'));
+    }
+
+    public function adminIndex()
+    {
+        $pariwisataList = Pariwisata::all();
+        return view('admin.konten.tampilan_pariwisata', compact('pariwisataList'));
     }
 
     public function create()
@@ -21,59 +36,78 @@ class PariwisataController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'deskripsi' => 'required',
-            'lokasi' => 'required|url', // Validasi link
+            'nama' => 'required|string|max:64',
+            'deskripsi' => 'required|string',
             'foto' => 'nullable|image',
+            'url_maps' => 'nullable|url',
+            'lat' => 'nullable|numeric',
+            'lng' => 'nullable|numeric',
         ]);
 
-        $fotoPath = $request->file('foto') ? $request->file('foto')->store('public/foto_pariwisata') : null;
+        $data = $request->all();
 
-        Pariwisata::create([
-            'nama' => $request->nama,
-            'deskripsi' => $request->deskripsi,
-            'lokasi' => $request->lokasi,
-            'foto' => $fotoPath,
-        ]);
+        if ($request->hasFile('foto')) {
+            $data['foto'] = file_get_contents($request->file('foto')->getRealPath());
+            $data['mime_type'] = $request->file('foto')->getClientMimeType();
+        }
 
-        return redirect()->route('pariwisata.index');
+        Pariwisata::create($data);
+
+        return redirect()->route('admin.manajemen-konten');
     }
 
     public function edit($id)
     {
-        $pariwisata = Pariwisata::findOrFail($id);
-        return view('admin.pariwisata.edit', compact('pariwisata'));
+        $item = Pariwisata::findOrFail($id);
+        return view('admin.pariwisata.edit', compact('item'));
     }
 
     public function update(Request $request, $id)
     {
-        $pariwisata = Pariwisata::findOrFail($id);
-        
+        $item = Pariwisata::findOrFail($id);
+
         $request->validate([
-            'nama' => 'required',
-            'deskripsi' => 'required',
-            'lokasi' => 'required|url',
+            'nama' => 'required|string|max:64',
+            'deskripsi' => 'required|string',
             'foto' => 'nullable|image',
+            'url_maps' => 'nullable|url',
+            'lat' => 'nullable|numeric',
+            'lng' => 'nullable|numeric',
         ]);
 
-        $fotoPath = $request->file('foto') ? $request->file('foto')->store('public/foto_pariwisata') : $pariwisata->foto;
+        if ($request->hasFile('foto')) {
+            $item->foto = file_get_contents($request->file('foto')->getRealPath());
+            $item->mime_type = $request->file('foto')->getClientMimeType();
+        }
 
-        $pariwisata->update([
-            'nama' => $request->nama,
-            'deskripsi' => $request->deskripsi,
-            'lokasi' => $request->lokasi,
-            'foto' => $fotoPath,
-        ]);
+        $item->nama = $request->nama;
+        $item->deskripsi = $request->deskripsi;
+        $item->url_maps = $request->url_maps;
+        $item->lat = $request->lat;
+        $item->lng = $request->lng;
 
-        return redirect()->route('pariwisata.index');
+        $item->save();
+
+        return redirect()->route('admin.manajemen-konten');
     }
 
     public function destroy($id)
     {
-        $pariwisata = Pariwisata::findOrFail($id);
-        $pariwisata->delete();
+        $item = Pariwisata::findOrFail($id);
+        $item->delete();
 
-        return redirect()->route('pariwisata.index');
+        return redirect()->route('admin.manajemen-konten');
     }
-}
 
+    public function gambar($id)
+    {
+        $item = Pariwisata::findOrFail($id);
+
+        if (!$item->foto) {
+            abort(404);
+        }
+
+        return response($item->foto)->header('Content-Type', $item->mime_type);
+    }
+    
+}

@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('kategori', function (Blueprint $table) {
             $table->char('kode_kategori', 3)->primary();
             $table->string('nama_kategori', 32);
+            $table->string('judul_kategori', 32);
             $table->text('deskripsi_kategori')->nullable();
             $table->binary('gambar_cover')->nullable();           // sementara pakai binary
             $table->string('mime_type', 50)->nullable();

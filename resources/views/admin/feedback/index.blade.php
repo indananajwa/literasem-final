@@ -20,14 +20,14 @@
         @include('admin.layouts.header')
 
         <!-- Judul Section -->
-    <div class="bg-white p-6">
-      <h1 class="text-2xl font-bold text-gray-800 mb-4">Laporan Aduan Pengunjung Website LITERASEM</h1>
-    </div>
+        <div class="bg-white p-6">
+            <h1 class="text-2xl font-bold text-gray-800 mb-4">
+                Laporan Aduan Pengunjung Website LITERASEM
+            </h1>
+        </div>
 
-    <!-- Tabel Daftar Section -->
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                </div>
-
+        <!-- Tabel Daftar Section -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200 text-sm">
                     <thead class="bg-gray-50">
@@ -42,10 +42,12 @@
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($feedback as $item)
                             <tr class="text-center hover:bg-gray-100">
-                                <td class="px-4 py-2">{{ $item->name_pengunjung }}</td>
-                                <td class="px-4 py-2">{{ $item->email_pengunjung }}</td>
-                                <td class="px-4 py-2">{{ $item->feedback_pengunjung }}</td>
-                                <td class="px-4 py-2">{{ $item->created_at->format('d M Y, H:i') }}</td>
+                                <td class="px-4 py-2">{{ $item->nama_pengunjung }}</td>
+                                <td class="px-4 py-2">{{ $item->email }}</td>
+                                <td class="px-4 py-2">{{ $item->pesan }}</td>
+                                <td class="px-4 py-2">
+                                    {{ \Carbon\Carbon::parse($item->tanggal_kirim)->format('d M Y, H:i') }}
+                                </td>
                                 <td class="px-4 py-2">
                                     <form action="{{ route('feedback.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus?')">
                                         @csrf

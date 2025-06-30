@@ -1,74 +1,86 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\Kategori;
-use App\Models\Konten;
+use Illuminate\Support\Facades\Log;
 
 class PengunjungController extends Controller
 {
     /**
-     * Menampilkan halaman utama atau daftar semua Kategori untuk pengunjung.
+     * Menampilkan halaman utama (index)
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        // Ambil semua Kategori dari database
-        $kategoris = Kategori::all();
-
-        // Mengirim data Kategoris ke view 'pengunjung.homepage'
-        return view('pengunjung.homepage', compact('kategoris'));
+        return view('pengunjung.index');
     }
 
     /**
-     * Menampilkan detail sebuah kategori dan konten-konten di dalamnya.
+     * Menampilkan halaman pemerintahan
+     *
+     * @return \Illuminate\View\View
      */
-    public function showKategori()
+    public function pemerintahan()
     {
-        // Ambil salah satu kategori sebagai default (misal yang pertama)
-        $kategori = Kategori::firstOrFail();
+        return view('pengunjung.pemerintahan');
+    }
 
-        // Ambil semua konten terkait kategori
-        $kontens = Konten::where('kode_kategori', $kategori->kode_kategori)->get();
+    /**
+     * Menampilkan halaman masa ke masa
+     *
+     * @return \Illuminate\View\View
+     */
+    public function masaKeMasa()
+    {
+        return view('pengunjung.masa-ke-masa');
+    }
 
-        // Cek apakah kategori ini pakai blade custom
-        $customKategoris = [
-            'arsitektur',
-            'budaya',
-            'makanan',
-            'pariwisata',
-            'tempat-ibadah',
-            'tokoh',
-            'situs-kota-lama',
-            'pemerintahan',
-        ];
+    public function situsKotaLama()
+    {
+        return view('pengunjung.situs-kota-lama');
+    }
 
-        // Jika slug-nya masuk daftar kategori custom, arahkan ke tampilan custom
-        if (in_array($kategori->slug, $customKategoris)) {
-            return view('pengunjung.kategori.custom', compact('kategori', 'kontens'));
+    public function showKategori($kode_kategori)
+    {
+        // Fetch category details
+        $kategori = DB::table('kategori')
+            ->where('kode_kategori', $kode_kategori)
+            ->first();
+
+        if (!$kategori) {
+            abort(404, 'Kategori tidak ditemukan');
         }
 
-        // Kalau bukan kategori custom, tampilkan berdasarkan 'tampilan'
-        $tampilan = $kategori->tampilan ?? null;
+        // Fetch related content for the category
+        $konten = DB::table('konten')
+            ->where('kode_kategori', $kode_kategori)
+            ->get()
+            ->map(function ($item) {
+                // Convert binary image to base64 if exists
+                $item->gambar_base64 = ($item->gambar && $item->mime_type)
+                    ? 'data:' . $item->mime_type . ';base64,' . base64_encode($item->gambar)
+                    : null;
+                return $item;
+            });
 
-        $viewName = match ($tampilan) {
-            1 => 'pengunjung.default.default_1',
-            2 => 'pengunjung.default.default_2',
-            default => 'pengunjung.default.default_1',
-        };
+        // Pre-process tourData for the view
+        $tourData = $konten->map(function ($item) {
+            return [
+                'id' => $item->kode_konten,
+                'name' => $item->judul,
+                'images' => [$item->gambar_base64],
+                'video' => $item->video_url,
+                'description' => $item->deskripsi,
+            ];
+        })->toArray();
 
-        return view($viewName, compact('kategori', 'kontens'));
+        // Log tourData for debugging
+        Log::info('tourData for category ' . $kode_kategori, ['tourData' => $tourData]);
+
+        return view('pengunjung.kategori.page1', compact('kategori', 'konten', 'tourData'));
     }
 
-    /**
-     * Menampilkan detail satu konten secara penuh.
-     */
-    public function showKonten($slug_konten)
-    {
-        // Cari konten berdasarkan slug
-        $konten = Konten::where('slug', $slug_konten)->firstOrFail();
 
-        // Kirim ke view detail
-        return view('pengunjung.detail_konten', compact('konten'));
-    }
 }
