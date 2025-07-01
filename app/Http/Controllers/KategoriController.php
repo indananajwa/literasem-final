@@ -61,9 +61,29 @@ public function store(Request $request)
 
 public function edit($kode)
 {
+    // Ambil kategori berdasarkan kode
     $kategori = DB::table('kategori')->where('kode_kategori', $kode)->first();
+
+    // Jika tidak ditemukan, tampilkan 404
+    if (!$kategori) {
+        abort(404, 'Kategori tidak ditemukan');
+    }
+
+    // Decode field_rules dari JSON ke array agar bisa digunakan di blade
+    if (!empty($kategori->field_rules)) {
+        $decoded = json_decode($kategori->field_rules, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            $kategori->field_rules = $decoded;
+        } else {
+            $kategori->field_rules = []; // fallback kosong
+        }
+    } else {
+        $kategori->field_rules = []; // fallback kosong
+    }
+
     return view('admin.kategori.edit', ['kategori' => $kategori]);
 }
+
 
 public function update(Request $request, $kode)
 {

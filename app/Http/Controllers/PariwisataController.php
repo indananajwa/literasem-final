@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Pariwisata;
 use Illuminate\Http\Request;
 
 class PariwisataController extends Controller
 {
-    // Untuk halaman publik
+    // Halaman untuk pengunjung
     public function index()
     {
         $data = Pariwisata::all();
@@ -16,23 +15,14 @@ class PariwisataController extends Controller
         return view('pengunjung.pariwisata', compact('data', 'highlight'));
     }
 
+    // Halaman admin
     public function adminView()
-    {
-        $pariwisataList = Pariwisata::all();
-        return view('admin.manajemen_konten', compact('pariwisataList'));
-    }
-
-    public function adminIndex()
     {
         $pariwisataList = Pariwisata::all();
         return view('admin.konten.tampilan_pariwisata', compact('pariwisataList'));
     }
 
-    public function create()
-    {
-        return view('admin.pariwisata.create');
-    }
-
+    // Tambah konten pariwisata
     public function store(Request $request)
     {
         $request->validate([
@@ -53,15 +43,10 @@ class PariwisataController extends Controller
 
         Pariwisata::create($data);
 
-        return redirect()->route('admin.manajemen-konten');
+        return redirect()->route('admin.pariwisata.konten')->with('success', 'Konten berhasil ditambahkan');
     }
 
-    public function edit($id)
-    {
-        $item = Pariwisata::findOrFail($id);
-        return view('admin.pariwisata.edit', compact('item'));
-    }
-
+    // Update konten pariwisata via modal edit
     public function update(Request $request, $id)
     {
         $item = Pariwisata::findOrFail($id);
@@ -88,17 +73,19 @@ class PariwisataController extends Controller
 
         $item->save();
 
-        return redirect()->route('admin.manajemen-konten');
+        return redirect()->route('admin.pariwisata.konten')->with('success', 'Konten berhasil diperbarui');
     }
 
+    // Hapus konten pariwisata
     public function destroy($id)
     {
         $item = Pariwisata::findOrFail($id);
         $item->delete();
 
-        return redirect()->route('admin.manajemen-konten');
+        return redirect()->route('admin.pariwisata.konten')->with('success', 'Konten berhasil dihapus');
     }
 
+    // Gambar untuk frontend
     public function gambar($id)
     {
         $item = Pariwisata::findOrFail($id);
@@ -109,5 +96,4 @@ class PariwisataController extends Controller
 
         return response($item->foto)->header('Content-Type', $item->mime_type);
     }
-    
 }

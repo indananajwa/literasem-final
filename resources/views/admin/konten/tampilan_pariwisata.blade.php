@@ -41,8 +41,17 @@
                     <td class="px-4 py-2">{{ $item->lat }}</td>
                     <td class="px-4 py-2">{{ $item->lng }}</td>
                     <td class="px-4 py-2"><a href="{{ $item->url_maps }}" target="_blank" class="text-blue-600 underline">Lihat</a></td>
+                    <!-- Tombol Aksi -->
                     <td class="px-4 py-2 space-x-2">
-                        <a href="{{ route('admin.pariwisata.edit', $item->id) }}" class="bg-yellow-500 text-white px-3 py-1 rounded">Edit</a>
+                        <button 
+                            type="button"
+                            onclick="openEditModal({{ $item->id }}, '{{ $item->nama }}', `{{ $item->deskripsi }}`, '{{ $item->url_maps }}', '{{ $item->lat }}', '{{ $item->lng }}')"
+                            class="bg-yellow-500 text-white px-3 py-1 rounded"
+                        >
+                            Edit
+                        </button>
+
+
                         <form action="{{ route('admin.pariwisata.destroy', $item->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus konten ini?');">
                             @csrf
                             @method('DELETE')
@@ -94,14 +103,73 @@
     </div>
 </div>
 
+{{-- Modal Edit Konten --}}
+<div id="editContentModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4">Edit Konten Pariwisata</h2>
+        <form id="editForm" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Nama</label>
+                <input type="text" name="nama" id="edit_nama" required class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Deskripsi</label>
+                <textarea name="deskripsi" id="edit_deskripsi" rows="3" class="w-full border rounded px-3 py-2"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Foto (Opsional)</label>
+                <input type="file" name="foto" class="w-full">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-1">URL Maps</label>
+                <input type="url" name="url_maps" id="edit_url_maps" class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Latitude</label>
+                <input type="text" name="lat" id="edit_lat" class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Longitude</label>
+                <input type="text" name="lng" id="edit_lng" class="w-full border rounded px-3 py-2">
+            </div>
+            <div class="flex justify-end">
+                <button type="button" onclick="closeEditModal()" class="mr-2 px-4 py-2 border rounded">Batal</button>
+                <button type="submit" class="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
     function openAddModal() {
         document.getElementById('addContentModal').classList.remove('hidden');
     }
+
     function closeAddModal() {
         document.getElementById('addContentModal').classList.add('hidden');
     }
+
+    function openEditModal(id, nama, deskripsi, url_maps, lat, lng) {
+        const form = document.getElementById('editForm');
+        form.action = `/admin/pariwisata/${id}`; // Pastikan route ini sesuai dengan Route::put()
+
+        document.getElementById('edit_nama').value = nama;
+        document.getElementById('edit_deskripsi').value = deskripsi;
+        document.getElementById('edit_url_maps').value = url_maps;
+        document.getElementById('edit_lat').value = lat;
+        document.getElementById('edit_lng').value = lng;
+
+        document.getElementById('editContentModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editContentModal').classList.add('hidden');
+    }
 </script>
+
 </div>
 </body>
 </html>

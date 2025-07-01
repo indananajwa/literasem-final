@@ -78,22 +78,28 @@ Route::middleware(['auth'])->group(function () {
 
     // Route untuk pariwisata
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/pariwisata', [PariwisataController::class, 'adminView'])->name('manajemen-konten'); // untuk halaman gabungan
-        Route::get('/pariwisata/{id}/edit', [PariwisataController::class, 'edit'])->name('pariwisata.edit');
-        Route::delete('/pariwisata/{id}', [PariwisataController::class, 'destroy'])->name('pariwisata.destroy');
+        Route::get('/pariwisata/konten', [PariwisataController::class, 'adminView'])->name('pariwisata.konten');
         Route::post('/kategori/pariwisata', [PariwisataController::class, 'store'])->name('pariwisata.store');
-        Route::get('/pariwisata/create', [PariwisataController::class, 'create'])->name('pariwisata.create');
         Route::put('/pariwisata/{id}', [PariwisataController::class, 'update'])->name('pariwisata.update');
-        Route::get('/pariwisata/konten', [PariwisataController::class, 'adminIndex'])->name('pariwisata.konten');
+        Route::delete('/pariwisata/{id}', [PariwisataController::class, 'destroy'])->name('pariwisata.destroy');
     });
 
-    // Route untuk pemerintah
+    
     // Route untuk pemerintah
     Route::prefix('admin')->name('admin.')->group(function () {
+        // Route untuk halaman utama manajemen pemerintah
         Route::get('/pemerintah/konten', [PemerintahController::class, 'adminIndex'])->name('pemerintah.konten');
+        
+        // Route untuk CRUD operations
         Route::post('/pemerintah', [PemerintahController::class, 'store'])->name('pemerintah.store');
-        Route::put('/pemerintah/{id}', [PemerintahController::class, 'update'])->name('pemerintah.update');
-        Route::delete('/pemerintah/{id}', [PemerintahController::class, 'destroy'])->name('pemerintah.destroy');
+        Route::put('/pemerintah/{periode}', [PemerintahController::class, 'update'])->name('pemerintah.update');
+        Route::delete('/pemerintah/{periode}', [PemerintahController::class, 'destroy'])->name('pemerintah.destroy');
+        
+        // Route untuk menampilkan foto
+        Route::get('/pemerintah/{periode}/foto/{type?}', [PemerintahController::class, 'showFoto'])->name('pemerintah.foto');
+        
+        // Route opsional untuk index biasa
+        Route::get('/pemerintah', [PemerintahController::class, 'index'])->name('pemerintah.index');
     });
 
 
@@ -111,9 +117,20 @@ Route::middleware(['auth'])->group(function () {
 
 // Landing Page dan Halaman Utama
 Route::get('/', [PengunjungController::class, 'index'])->name('home');
-Route::get('/pemerintahan', [PengunjungController::class, 'pemerintahan'])->name('pemerintahan');
 Route::get('/masa-ke-masa', [PengunjungController::class, 'masaKeMasa'])->name('masa-ke-masa');
 Route::get('/situs-kota-lama', [PengunjungController::class, 'situsKotaLama'])->name('situs-kota-lama');
+Route::get('/pemerintahan/foto/{periode}/{type?}', [PengunjungController::class, 'showFotoPemerintahan'])
+    ->name('pengunjung.pemerintahan.foto');
+    
+// Routes untuk pengunjung
+Route::get('/pemerintahan', [PemerintahController::class, 'timelinePemerintahan'])->name('pengunjung.pemerintahan.timeline');
+Route::get('/pemerintahan/current', [PemerintahController::class, 'currentPemerintahan'])->name('pengunjung.pemerintahan.current');
+Route::get('/pemerintahan/detail/{periode}', [PemerintahController::class, 'detailPemerintahan'])->name('pengunjung.pemerintahan.detail');
+Route::get('/pemerintahan/search', [PemerintahController::class, 'searchPemerintahan'])->name('pengunjung.pemerintahan.search');
+Route::get('/pemerintahan/statistik', [PemerintahController::class, 'statistikPemerintahan'])->name('pengunjung.pemerintahan.statistik');
+Route::get('/pemerintahan/foto/{periode}/{type?}', [PemerintahController::class, 'publicFoto'])->name('pengunjung.pemerintahan.foto');
+Route::get('/api/pemerintahan', [PemerintahController::class, 'apiPemerintahan'])->name('api.pemerintahan');
+
 
 // Halaman kategori & konten
 Route::get('/kategori', [PengunjungController::class, 'showKategori'])->name('pengunjung.kategori');
@@ -147,5 +164,4 @@ Route::resources([
     'tokoh'      => TokohController::class,
     'kotalama'   => KotaLamaController::class,
     'budaya'     => BudayaController::class,
-    'pariwisata' => PariwisataController::class,
 ]);

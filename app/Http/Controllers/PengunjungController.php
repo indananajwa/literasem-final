@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\Pemerintah;
 
 class PengunjungController extends Controller
 {
@@ -14,7 +15,10 @@ class PengunjungController extends Controller
      */
     public function index()
     {
-        return view('pengunjung.index');
+        // Ambil data pemerintahan untuk ditampilkan di halaman index
+        $pemerintahan = Pemerintah::orderBy('periode', 'desc')->get();
+        
+        return view('pengunjung.index', compact('pemerintahan'));
     }
 
     /**
@@ -24,7 +28,9 @@ class PengunjungController extends Controller
      */
     public function pemerintahan()
     {
-        return view('pengunjung.pemerintahan');
+        $pemerintahan = Pemerintah::orderBy('periode', 'desc')->get();
+        
+        return view('pengunjung.pemerintahan', compact('pemerintahan'));
     }
 
     /**
@@ -82,5 +88,27 @@ class PengunjungController extends Controller
         return view('pengunjung.kategori.page1', compact('kategori', 'konten', 'tourData'));
     }
 
+    /**
+     * Method untuk menampilkan foto pemerintahan (untuk pengunjung)
+     */
+    public function showFotoPemerintahan($periode, $type = 'walikota')
+    {
+        $pemerintah = Pemerintah::findOrFail($periode);
+        
+        if ($type === 'wakil') {
+            $foto = $pemerintah->foto_wakil_walikota;
+            $mimeType = $pemerintah->mime_type_wakil_walikota;
+        } else {
+            $foto = $pemerintah->foto_walikota;
+            $mimeType = $pemerintah->mime_type_walikota;
+        }
 
+        if (!$foto) {
+            abort(404);
+        }
+
+        return response($foto)
+            ->header('Content-Type', $mimeType)
+            ->header('Cache-Control', 'public, max-age=86400'); // 24 hours cache
+    }
 }

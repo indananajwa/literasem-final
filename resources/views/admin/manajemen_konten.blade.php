@@ -90,12 +90,6 @@
                     <td class="px-4 py-2 text-gray-700">Pariwisata</td>
                     <td class="px-4 py-2 space-x-2">
                         <a href="{{ route('admin.pariwisata.konten') }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Konten</a>
-                        <a href="{{ route('admin.pariwisata.create') }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</a>
-                        <form action="{{ route('admin.pariwisata.destroy', 1) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus semua data pariwisata?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">Hapus</button>
-                        </form>
                     </td>
                 </tr>
 
@@ -105,12 +99,6 @@
                     <td class="px-4 py-2 text-gray-700">Pemerintah</td>
                     <td class="px-4 py-2 space-x-2">
                         <a href="{{ route('admin.pemerintah.konten') }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">Konten</a>
-                        <a href="{{ route('admin.pemerintah.konten') }}" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">Edit</a>
-                        <form action="{{ route('pemerintah.destroy', 1) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin menghapus data pemerintah ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">Hapus</button>
-                        </form>
                     </td>
                 </tr>
             </tbody>

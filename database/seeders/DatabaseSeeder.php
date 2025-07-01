@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             PariwisataSeeder::class,
             KategoriSeeder::class,
             KontenSeeder::class,
+            PemerintahSeeder::class,
             // Masalampau::class,
         ]);
     }
