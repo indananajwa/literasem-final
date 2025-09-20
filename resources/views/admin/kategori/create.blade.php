@@ -101,11 +101,12 @@
     <!-- Opsi -->
      <div class="mb-4">
           <label for="tampilan" class="block mb-1">Tampilan</label>
-          <select name="tampilan" id="tampilan" class="w-full border p-2 rounded">
+          <select name="field_rules[tampilan]" id="tampilan" class="w-full border p-2 rounded">
               <option value="">Pilih Tampilan</option>
-              <option value="1" {{ old('tampilan', $kategori->tampilan ?? '') == 0 ? 'selected' : '' }}>Tampilan 1</option>
-              <option value="2" {{ old('tampilan', $kategori->tampilan ?? '') == 1 ? 'selected' : '' }}>Tampilan 2</option>
+              <option value="0" {{ old('field_rules.tampilan', $kategori->field_rules['tampilan'] ?? '') == 0 ? 'selected' : '' }}>Tampilan 1</option>
+              <option value="1" {{ old('field_rules.tampilan', $kategori->field_rules['tampilan'] ?? '') == 1 ? 'selected' : '' }}>Tampilan 2</option>
           </select>
+
       </div>
 
 

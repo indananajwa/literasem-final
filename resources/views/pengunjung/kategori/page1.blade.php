@@ -58,13 +58,15 @@
     @if(isset($fieldRules['highlight']) && $fieldRules['highlight'] === 'required')
         @include('pengunjung.kategori.highlight')
     @endif
+    
 
     <!-- Detail Section -->
-    @if(isset($fieldRules['tampilan']) && $fieldRules['tampilan'] === 1)
+    @if(isset($fieldRules['tampilan']) && $fieldRules['tampilan'] === '1')
         @include('pengunjung.kategori.kategori1')
     @else
         @include('pengunjung.kategori.kategori0')
     @endif
+
     <script>
         window.kategoriDataFromPHP = {!! json_encode($kategoriForJS ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!};
         window.fieldRulesFromPHP = {!! json_encode($fieldRules ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!};

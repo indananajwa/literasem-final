@@ -34,7 +34,6 @@ public function store(Request $request)
         'deskripsi_kategori' => 'required|string',
         'gambar_cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         'field_rules' => 'nullable|array',
-        'tampilan' => 'nullable|integer|in:1,2',
     ]);
 
     $gambar = null;
@@ -45,6 +44,8 @@ public function store(Request $request)
         $mimeType = $request->file('gambar_cover')->getMimeType();
     }
 
+    
+
     DB::table('kategori')->insert([
         'kode_kategori' => $request->kode_kategori,
         'nama_kategori' => $request->nama_kategori,
@@ -53,7 +54,6 @@ public function store(Request $request)
         'gambar_cover' => $gambar,
         'mime_type' => $mimeType,
         'field_rules' => json_encode($request->field_rules),
-        'tampilan' => $request->tampilan,
     ]);
 
     return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil ditambahkan');
@@ -93,7 +93,6 @@ public function update(Request $request, $kode)
         'deskripsi_kategori' => 'nullable|string',
         'gambar_cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         'field_rules' => 'nullable|array',
-        'tampilan' => 'nullable|integer|in:1,2',
     ]);
 
     $kategori = DB::table('kategori')->where('kode_kategori', $kode)->first();
@@ -113,7 +112,6 @@ public function update(Request $request, $kode)
         'gambar_cover' => $gambar,
         'mime_type' => $mimeType,
         'field_rules' => json_encode($request->field_rules),
-        'tampilan' => $request->tampilan,
     ]);
 
     return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil diperbarui.');
@@ -171,6 +169,14 @@ public function show($kodeKategori)
                 $fieldRules = $decodedRules;
             }
         }
+
+            // TAMBAHKAN DEBUG INI
+        Log::info('Field Rules Debug', [
+            'raw_field_rules' => $kategori->field_rules,
+            'decoded_field_rules' => $fieldRules,
+            'tampilan_value' => $fieldRules['tampilan'] ?? 'not_set',
+            'tampilan_type' => gettype($fieldRules['tampilan'] ?? null),
+        ]);
 
         // Buat array yang akan dikirim ke JavaScript
         $tourData = $kontenList->map(function ($item) {

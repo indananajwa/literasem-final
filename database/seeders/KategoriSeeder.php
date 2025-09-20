@@ -17,7 +17,7 @@ class KategoriSeeder extends Seeder
                 'deskripsi_kategori' => 'Keindahan yang Tak Lekang oleh Waktu',
                 'cover_path' => public_path('cover/cover_budaya.png'),
                 'field_rules' => [
-                    "tampilan" => 0,
+                    "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "required",
                     "image" => "required",
@@ -33,7 +33,7 @@ class KategoriSeeder extends Seeder
                 'deskripsi_kategori' => 'Menelusuri Jejak Arsitektur Semarang, Dari Masa ke Masa',
                 'cover_path' => public_path('cover/cover_arsi.jpg'),
                 'field_rules' => [
-                    "tampilan" => 0,
+                    "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
                     "image" => "optional",
@@ -49,7 +49,7 @@ class KategoriSeeder extends Seeder
                 'deskripsi_kategori' => 'Menapaki Keagungan Tempat Ibadah Bersejarah di Semarang',
                 'cover_path' => public_path('cover/cover_ibadah.jpg'),
                 'field_rules' => [
-                    "tampilan" => 0,
+                    "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
                     "image" => "required",
@@ -65,7 +65,7 @@ class KategoriSeeder extends Seeder
                 'deskripsi_kategori' => 'Mengenal Sosok-Sosok Berpengaruh dari Sejarah Semarang',
                 'cover_path' => public_path('cover/tokoh.png'),
                 'field_rules' => [
-                    "tampilan" => 1,
+                    "tampilan" => "1",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
                     "image" => "required",
@@ -81,7 +81,7 @@ class KategoriSeeder extends Seeder
                 'deskripsi_kategori' => 'Kaya Rasa, Sarat Makna',
                 'cover_path' => public_path('cover/cover_pariwisata.jpg'), // atau ganti sesuai gambar
                 'field_rules' => [
-                    "tampilan" => 1,
+                    "tampilan" => "1",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
                     "image" => "required",

@@ -14,7 +14,7 @@ function initializeData(kategoriDataFromPHP, fieldRulesFromPHP, tourDataFromPHP)
     tourData = tourDataFromPHP || [];
     
     // Determine template type based on tampilan field
-    templateType = (fieldRules.tampilan === 1) ? 'card' : 'default';
+    templateType = (fieldRules.tampilan === '1') ? 'card' : 'default';
     
     // Set detailSection based on template type
     if (templateType === 'card') {

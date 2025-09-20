@@ -158,10 +158,10 @@ Route::delete('/admin/feedback/{id}', [FeedbackController::class, 'destroy'])->n
 // Public resource routes (kategori tematik)
 Route::resources([
     'pemerintah' => PemerintahController::class,
-    'arsitektur' => ArsitekturController::class,
-    'ibadah'     => IbadahController::class,
-    'makanan'    => MakananController::class,
-    'tokoh'      => TokohController::class,
-    'kotalama'   => KotaLamaController::class,
-    'budaya'     => BudayaController::class,
+    // 'arsitektur' => ArsitekturController::class,
+    // 'ibadah'     => IbadahController::class,
+    // 'makanan'    => MakananController::class,
+    // 'tokoh'      => TokohController::class,
+    // 'kotalama'   => KotaLamaController::class,
+    // 'budaya'     => BudayaController::class,
 ]);
