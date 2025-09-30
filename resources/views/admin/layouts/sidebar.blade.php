@@ -1,58 +1,68 @@
-<!-- Tambahkan Lucide Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
 
-<div class="w-64 fixed top-0 left-0 h-screen bg-red-800 text-white flex flex-col justify-between py-8 px-5 z-50">
-  <!-- Logo & Judul -->
+<style>
+  .sidebar-menu-item {
+    transition: all 0.25s ease;
+    border-radius: 14px;
+  }
+  .sidebar-menu-item:hover {
+    background-color: rgba(153, 27, 27, 0.08);
+  }
+  .sidebar-menu-item.active {
+    background: linear-gradient(90deg, #991B1B 0%, #7F1D1D 100%);
+    color: white !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+  }
+  .sidebar-menu-item.active i,
+  .sidebar-menu-item.active svg {
+    color: white !important;
+    stroke: white !important;
+  }
+  .sidebar-menu-item:not(.active):hover {
+    color: #991B1B;
+  }
+</style>
+
+<div class="w-64 fixed top-0 left-0 h-screen bg-white flex flex-col justify-between py-6 px-5 border-r border-gray-200 shadow-sm overflow-y-auto">
+  <!-- Logo & Brand -->
   <div>
-    <div class="flex items-center space-x-3 mb-7">
-      <img src="{{ asset('img/logo.png') }}" alt="Logo" class="w-10 h-10">
+    <div class="flex items-center space-x-3 mb-10 px-2">
+      <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-700 to-red-900 flex items-center justify-center shadow-md">
+        <img src="{{ asset('img/logo.png') }}" alt="Logo" class="w-7 h-7">
+      </div>
       <div>
-        <p class="text-sm">Admin <span class="font-bold">LITERASEM</span></p>
-        <p class="text-xs">Literasi Arsip Semarang</p>
+        <p class="text-gray-800 font-semibold text-base leading-tight">
+          <span class="text-red-700">LITERASEM</span>
+        </p>
+        <p class="text-xs text-gray-500">Literasi Arsip Semarang</p>
       </div>
     </div>
-    <hr class="border-gray-300 mb-8">
 
     <!-- MENU -->
-    <ul class="space-y-5 text-sm pl-2">
-      <li>
-        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:translate-x-1 transition-all duration-200">
-          <i data-lucide="layout-dashboard" class="w-5 h-5 text-white"></i>
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="{{ route('manajemen_konten') }}" class="flex items-center gap-3 hover:translate-x-1 transition-all duration-200">
-          <i data-lucide="file-pen-line" class="w-5 h-5 text-white"></i>
-          Manajemen Konten
-        </a>
-      </li>
-      <li>
-        <a href="{{ route('admin.feedback.index') }}" class="flex items-center gap-3 hover:translate-x-1 transition-all duration-200">
-          <i data-lucide="megaphone" class="w-5 h-5 text-white"></i>
-          Laporan Aduan
-        </a>
-      </li>
-    </ul>
+    <nav class="space-y-2 text-sm font-medium">
+      <a href="{{ route('admin.dashboard') }}" 
+         class="sidebar-menu-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} flex items-center gap-3 px-4 py-3 text-gray-700 group">
+        <i data-lucide="layout-dashboard" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        <span>Dashboard</span>
+      </a>
+      
+      <a href="{{ route('admin.kategori.index') }}" 
+         class="sidebar-menu-item {{ request()->routeIs('admin.kategori.*') || request()->routeIs('admin.konten.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-3 text-gray-700 group">
+        <i data-lucide="file-pen-line" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        <span>Manajemen Konten</span>
+      </a>
+      
+      <a href="{{ route('admin.feedback.index') }}" 
+         class="sidebar-menu-item {{ request()->routeIs('admin.feedback.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-3 text-gray-700 group">
+        <i data-lucide="megaphone" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+        <span>Laporan Aduan</span>
+      </a>
+    </nav>
   </div>
-
-  <!-- Logout & Footer -->
-  <div>
-    <ul class="space-y-5 text-sm pl-2 mb-6">
-      <li>
-        <a  onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-3 hover:translate-x-1 transition-all duration-200">
-          <i data-lucide="log-out" class="w-5 h-5 text-white"></i>
-          Logout
-        </a>
-      </li>
-    </ul>
-    <p class="text-[10px] text-gray-200 leading-snug">DINAS ARSIP DAN PERPUSTAKAAN<br>KOTA SEMARANG</p>
-
-    
-  </div>
+  
+ 
 </div>
 
-<!-- Aktifkan ikon -->
 <script>
   lucide.createIcons();
 </script>

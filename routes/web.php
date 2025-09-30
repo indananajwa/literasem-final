@@ -12,6 +12,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\KontenController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PengunjungController;
+use App\Http\Controllers\DashboardController;
 
 // PENGUNJUNG: Resource controller per kategori
 use App\Http\Controllers\PemerintahController;
@@ -43,8 +44,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 */
 Route::middleware(['auth'])->group(function () {
     // Dashboard
-    Route::get('/admin/dashboard', fn () => view('admin.dashboard'))->name('dashboard');
-
+    Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->name('admin.dashboard');
     // Kategori Management
     Route::resource('admin/kategori', KategoriController::class)->except(['show'])->names([
         'index'   => 'admin.kategori.index',
@@ -66,8 +67,18 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{kode_konten}', [KontenController::class, 'destroy'])->name('destroy');
     });
 
+    Route::get('/kategori/{kode}/cover', [KategoriController::class, 'cover'])->name('kategori.cover');
+
+    Route::prefix('admin/kategori')->name('admin.kategori.')->group(function () {
+    Route::get('/', [KategoriController::class, 'index'])->name('index');
+});
+
     // Gambar konten (khusus untuk admin)
     Route::get('/admin/konten/gambar/{kode_konten}', [KontenController::class, 'showGambar'])->name('admin.konten.gambar');
+    Route::get('/admin/konten/{kode_kategori}/{kode_konten}/edit', [KontenController::class, 'edit'])
+        ->name('admin.konten.edit');
+
+
 
     // Feedback admin panel
     Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
@@ -102,7 +113,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pemerintah', [PemerintahController::class, 'index'])->name('pemerintah.index');
     });
 
+    Route::prefix('admin/konten')->name('admin.konten.')->group(function () {
+        Route::get('/pariwisata', [KontenController::class, 'tampilanPariwisata'])
+            ->name('tampilan_pariwisata');
 
+        Route::get('/pemerintah', [KontenController::class, 'tampilanPemerintah'])
+            ->name('tampilan_pemerintah');
+    });
 
     // Optional manual content management page
     Route::get('/manajemen-konten', [KategoriController::class, 'index'])->name('manajemen_konten');
@@ -131,10 +148,19 @@ Route::get('/pemerintahan/statistik', [PemerintahController::class, 'statistikPe
 Route::get('/pemerintahan/foto/{periode}/{type?}', [PemerintahController::class, 'publicFoto'])->name('pengunjung.pemerintahan.foto');
 Route::get('/api/pemerintahan', [PemerintahController::class, 'apiPemerintahan'])->name('api.pemerintahan');
 
+// Halaman kategori & konten
+// Route::get('/kategori', [PengunjungController::class, 'showKategori'])->name('pengunjung.kategori');
+// Route::get('/kategori/{kode_kategori}', [PengunjungController::class, 'showKategori'])
+//     ->name('pengunjung.kategori.show')
+//     ->where('kode_kategori', '[A-Z]{3}');
+// Route::get('/kategori/{kodeKategori}/cover', [KategoriController::class, 'showCoverImage'])->name('kategori.cover')->where('kodeKategori', '[A-Z]{3}');
+// Route::get('/konten/{kodeKonten}/image', [KategoriController::class, 'showKontenImage'])->name('konten.image')->where('kodeKonten', '[A-Z]{3}[0-9]{3}');
+// Route::get('/konten/{slug_konten}', [PengunjungController::class, 'showKonten'])->name('pengunjung.show.konten');
+// Route::get('/section/{slug}', [PengunjungController::class, 'showSection'])->name('pengunjung.show.section');
 
 // Halaman kategori & konten
 Route::get('/kategori', [PengunjungController::class, 'showKategori'])->name('pengunjung.kategori');
-Route::get('/kategori/{kodeKategori}', [KategoriController::class, 'show'])->name('kategori.show')->where('kodeKategori', '[A-Z]{3}');
+Route::get('/kategori/{kodeKategori}', [KategoriController::class, 'show'])->name('pengunjung.kategori.show')->where('kodeKategori', '[A-Z]{3}');
 Route::get('/kategori/{kodeKategori}/cover', [KategoriController::class, 'showCoverImage'])->name('kategori.cover')->where('kodeKategori', '[A-Z]{3}');
 Route::get('/konten/{kodeKonten}/image', [KategoriController::class, 'showKontenImage'])->name('konten.image')->where('kodeKonten', '[A-Z]{3}[0-9]{3}');
 Route::get('/konten/{slug_konten}', [PengunjungController::class, 'showKonten'])->name('pengunjung.show.konten');

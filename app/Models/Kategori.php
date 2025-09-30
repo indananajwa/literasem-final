@@ -1,6 +1,5 @@
 <?php
 
-// File: app/Models/Kategori.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,12 +13,15 @@ class Kategori extends Model
     protected $primaryKey = 'kode_kategori';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = [
         'kode_kategori',
         'nama_kategori',
+        'judul_kategori',
         'deskripsi_kategori',
         'gambar_cover',
+        'mime_type',
         'field_rules'
     ];
 
@@ -27,9 +29,21 @@ class Kategori extends Model
         'field_rules' => 'array'
     ];
 
+    // Relasi umum ke tabel "konten"
     public function konten()
     {
-        return $this->hasMany(Konten::class, 'kode_kategori', 'kode_kategori');
+        return $this->hasMany(\App\Models\Konten::class, 'kode_kategori', 'kode_kategori');
+    }
+
+    // Relasi khusus ke pariwisata
+    public function pariwisata()
+    {
+        return $this->hasMany(Pariwisata::class, 'kategori_id');
+    }
+
+    // Relasi khusus ke pemerintah
+    public function pemerintah()
+    {
+        return $this->hasMany(Pemerintah::class, 'kategori_id');
     }
 }
-

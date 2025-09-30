@@ -139,7 +139,7 @@
                                 $kategoris = \App\Models\Kategori::all();
                             @endphp
                             @forelse($kategoris as $kategori)
-                                <a href="{{ route('kategori.show', $kategori->kode_kategori) }}" 
+                                <a href="{{ route('pengunjung.kategori.show', $kategori->kode_kategori) }}" 
                                    class="block px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-colors border-b border-gray-100">
                                     <i class="fas fa-folder mr-2"></i>{{ $kategori->nama_kategori }}
                                 </a>
@@ -199,7 +199,7 @@
                     </button>
                     <div class="mobile-dropdown bg-red-900 rounded-lg mt-1" id="kategori-dropdown">
                         @forelse($kategoris ?? \App\Models\Kategori::all() as $kategori)
-                            <a class="block px-6 py-2 hover:bg-red-700 transition-colors" href="{{ route('kategori.show', $kategori->kode_kategori) }}">
+                            <a class="block px-6 py-2 hover:bg-red-700 transition-colors" href="{{ route('pengunjung.kategori.show', $kategori->kode_kategori) }}">
                                 <i class="fas fa-folder mr-2"></i>{{ $kategori->nama_kategori }}
                             </a>
                         @empty
