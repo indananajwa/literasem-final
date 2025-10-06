@@ -117,18 +117,23 @@
                     DINAS ARSIP DAN <br> PERPUSTAKAAN KOTA SEMARANG
                 </a>
             </div>
-
+        
             <div class="nav-container flex-1 hidden lg:flex pr-1">
                 <nav class="flex items-center space-x-4 text-sm font-medium">
                     <a href="/#pemerintahan" class="nav-link hover:text-gray-300">
                         Pemerintah
                     </a>
-                    <a class="nav-link hover:text-gray-300" href="{{ route('situs-kota-lama') }}">
+        
+                    {{-- Link khusus Situs Kota Lama --}}
+                    <a class="nav-link hover:text-gray-300" href="{{ url('/kategori/SIT') }}">
                         Situs Kota Lama
                     </a>
+        
                     <a class="nav-link hover:text-gray-300" href="{{ route('pariwisata.index') }}">
                         Pariwisata
                     </a>
+        
+                    {{-- Dropdown kategori (kecuali SIT) --}}
                     <div class="relative dropdown">
                         <button class="nav-link hover:text-gray-300 flex items-center">
                             Kategori
@@ -136,10 +141,10 @@
                         </button>
                         <div class="dropdown-menu absolute right-0 mt-2 w-64 bg-white text-gray-800 rounded-lg shadow-lg border max-h-80 overflow-y-auto">
                             @php
-                                $kategoris = \App\Models\Kategori::all();
+                                $kategoris = \App\Models\Kategori::where('kode_kategori', '!=', 'SIT')->get();
                             @endphp
                             @forelse($kategoris as $kategori)
-                                <a href="{{ route('kategori.show', $kategori->kode_kategori) }}"
+                                <a href="{{ route('pengunjung.kategori.show', $kategori->kode_kategori) }}" 
                                    class="block px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-colors border-b border-gray-100">
                                     <i class="fas fa-folder mr-2"></i>{{ $kategori->nama_kategori }}
                                 </a>
@@ -151,6 +156,7 @@
                         </div>
                     </div>
                 </nav>
+        
                 <div class="flex items-center space-x-1 ml-1">
                     <a href="{{ route('bookmark') }}"
                        class="btn-bookmark flex items-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all transform hover:scale-105 shadow-md">
@@ -162,13 +168,14 @@
                     </button>
                 </div>
             </div>
-
+        
             <button class="mobile-menu-button lg:hidden text-xl p-2 rounded-lg hover:bg-red-700 transition-colors" id="menuButton">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
     </header>
-
+        
+    {{-- MOBILE MENU --}}
     <div class="mobile-menu fixed top-0 left-0 h-full bg-red-800 text-white z-50 shadow-2xl lg:hidden">
         <div class="p-4">
             <div class="flex justify-between items-center mb-6 pb-4 border-b border-red-700">
@@ -180,16 +187,21 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+        
             <nav class="flex flex-col space-y-2">
                 <a href="/#pemerintahan" class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" onclick="closeMobileMenu();">
                     <i class="fas fa-landmark mr-3 w-5"></i>Pemerintah
                 </a>
-                <a class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" href="{{ route('situs-kota-lama') }}">
+        
+                {{-- Link khusus Situs Kota Lama --}}
+                <a class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" href="{{ url('/kategori/SIT') }}">
                     <i class="fas fa-landmark mr-3 w-5"></i>Situs Kota Lama
                 </a>
+        
                 <a class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" href="{{ route('pariwisata.index') }}">
                     <i class="fas fa-map-marked-alt mr-3 w-5"></i>Pariwisata
                 </a>
+        
                 <div class="mb-2">
                     <button class="flex items-center justify-between w-full px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" onclick="toggleMobileDropdown('kategori')">
                         <span class="flex items-center">
@@ -198,8 +210,12 @@
                         <i class="fas fa-chevron-down transition-transform" id="kategori-icon"></i>
                     </button>
                     <div class="mobile-dropdown bg-red-900 rounded-lg mt-1" id="kategori-dropdown">
-                        @forelse($kategoris ?? \App\Models\Kategori::all() as $kategori)
-                            <a class="block px-6 py-2 hover:bg-red-700 transition-colors" href="{{ route('pengunjung.kategori.show', $kategori->kode_kategori) }}">
+                        @php
+                            $kategorisMobile = \App\Models\Kategori::where('kode_kategori', '!=', 'SIT')->get();
+                        @endphp
+                        @forelse($kategorisMobile as $kategori)
+                            <a class="block px-6 py-2 hover:bg-red-700 transition-colors" 
+                               href="{{ route('pengunjung.kategori.show', $kategori->kode_kategori) }}">
                                 <i class="fas fa-folder mr-2"></i>{{ $kategori->nama_kategori }}
                             </a>
                         @empty
@@ -209,6 +225,7 @@
                         @endforelse
                     </div>
                 </div>
+        
                 <a href="{{ route('bookmark') }}"
                    class="flex items-center mt-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-md btn-bookmark">
                     <i class="fas fa-bookmark mr-3 w-5"></i>Bookmark

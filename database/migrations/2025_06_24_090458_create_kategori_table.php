@@ -10,14 +10,16 @@ return new class extends Migration {
         Schema::create('kategori', function (Blueprint $table) {
             $table->char('kode_kategori', 3)->primary();
             $table->string('nama_kategori', 32);
-            $table->string('judul_kategori', 32);
+            $table->string('judul_kategori', 64);
             $table->text('deskripsi_kategori')->nullable();
-            $table->binary('gambar_cover')->nullable();           // sementara pakai binary
+            $table->binary('gambar_cover')->nullable();
             $table->string('mime_type', 50)->nullable();
             $table->json('field_rules')->nullable();
+            $table->json('video_sampul')->nullable(); 
+            $table->timestamps();
         });
 
-        // Override tipe gambar_cover → MEDIUMBLOB
+        // Ubah tipe kolom gambar_cover jadi MEDIUMBLOB
         DB::statement("ALTER TABLE kategori MODIFY gambar_cover MEDIUMBLOB;");
     }
 

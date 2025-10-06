@@ -94,22 +94,10 @@ class KontenSeeder extends Seeder
                 'deskripsi' => 'Gedung Pertamina, yang sebelumnya dikenal sebagai Gedung BP Migas, adalah salah satu bangunan bersejarah yang terletak di Jalan Pemuda 114, Semarang. Bangunan ini masih terjaga keasliannya dengan baik. Meskipun di sisi kirinya telah dibangun Mall Paragon dan Hotel Crowne Plaza, sebagai bangunan tua, keberadaannya masih terlihat serasi berdampingan dengan bangunan-bangunan modern di sekitarnya.'
             ],
             [
-                'judul' => 'Pasar Pedamaran Semarang',
-                'gambar' => null, //gambargaada
-                'video' => null,
-                'deskripsi' => 'Pasar Pedamaran Semarang Pasar Pedamaran Johar Semarang, Pada foto tahun 1910. Situasi Pasar Pedamaran ini sebelum dibagunnya Pasar Johar pada tahun 1931. Pasar ini memiliki 240 buah dasarn sehingga pemerintah pada saat itu meminta Ir. Herman Thomas Karsten mendirikan pasar gede Semarang yang menggabungkan Pasar Pedamaran, Johar, Beteng, Jurnatan dan Pekojan.'
-            ],
-            [
                 'judul' => 'Gedung Papak',
                 'gambar' => 'arsi/GedungPapak.jpg',
                 'video' => null,
                 'deskripsi' => 'Gedung Papak, yang dibangun pada 1919 dengan arsitektur kolonial Belanda, awalnya berfungsi sebagai markas tentara Belanda dan tempat penyiksaan bagi pribumi yang melawan. Dengan desain kokoh dan sederhana, gedung ini akhirnya dikuasai oleh tentara Jepang.'
-            ],
-            [
-                'judul' => 'Penjara Bulu',
-                'gambar' => null,
-                'video' => null,
-                'deskripsi' => 'Penjara bulu adalah tempat terjadinya pembantaian Penjara Bulu pada Perang Dunia II. Saat itu Dr. Kariadi sebagai kepala laboratorium Rumah Sakit Purusara (Sekarang Rumah Sakit Kariadi) dipanggil untuk membuktikan kebenaran adanya racun pada tandon air Siranda, Candi Baru. Namun, Dr. Kariadi dan sopirnya ditembak oleh Jepang saat melewati Jl. Pandanaran. Hal ini memicu perlawanan dari warga Semarang untuk menyerang tahanan-tahanan jepang yang berada di penjara bulu.'
             ],
             [
                 'judul' => 'Gedung Chinese English School Bodjong 1930',
@@ -117,18 +105,7 @@ class KontenSeeder extends Seeder
                 'video' => null,
                 'deskripsi' => 'Chinese English School "Hwa Ing" terletak di Bodjong Straat, yang kini dikenal sebagai Jalan Pemuda Semarang. Thio menjabat sebagai ketua sekolah ini pada tahun 1928. Saat ini, gedung tersebut digunakan sebagai SMA Negeri 5 Semarang.'
             ],
-            [
-                'judul' => 'Gedung Gris',
-                'gambar' => 'arsi/GedungGRIS1925.jpg',
-                'video' => null,
-                'deskripsi' => 'GRIS, yang dulunya merupakan sebuah Sositet de Harmonie milik seorang Belanda, dibeli oleh masyarakat pribumi dengan membentuk panitia Fonds GRIS. Di masa keemasannya, GRIS selalu ramai dikunjungi masyarakat untuk menyaksikan pertunjukan Wayang Orang Ngesti Pandowo. Selain digunakan untuk menimba ilmu tentang kesenian serta hiburan murah, GRIS juga digunakan untuk acara resepsi, perpustakaan rakyat, gedung bioskop, kampus sebuah akademi bahasa, dan sebagainya (Gedung GRIS sekarang menjadi Paragon Mall).'
-            ],
-            [
-                'judul' => 'Gedung Mega Eltra',
-                'gambar' => 'arsi/GedungMegaEltra.jpg',
-                'video' => null,
-                'deskripsi' => 'Gedung Mega Eltra, dibangun sekitar tahun 1897. Penghuni gedung ini dulunya NV. Lindeteves yang menyediakan kelistrikan di wilayah pelabuhan Semarang. Pada masa pendudukan Jepang, gedung ini dikenal dengan nama Semarang Kikei Sesaku Syo. Mega Eltra sendiri adalah perusahaan yang bermula dari perusahaan Belanda yang kegiatan usaha di bidang listrik, mesin dan peralatan tehnik yang telah eksis sejak tahun 1930, dikenal dengan nama Electro Import NV. Perusahaan ini merupakan anak perusahaan Jacobson Vanden Berg & Co, sebuah perusahaan Belanda yang pada zamannya dikenal dalam kelompok perusahaan “The Big Five”.'
-            ]
+
         ];
 
         $ibadahData = [
@@ -176,12 +153,6 @@ class KontenSeeder extends Seeder
                 'gambar' => 'tokohM/K.R.M.T WONGSONEGORO.png',
                 'video' => null,
                 'deskripsi' => "Mr. Wongsonegoro (20 April 1897 - 4 Maret 1978) pernah menjabat sebagai Wakil Perdana Menteri Indonesia dalam Kabinet Ali Sastroamidjojo I pada 1953-1955 dan Menteri Pendidikan dan Kebudayaan pada 1951-1952. Sebelum kemerdekaan, ia menjadi anggota BPUPKI sebagai perwakilan Surakarta bersama Wuryaningrat, Sosrodiningrat, dan Radjiman Wedyodiningrat. Untuk menghormatinya, nama K.R.M.T Wongsonegoro kini digunakan sebagai nama Rumah Sakit Umum Daerah di Kota Semarang."
-            ],
-            [
-                'judul' => 'Dr. Tjipto Mangoenkoesoemo',
-                'gambar' => 'tokohM/TJIPTO MANGOENKOESOEMO.jpeg',
-                'video' => null,
-                'deskripsi' => 'Dr. Tjipto Mangoenkoesoemo adalah tokoh pergerakan kemerdekaan Indonesia yang terkenal sebagai bagian dari "Tiga Serangkai" bersama Ernest Douwes Dekker dan Ki Hajar Dewantara. Sebagai tokoh terkemuka di Indische Partij, Tjipto kerap mengkritik pemerintahan kolonial Hindia-Belanda melalui tulisan-tulisannya yang dianggap radikal. Akibat aktivitasnya, ia diasingkan oleh pemerintah kolonial Belanda dan pada tahun 1927 dibuang ke Banda.'
             ],
             [
                 'judul' => 'Dr. Kariadi',
@@ -270,12 +241,40 @@ class KontenSeeder extends Seeder
                 'video' => null,
                 'deskripsi' => 'Asal-usul tahu petis di Semarang masih belum jelas, namun diperkirakan muncul pada akhir abad ke-19 atau awal abad ke-20, saat Kota Semarang sedang mengalami masa kejayaan sebagai pusat perdagangan dan pelabuhan penting di Jawa. Migrasi penduduk dari berbagai daerah, termasuk Tionghoa yang membawa tradisi kulinernya, turut mempengaruhi perkembangan kuliner Semarang. Tahu, bahan dasar tahu petis, sudah dikenal luas di Indonesia sejak lama, sementara petis, saus fermentasi udang khas Jawa Timur, kemungkinan masuk ke Semarang melalui jalur perdagangan. Perpaduan kedua bahan ini menciptakan tahu petis, camilan khas yang kemudian menjadi favorit di Semarang.'
             ],
+
+        ];
+
+        $situs = [
             [
-                'judul' => 'Tahu Pong',
-                'gambar' => 'makanan/tahupong.jpg',
+                'judul' => 'Gereja Blenduk',
+                'gambar' => 'SKL/Gereja-Blenduk-1930.jpg',
                 'video' => null,
-                'deskripsi' => 'Tahu pong adalah jenis tahu yang kosong di bagian dalam. Kata "kopong" dalam bahasa Jawa berarti kosong atau tanpa isi, sehingga dikenal sebagai tahu pong atau tahu kopong. Ada juga yang mengaitkan asal-usul namanya dengan kata "péng" dalam dialek Hokkian, yang diucapkan "phong", yang berarti menggelembung. Tahu pong memiliki tekstur yang berbeda dari tahu biasa. Ketika digoreng, tahu pong akan menggembung, dengan bagian dalam yang berongga, sementara kulitnya tipis dan kering.'
-            ]
+                'deskripsi' => "Terdapat bangunan Gereja Blenduk yang merupakan bangunan yang dibangun pada 1753 dengan bentuk rumah panggung Jawa dan atap bergaya Jawa. Renovasi besar dilakukan pada 1787, diikuti perubahan lagi pada 1794 dan pembangunan kembali pada 1894 oleh H.P.A. de Wilde dan W.Westmas. Setelah tiga renovasi—1753, 1894, dan 2003—gereja ini tetap mempertahankan gaya arsitektur Eropa klasik yang anggun dan aristokrat. Setiap renovasi tercatat di batu marmer di bawah altar."
+            ],
+            [
+                'judul' => 'De Koloniale Bank',
+                'gambar' => 'SKL/De-Koloniale-Bank-120.jpg',
+                'video' => null,
+                'deskripsi' => "Koloniale Bank, yang didirikan di Amsterdam pada tahun 1881, bertujuan mendukung keuangan para pengusaha perkebunan di Hindia Belanda. Bank ini membuka cabang di Semarang pada Juni 1883, namun harus menghentikan operasinya pada Januari 1935 karena dampak krisis ekonomi."
+            ],
+            [
+                'judul' => 'Kantor Pos Semarang',
+                'gambar' => 'SKL/Kantor-Pos-127.jpg',
+                'video' => null,
+                'deskripsi' => "Saat ini, Kantor Pos Besar Semarang tetap beroperasi dan melayani berbagai kebutuhan masyarakat. Sementara itu, bekas Kantor Gubernur kini berfungsi sebagai Gedung Keuangan Negara Semarang I, yang menjadi kantor wilayah Direktorat Jenderal Perbendaharaan (DJPb) Provinsi Jawa Tengah."
+            ],
+            [
+                'judul' => 'Gedung Asuransi Jiwasraya',
+                'gambar' => 'SKL/Gedung-Asuransi-Jiwasraya.jpg',
+                'video' => null,
+                'deskripsi' => "Gedung Jiwasraya, yang kini menjadi kantor PT Asuransi Jiwasraya (Persero) Wilayah Semarang, dulunya adalah Kantor Nillmij van 1859, perusahaan asuransi jiwa Belanda yang beroperasi di Hindia Belanda sejak 1859. Nillmij mengelola cabang di Semarang setelah membuka kantor pertama di Batavia pada 1909. Gedung ini terletak di kawasan Kota Lama Semarang, yang dikenal dengan peninggalan kolonial Belanda dan menjadi daya tarik wisata budaya."
+            ],
+            [
+                'judul' => 'Pecinan Semarang',
+                'gambar' => 'SKL/Pecinan-Semarang.jpg',
+                'video' => null,
+                'deskripsi' => "Terbentuknya wilayah Pecinan Semarang berkaitan dengan peristiwa pemberontakan masyarakat Tionghoa pada masa kolonial yang bermula di Batavia (Jakarta) pada tahun 1740. Dampak dari pemberontakan tersebut banyak masyarakat Tionghoa yang dibawa Belanda ke Semarang. Mulanya, masyarakat Tionghoa berada di daerah Simongan sekitar kelenteng Sam Po Kong. Kemudian oleh Belanda dipindahkan ke pusat kota untuk menghindari meluasnya dampak pemberontakan masyarakat Cina & agar pemerintahan Belanda dapat mengawasi aktivitas orang-orang Tionghoa di Semarang."
+            ],
         ];
 
         $this->insertKonten('BUD', $budayaData);
@@ -283,6 +282,7 @@ class KontenSeeder extends Seeder
         $this->insertKonten('TEM', $ibadahData);
         $this->insertKonten('TOK', $tokohData);
         $this->insertKonten('MAK', $makananData);
+        $this->insertKonten('SIT', $situs);
     }
 
     /**

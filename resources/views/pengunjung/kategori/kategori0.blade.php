@@ -1,8 +1,8 @@
 
 <!-- kategori0.blade.php - Template Default untuk tourData -->
-<section id="detail-section" class="container mx-auto px-4 py-12">
+<section class="container mx-auto px-4 py-12">
     <h2 class="text-4xl font-bold mb-8 text-center">Detail Destinasi</h2>
-    <div id="tour-items-container" class="space-y-8">
+    <div id="detail-section" class="space-y-8">
         <!-- Konten akan di-generate lewat JavaScript dari tourData -->
     </div>
 </section>

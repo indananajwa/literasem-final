@@ -150,7 +150,7 @@
                     </div>
                     <button
                         class="mt-6 bg-red-800 text-white px-4 py-2 rounded-full flex items-center self-start"
-                        onclick="window.location.href='{{ route('situs-kota-lama') }}'"
+                        onclick="window.location.href='{{ url('/kategori/SIT') }}'"
                     >
                         More Information
                         <i class="fas fa-arrow-right ml-2"></i>

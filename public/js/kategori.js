@@ -153,8 +153,12 @@ function changeContent(tourId, type, src) {
 }
 
 // Render tour data ke detail section (untuk template default)
+// Render tour data ke detail section (untuk template default)
 function renderTourData() {
     if (!tourData || !detailSection || templateType === 'card') return;
+    
+    console.log('=== RENDER DEBUG ===');
+    console.log('fieldRules:', fieldRules);
     
     detailSection.innerHTML = "";
 
@@ -165,17 +169,23 @@ function renderTourData() {
         
         const hasVideo = tour.video && getYouTubeVideoId(tour.video);
         const hasImages = tour.images && tour.images.length > 0;
+        
+        console.log(`Tour: ${tour.name}`);
+        console.log('  - images:', tour.images);
+        console.log('  - hasImages:', hasImages);
+        console.log('  - fieldRules.image:', fieldRules.image);
+        
         const totalContent = (hasImages ? tour.images.length : 0) + (hasVideo ? 1 : 0);
         const shouldShowThumbnails = totalContent > 1;
         
         const mainContent = createMainContent(tour);
         
-        // Conditional rendering based on field rules
-        const showMedia = fieldRules.image === 'required' || 
-                         (fieldRules.image === 'optional' && (hasImages || hasVideo));
+        // FIXED: Simplified condition - always show media if it exists
+        const showMedia = hasImages || hasVideo || fieldRules.image === 'required';
         
-                
-detailItem.innerHTML = `
+        console.log('  - showMedia:', showMedia);
+        
+        detailItem.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-[480px_1fr] gap-6 items-start">
             ${showMedia ? `
             <div class="flex flex-col w-full">
@@ -222,7 +232,6 @@ detailItem.innerHTML = `
                 <h3 class="text-3xl font-semibold text-red-800 mb-4">${tour.name}</h3>
                 <p class="text-lg text-gray-700 text-justify mb-8">${tour.description}</p>
                 
-                <!-- Minimalist Bookmark Button -->
                 <button 
                     class="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors duration-200 w-fit"
                     onclick='addToBookmark(${JSON.stringify(tour)})'

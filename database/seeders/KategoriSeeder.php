@@ -90,6 +90,34 @@ class KategoriSeeder extends Seeder
                     "video_url" => "optional"
                 ]
             ],
+            [
+                'kode_kategori' => 'SIT',
+                'nama_kategori' => 'Situs Kota Lama',
+                'judul_kategori' => 'Situs Kota Lama Semarang',
+                'deskripsi_kategori' => 'Menghidupkan Kembali Warisan Sejarah Kota Semarang',
+                'cover_path' => public_path('cover/cover_kotalama.jpg'),
+                'field_rules' => [
+                    "tampilan" => "0",
+                    "sampulvideo" => "required",
+                    "highlight" => "not_used",
+                    "judul" => "required",
+                    "deskripsi" => "required",
+                    "gambar" => "required",
+                    "video_url" => "not_used"
+                ],
+                'video_sampul' => [
+                    [
+                        'title' => 'Revitalisasi Kota Lama Semarang',
+                        'description' => 'Upaya pelestarian Kota Lama Semarang agar tetap menjadi ikon bersejarah yang menarik dan berdaya guna.',
+                        'youtube_id' => 'khNkocgfiN0'
+                    ],
+                    [
+                        'title' => 'Mengenal Kota Lama Semarang',
+                        'description' => 'Mengungkap sejarah dan pesona Kota Lama Semarang, sebuah kawasan bersejarah yang penuh cerita dan keindahan.',
+                        'youtube_id' => 'WhW0GBZiRWo'
+                    ]
+                ]
+            ],
         ];
 
         foreach ($kategoriData as $kategori) {
@@ -114,7 +142,10 @@ class KategoriSeeder extends Seeder
                 'deskripsi_kategori' => $kategori['deskripsi_kategori'],
                 'gambar_cover' => $gambar,
                 'mime_type' => $mime,
-                'field_rules' => json_encode($kategori['field_rules'])
+                'field_rules' => json_encode($kategori['field_rules']),
+                'video_sampul' => isset($kategori['video_sampul']) ? json_encode($kategori['video_sampul']) : null,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

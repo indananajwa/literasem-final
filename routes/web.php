@@ -165,10 +165,10 @@ Route::get('/api/pemerintahan', [PemerintahController::class, 'apiPemerintahan']
 // Halaman kategori & konten
 Route::get('/kategori', [PengunjungController::class, 'showKategori'])->name('pengunjung.kategori');
 Route::get('/kategori/{kodeKategori}', [KategoriController::class, 'show'])->name('pengunjung.kategori.show')->where('kodeKategori', '[A-Z]{3}');
-Route::get('/kategori/{kodeKategori}/cover', [KategoriController::class, 'showCoverImage'])->name('kategori.cover')->where('kodeKategori', '[A-Z]{3}');
 Route::get('/konten/{kodeKonten}/image', [KategoriController::class, 'showKontenImage'])->name('konten.image')->where('kodeKonten', '[A-Z]{3}[0-9]{3}');
 Route::get('/konten/{slug_konten}', [PengunjungController::class, 'showKonten'])->name('pengunjung.show.konten');
 Route::get('/section/{slug}', [PengunjungController::class, 'showSection'])->name('pengunjung.show.section');
+Route::get('/kategori/{kode}/cover', [KategoriController::class, 'cover'])->name('kategori.cover');
 
 // Search API
 Route::get('/api/kategori/{kodeKategori}/search', [KategoriController::class, 'searchKonten'])->name('kategori.search')->where('kodeKategori', '[A-Z]{3}');

@@ -152,7 +152,6 @@ class KategoriController extends Controller
             }
         }
 
-            // TAMBAHKAN DEBUG INI
         Log::info('Field Rules Debug', [
             'raw_field_rules' => $kategori->field_rules,
             'decoded_field_rules' => $fieldRules,
@@ -160,7 +159,14 @@ class KategoriController extends Controller
             'tampilan_type' => gettype($fieldRules['tampilan'] ?? null),
         ]);
 
-        // Buat array yang akan dikirim ke JavaScript
+        $video_sampul = [];
+        if (!empty($kategori->video_sampul)) {
+            $decodedVideos = json_decode($kategori->video_sampul, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decodedVideos)) {
+                $video_sampul = $decodedVideos;
+            }
+        }
+
         $tourData = $kontenList->map(function ($item) {
             return [
                 'id' => $item->kode_konten,
@@ -171,19 +177,30 @@ class KategoriController extends Controller
             ];
         });
 
-        // FIX: Create safe versions for JavaScript without breaking existing template
         $kategoriForJS = [
             'kode_kategori' => $kategori->kode_kategori,
             'nama_kategori' => $kategori->nama_kategori,
             'judul_kategori' => $kategori->judul_kategori,
             'deskripsi_kategori' => $kategori->deskripsi_kategori,
             'field_rules' => $kategori->field_rules,
+            'video_sampul' => $kategori->video_sampul
         ];
 
         $tourDataForJS = $tourData->toArray();
 
-        return view('pengunjung.kategori.page1', compact('kategori', 'kontenList', 'fieldRules', 'tourData', 'kategoriForJS', 'tourDataForJS'));
+        // tambahkan $video_sampul ke compact()
+        return view('pengunjung.kategori.page1', compact(
+            'kategori',
+            'kontenList',
+            'fieldRules',
+            'tourData',
+            'kategoriForJS',
+            'tourDataForJS',
+            'video_sampul'
+        ));
     }
+
+
 
     /**
      * Form edit kategori.
@@ -289,17 +306,18 @@ class KategoriController extends Controller
             
         return response()->json($kontenList);
     }
-    public function cover($kode)
-{
-    $kategori = Kategori::findOrFail($kode);
-
-    if ($kategori->gambar_cover) {
-        return response($kategori->gambar_cover)
-            ->header('Content-Type', $kategori->mime_type);
+    public function cover($kodeKategori)
+    {
+        $kategori = Kategori::where('kode_kategori', strtoupper($kodeKategori))->first();
+    
+        if ($kategori && $kategori->gambar_cover) {
+            return response($kategori->gambar_cover)
+                ->header('Content-Type', $kategori->mime_type ?? 'image/jpeg');
+        }
+    
+        // fallback kalau nggak ada gambar
+        return response()->file(public_path('images/no-image.png'));
     }
-
-    // fallback kalau nggak ada gambar
-    return response()->file(public_path('images/no-image.png'));
-}
+    
 
 }
