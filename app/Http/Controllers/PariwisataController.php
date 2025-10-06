@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Pariwisata;
 use Illuminate\Http\Request;
+use App\Models\Kategori;
+use App\Models\Konten;
 
 class PariwisataController extends Controller
 {
@@ -19,8 +21,7 @@ class PariwisataController extends Controller
     public function adminView()
     {
         $pariwisataList = Pariwisata::all();
-        return view('admin.konten.tampilan_pariwisata', compact('pariwisataList'));
-    }
+    return view('admin.konten.tampilan_pariwisata', compact('pariwisataList'));    }
 
     // Tambah konten pariwisata
     public function store(Request $request)

@@ -11,125 +11,107 @@ use App\Models\Pemerintah;
 
 class KategoriController extends Controller
 {
+    /**
+     * Tampilkan semua kategori.
+     */
     public function index()
-{
-    $kategoris = Kategori::all();
-    $pariwisataList = Pariwisata::all();
-    $pemerintahList = Pemerintah::all();
+    {
+        $pariwisataList = Pariwisata::all();
+        $pemerintahList = Pemerintah::all();
+        $kategori = Kategori::all();
 
-    return view('admin.manajemen_konten', compact('kategoris', 'pariwisataList', 'pemerintahList'));
-}
+        $kategoris = Kategori::withCount('konten')->get();
+        $pariwisataCount = Pariwisata::count();
+        $pemerintahCount = Pemerintah::count();
 
-public function create()
-{
-    return view('admin.kategori.create');
-}
-
-public function store(Request $request)
-{
-    $request->validate([
-        'kode_kategori' => 'required|size:3|unique:kategori,kode_kategori',
-        'nama_kategori' => 'required|string|max:32',
-        'judul_kategori' => 'required|string|max:32',
-        'deskripsi_kategori' => 'required|string',
-        'gambar_cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'field_rules' => 'nullable|array',
-    ]);
-
-    $gambar = null;
-    $mimeType = null;
-
-    if ($request->hasFile('gambar_cover')) {
-        $gambar = file_get_contents($request->file('gambar_cover')->getRealPath());
-        $mimeType = $request->file('gambar_cover')->getMimeType();
+        return view('admin.kategori.index', compact(
+            'kategoris',
+            'pariwisataList',
+            'pemerintahList',
+            'pariwisataCount',
+            'pemerintahCount'
+        ));
+        
     }
 
-    
-
-    DB::table('kategori')->insert([
-        'kode_kategori' => $request->kode_kategori,
-        'nama_kategori' => $request->nama_kategori,
-        'judul_kategori' => $request->judul_kategori,
-        'deskripsi_kategori' => $request->deskripsi_kategori,
-        'gambar_cover' => $gambar,
-        'mime_type' => $mimeType,
-        'field_rules' => json_encode($request->field_rules),
-    ]);
-
-    return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil ditambahkan');
-}
-
-public function edit($kode)
-{
-    // Ambil kategori berdasarkan kode
-    $kategori = DB::table('kategori')->where('kode_kategori', $kode)->first();
-
-    // Jika tidak ditemukan, tampilkan 404
-    if (!$kategori) {
-        abort(404, 'Kategori tidak ditemukan');
+    /**
+     * Form buat tambah kategori.
+     */
+    public function create()
+    {
+        return view('admin.kategori.create');
     }
 
-    // Decode field_rules dari JSON ke array agar bisa digunakan di blade
-    if (!empty($kategori->field_rules)) {
-        $decoded = json_decode($kategori->field_rules, true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-            $kategori->field_rules = $decoded;
-        } else {
-            $kategori->field_rules = []; // fallback kosong
+    /**
+     * Simpan kategori baru.
+     */
+    public function store(Request $request)
+{
+    try {
+        // Validasi dengan pesan custom
+        $validated = $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'kode_kategori' => 'required|string|max:3|unique:kategori,kode_kategori',
+            'judul_kategori' => 'required|string|max:255',
+            'deskripsi_kategori' => 'required|string',
+            'gambar_cover' => 'required|image|max:10240',
+            'field_rules' => 'required|array'
+        ], [
+            'nama_kategori.required' => 'Nama kategori wajib diisi',
+            'kode_kategori.required' => 'Kode kategori wajib diisi',
+            'kode_kategori.unique' => 'Kode kategori sudah digunakan',
+            'judul_kategori.required' => 'Judul kategori wajib diisi',
+            'deskripsi_kategori.required' => 'Deskripsi wajib diisi',
+            'gambar_cover.required' => 'Gambar cover wajib diupload',
+            'gambar_cover.image' => 'File harus berupa gambar',
+            'gambar_cover.max' => 'Ukuran gambar maksimal 10MB',
+            'field_rules.required' => 'Aturan field wajib dipilih'
+        ]);
+
+        // Proses gambar cover
+        $gambar = null;
+        $mimeType = null;
+        
+        if ($request->hasFile('gambar_cover')) {
+            $file = $request->file('gambar_cover');
+            $gambar = file_get_contents($file->getRealPath());
+            $mimeType = $file->getMimeType();
         }
-    } else {
-        $kategori->field_rules = []; // fallback kosong
+
+        // Simpan ke database
+        Kategori::create([
+            'kode_kategori' => strtoupper($validated['kode_kategori']),
+            'nama_kategori' => $validated['nama_kategori'],
+            'judul_kategori' => $validated['judul_kategori'],
+            'deskripsi_kategori' => $validated['deskripsi_kategori'],
+            'gambar_cover' => $gambar,
+            'mime_type' => $mimeType,
+            'field_rules' => $validated['field_rules']
+        ]);
+
+        return redirect()->route('admin.kategori.index')
+                         ->with('success', 'Kategori berhasil ditambahkan!');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Error validasi - redirect back dengan error
+        return redirect()->back()
+                         ->withErrors($e->validator)
+                         ->withInput();
+                         
+    } catch (\Exception $e) {
+        // Error umum (database, dll)
+        Log::error('Error saat menyimpan kategori: ' . $e->getMessage());
+        
+        return redirect()->back()
+                         ->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.')
+                         ->withInput();
     }
-
-    return view('admin.kategori.edit', ['kategori' => $kategori]);
 }
 
-
-public function update(Request $request, $kode)
-{
-    $request->validate([
-        'nama_kategori' => 'required|string|max:32',
-        'judul_kategori' => 'required|string|max:32',
-        'deskripsi_kategori' => 'nullable|string',
-        'gambar_cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        'field_rules' => 'nullable|array',
-    ]);
-
-    $kategori = DB::table('kategori')->where('kode_kategori', $kode)->first();
-
-    $gambar = $kategori->gambar_cover;
-    $mimeType = $kategori->mime_type;
-
-    if ($request->hasFile('gambar_cover')) {
-        $gambar = file_get_contents($request->file('gambar_cover')->getRealPath());
-        $mimeType = $request->file('gambar_cover')->getMimeType();
-    }
-
-    DB::table('kategori')->where('kode_kategori', $kode)->update([
-        'nama_kategori' => $request->nama_kategori,
-        'judul_kategori' => $request->judul_kategori,
-        'deskripsi_kategori' => $request->deskripsi_kategori,
-        'gambar_cover' => $gambar,
-        'mime_type' => $mimeType,
-        'field_rules' => json_encode($request->field_rules),
-    ]);
-
-    return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil diperbarui.');
-}
-
-public function destroy($kode)
-{
-    DB::table('kategori')->where('kode_kategori', $kode)->delete();
-    return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus.');
-}
-
-// public function show($kode)
-// {
-//     $kategori = DB::table('kategori')->where('kode_kategori', $kode)->first();
-//     return view('admin.kategori.show', ['kategori' => $kategori]);
-// }
-
-public function show($kodeKategori)
+    /**
+     * Tampilkan detail kategori.
+     */
+    public function show($kodeKategori)
     {
         try {
             $kategori = DB::table('kategori')
@@ -204,6 +186,58 @@ public function show($kodeKategori)
     }
 
     /**
+     * Form edit kategori.
+     */
+    public function edit($id)
+    {
+        $kategori = Kategori::findOrFail($id);
+        return view('admin.kategori.edit', compact('kategori'));
+    }
+
+    /**
+     * Update kategori.
+     */
+    public function update(Request $request, $id)
+    {
+        $kategori = Kategori::findOrFail($id);
+
+        $request->validate([
+            'nama_kategori' => 'required|string|max:255',
+            'deskripsi_kategori' => 'nullable|string',
+            'gambar_cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'field_rules' => 'nullable|array',
+        ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('gambar_cover')) {
+            $file = $request->file('gambar_cover');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/kategori'), $filename);
+            $data['gambar_cover'] = $filename;
+        }
+
+        if (isset($data['field_rules'])) {
+            $data['field_rules'] = json_encode($data['field_rules']);
+        }
+
+        $kategori->update($data);
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil diperbarui');
+    }
+
+    /**
+     * Hapus kategori.
+     */
+    public function destroy($id)
+    {
+        $kategori = Kategori::findOrFail($id);
+        $kategori->delete();
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus');
+    }
+
+    /**
      * Menampilkan gambar kategori cover
      */
     public function showCoverImage($kodeKategori)
@@ -255,4 +289,17 @@ public function show($kodeKategori)
             
         return response()->json($kontenList);
     }
+    public function cover($kode)
+{
+    $kategori = Kategori::findOrFail($kode);
+
+    if ($kategori->gambar_cover) {
+        return response($kategori->gambar_cover)
+            ->header('Content-Type', $kategori->mime_type);
+    }
+
+    // fallback kalau nggak ada gambar
+    return response()->file(public_path('images/no-image.png'));
+}
+
 }

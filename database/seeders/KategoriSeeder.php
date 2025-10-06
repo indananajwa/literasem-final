@@ -20,10 +20,10 @@ class KategoriSeeder extends Seeder
                     "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "required",
-                    "image" => "required",
-                    "title" => "required",
-                    "video_url" => "optional",
-                    "description" => "required"
+                    "judul" => "required",
+                    "deskripsi" => "required",
+                    "gambar" => "required",
+                    "video_url" => "optional"
                 ]
             ],
             [
@@ -36,10 +36,10 @@ class KategoriSeeder extends Seeder
                     "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
-                    "image" => "optional",
-                    "title" => "required",
-                    "video_url" => "optional",
-                    "description" => "required"
+                    "judul" => "required",
+                    "deskripsi" => "required",
+                    "gambar" => "optional",
+                    "video_url" => "optional"
                 ]
             ],
             [
@@ -52,10 +52,10 @@ class KategoriSeeder extends Seeder
                     "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
-                    "image" => "required",
-                    "title" => "required",
-                    "video_url" => "optional",
-                    "description" => "required"
+                    "judul" => "required",
+                    "deskripsi" => "required",
+                    "gambar" => "required",
+                    "video_url" => "optional"
                 ]
             ],
             [
@@ -68,10 +68,10 @@ class KategoriSeeder extends Seeder
                     "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
-                    "image" => "required",
-                    "title" => "required",
-                    "video_url" => "optional",
-                    "description" => "required"
+                    "judul" => "required",
+                    "deskripsi" => "required",
+                    "gambar" => "required",
+                    "video_url" => "optional"
                 ]
             ],
             [
@@ -79,15 +79,15 @@ class KategoriSeeder extends Seeder
                 'nama_kategori' => 'Makanan Khas',
                 'judul_kategori' => 'Ragam Kuliner Semarang',
                 'deskripsi_kategori' => 'Kaya Rasa, Sarat Makna',
-                'cover_path' => public_path('cover/cover_pariwisata.jpg'), // atau ganti sesuai gambar
+                'cover_path' => public_path('cover/cover_pariwisata.jpg'),
                 'field_rules' => [
                     "tampilan" => "1",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
-                    "image" => "required",
-                    "title" => "required",
-                    "video_url" => "optional",
-                    "description" => "required"
+                    "judul" => "required",
+                    "deskripsi" => "required",
+                    "gambar" => "required",
+                    "video_url" => "optional"
                 ]
             ],
         ];

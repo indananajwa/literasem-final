@@ -199,7 +199,7 @@
                     </button>
                     <div class="mobile-dropdown bg-red-900 rounded-lg mt-1" id="kategori-dropdown">
                         @forelse($kategoris ?? \App\Models\Kategori::all() as $kategori)
-                            <a class="block px-6 py-2 hover:bg-red-700 transition-colors" href="{{ route('kategori.show', $kategori->kode_kategori) }}">
+                            <a class="block px-6 py-2 hover:bg-red-700 transition-colors" href="{{ route('pengunjung.kategori.show', $kategori->kode_kategori) }}">
                                 <i class="fas fa-folder mr-2"></i>{{ $kategori->nama_kategori }}
                             </a>
                         @empty

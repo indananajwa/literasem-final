@@ -43,10 +43,29 @@ class FeedbackController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
         }
     }
+
     public function index()
     {
         $feedback = DB::table('feedback')->orderBy('tanggal_kirim', 'desc')->get();
         return view('admin.feedback.index', compact('feedback'));
     }
 
+    public function destroy($id)
+    {
+        try {
+            // Cek apakah feedback exists
+            $feedback = DB::table('feedback')->where('id', $id)->first();
+
+            if (!$feedback) {
+                return redirect()->back()->with('error', 'Data feedback tidak ditemukan.');
+            }
+
+            // Hapus feedback
+            DB::table('feedback')->where('id', $id)->delete();
+
+            return redirect()->route('feedback.index')->with('success', 'Feedback berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus feedback. Silakan coba lagi.');
+        }
+    }
 }
