@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             KontenSeeder::class,
             PemerintahSeeder::class,
             // Masalampau::class,
+            SmgSeeder::class,
         ]);
     }
 }

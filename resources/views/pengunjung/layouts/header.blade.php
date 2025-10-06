@@ -80,11 +80,11 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 0.25rem; /* Further reduced gap for tighter alignment */
+            gap: 0.25rem;
         }
         @media (max-width: 1024px) {
             .header {
-                padding: 0.5rem 0; /* Reduced padding further for mobile */
+                padding: 0.5rem 0;
             }
             .nav-container {
                 display: none;
@@ -110,17 +110,17 @@
 </head>
 <body class="bg-white">
     <header id="header" class="header bg-red-800 text-white fixed w-full z-50 shadow-md">
-        <div class="flex items-center justify-between h-16 md:h-20 px-2"> <!-- Reduced px-2 to px-1 -->
-            <div class="flex items-center space-x-2 pl-2"> <!-- Reduced space-x-2 to space-x-1, pl-2 to pl-1 -->
+        <div class="flex items-center justify-between h-16 md:h-20 px-2">
+            <div class="flex items-center space-x-2 pl-2">
                 <img alt="Logo Dinas Arsip dan Perpustakaan Kota Semarang" class="w-8 md:w-12" src="{{ asset('img/logo.png') }}">
                 <a class="text-sm md:text-base font-bold leading-tight" href="{{ route('home') }}">
                     DINAS ARSIP DAN <br> PERPUSTAKAAN KOTA SEMARANG
                 </a>
             </div>
 
-            <div class="nav-container flex-1 hidden lg:flex pr-1"> <!-- Reduced pr-2 to pr-1 -->
-                <nav class="flex items-center space-x-4 text-sm font-medium"> <!-- Reduced space-x-6 to space-x-4 -->
-                    <a class="nav-link hover:text-gray-300" onclick="scrollToSection('pemerintahan')">
+            <div class="nav-container flex-1 hidden lg:flex pr-1">
+                <nav class="flex items-center space-x-4 text-sm font-medium">
+                    <a href="/#pemerintahan" class="nav-link hover:text-gray-300">
                         Pemerintah
                     </a>
                     <a class="nav-link hover:text-gray-300" href="{{ route('situs-kota-lama') }}">
@@ -139,7 +139,7 @@
                                 $kategoris = \App\Models\Kategori::all();
                             @endphp
                             @forelse($kategoris as $kategori)
-                                <a href="{{ route('kategori.show', $kategori->kode_kategori) }}" 
+                                <a href="{{ route('kategori.show', $kategori->kode_kategori) }}"
                                    class="block px-4 py-3 hover:bg-red-50 hover:text-red-600 transition-colors border-b border-gray-100">
                                     <i class="fas fa-folder mr-2"></i>{{ $kategori->nama_kategori }}
                                 </a>
@@ -151,7 +151,7 @@
                         </div>
                     </div>
                 </nav>
-                <div class="flex items-center space-x-1 ml-1"> <!-- Reduced space-x-2 to space-x-1, ml-2 to ml-1 -->
+                <div class="flex items-center space-x-1 ml-1">
                     <a href="{{ route('bookmark') }}"
                        class="btn-bookmark flex items-center bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all transform hover:scale-105 shadow-md">
                         <i class="fas fa-bookmark mr-1"></i>Bookmark
@@ -181,7 +181,7 @@
                 </button>
             </div>
             <nav class="flex flex-col space-y-2">
-                <a class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" onclick="scrollToSection('pemerintahan'); closeMobileMenu();">
+                <a href="/#pemerintahan" class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" onclick="closeMobileMenu();">
                     <i class="fas fa-landmark mr-3 w-5"></i>Pemerintah
                 </a>
                 <a class="flex items-center px-3 py-3 rounded-lg hover:bg-red-700 transition-colors" href="{{ route('situs-kota-lama') }}">
@@ -223,112 +223,157 @@
 
     <div class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" id="mobileOverlay"></div>
 
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            header.classList.toggle('scrolled', window.scrollY > 50);
+<script>
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('header');
+        header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu functionality
+    const menuButton = document.getElementById('menuButton');
+    const closeMenu = document.getElementById('closeMenu');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+
+    function openMobileMenu() {
+        mobileMenu.classList.add('active');
+        mobileOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        mobileOverlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        document.querySelectorAll('.mobile-dropdown').forEach(dd => dd.classList.remove('active'));
+        document.querySelectorAll('[id$="-icon"]').forEach(icon => icon.style.transform = 'rotate(0deg)');
+    }
+
+    menuButton.addEventListener('click', openMobileMenu);
+    closeMenu.addEventListener('click', closeMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    // Touch support for mobile menu swipe
+    let touchStartX = 0;
+    mobileMenu.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    mobileMenu.addEventListener('touchend', e => {
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 50) {
+            closeMobileMenu();
+        }
+    });
+
+    // Mobile dropdown functionality
+    function toggleMobileDropdown(dropdownId) {
+        const dropdown = document.getElementById(dropdownId + '-dropdown');
+        const icon = document.getElementById(dropdownId + '-icon');
+        const isActive = dropdown.classList.contains('active');
+        
+        document.querySelectorAll('.mobile-dropdown').forEach(dd => {
+            if (dd !== dropdown) dd.classList.remove('active');
+        });
+        document.querySelectorAll('[id$="-icon"]').forEach(ic => {
+            if (ic !== icon) ic.style.transform = 'rotate(0deg)';
         });
 
-        // Mobile menu functionality
-        const menuButton = document.getElementById('menuButton');
-        const closeMenu = document.getElementById('closeMenu');
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const mobileOverlay = document.getElementById('mobileOverlay');
+        dropdown.classList.toggle('active', !isActive);
+        icon.style.transform = isActive ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
 
-        function openMobileMenu() {
-            mobileMenu.classList.add('active');
-            mobileOverlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMobileMenu() {
-            mobileMenu.classList.remove('active');
-            mobileOverlay.classList.add('hidden');
-            document.body.style.overflow = '';
-            document.querySelectorAll('.mobile-dropdown').forEach(dd => dd.classList.remove('active'));
-            document.querySelectorAll('[id$="-icon"]').forEach(icon => icon.style.transform = 'rotate(0deg)');
-        }
-
-        menuButton.addEventListener('click', openMobileMenu);
-        closeMenu.addEventListener('click', closeMobileMenu);
-        mobileOverlay.addEventListener('click', closeMobileMenu);
-
-        // Touch support for mobile menu swipe
-        let touchStartX = 0;
-        mobileMenu.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        mobileMenu.addEventListener('touchend', e => {
-            const touchEndX = e.changedTouches[0].screenX;
-            if (touchStartX - touchEndX > 50) {
-                closeMobileMenu();
-            }
-        });
-
-        // Mobile dropdown functionality
-        function toggleMobileDropdown(dropdownId) {
-            const dropdown = document.getElementById(dropdownId + '-dropdown');
-            const icon = document.getElementById(dropdownId + '-icon');
-            const isActive = dropdown.classList.contains('active');
-            
-            document.querySelectorAll('.mobile-dropdown').forEach(dd => {
-                if (dd !== dropdown) dd.classList.remove('active');
-            });
-            document.querySelectorAll('[id$="-icon"]').forEach(ic => {
-                if (ic !== icon) ic.style.transform = 'rotate(0deg)';
-            });
-
-            dropdown.classList.toggle('active', !isActive);
-            icon.style.transform = isActive ? 'rotate(0deg)' : 'rotate(180deg)';
-        }
-
-        // Scroll to section function
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                const headerHeight = document.getElementById('header').offsetHeight;
-                const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                window.scrollTo({
-                    top: elementPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        // Scroll to footer
-        function scrollToFooter() {
-            const footer = document.getElementById('footer');
-            if (footer) {
-                const headerHeight = document.getElementById('header').offsetHeight;
-                const footerPosition = footer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                window.scrollTo({
-                    top: footerPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        // Close mobile menu on link click
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
+    // Handle clicks on navigation links for smooth scrolling on same page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all navigation links that point to sections on homepage
+        const navLinks = document.querySelectorAll('a[href^="/#"]');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const hash = this.getAttribute('href').substring(2); // Remove /# to get section id
+                const isHomepage = window.location.pathname === "/";
+                
+                if (isHomepage && hash) {
+                    // We're already on homepage, do smooth scroll
+                    e.preventDefault();
+                    const element = document.getElementById(hash);
+                    
+                    if (element) {
+                        const headerHeight = document.getElementById('header').offsetHeight;
+                        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                        window.scrollTo({
+                            top: elementPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                // If not on homepage, let the default behavior happen (redirect to /#pemerintahan)
             });
         });
+    });
 
-        // Handle escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
-                closeMobileMenu();
-            }
-        });
+    // Scroll to footer
+    function scrollToFooter() {
+        const footer = document.getElementById('footer');
+        const isHomepage = window.location.pathname === "/"; // Matches the 'home' route ('/')
 
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 1024 && mobileMenu.classList.contains('active')) {
-                closeMobileMenu();
-            }
+        if (isHomepage && footer) {
+            // If on homepage and footer exists, scroll directly
+            const headerHeight = document.getElementById('header').offsetHeight;
+            const footerPosition = footer.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+            window.scrollTo({
+                top: footerPosition,
+                behavior: 'smooth'
+            });
+        } else {
+            // If not on homepage, redirect to homepage with hash
+            window.location.href = "{{ route('home') }}#contact";
+        }
+    }
+
+    // Handle scroll to section after page load if hash is present
+    window.addEventListener('load', () => {
+        const hash = window.location.hash.substring(1); // Remove # from hash
+        
+        if (hash) {
+            setTimeout(() => {
+                const element = document.getElementById(hash);
+                
+                if (element) {
+                    const headerHeight = document.getElementById('header').offsetHeight;
+                    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                    window.scrollTo({
+                        top: elementPosition,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.warn('Element with id "' + hash + '" not found');
+                }
+            }, 300); // Increased delay to ensure page is fully loaded including included files
+        }
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            closeMobileMenu();
         });
-    </script>
+    });
+
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1024 && mobileMenu.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+</script>
+
 </body>
 </html>

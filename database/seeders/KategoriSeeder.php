@@ -63,9 +63,9 @@ class KategoriSeeder extends Seeder
                 'nama_kategori' => 'Tokoh',
                 'judul_kategori' => 'Jelajah Para Tokoh',
                 'deskripsi_kategori' => 'Mengenal Sosok-Sosok Berpengaruh dari Sejarah Semarang',
-                'cover_path' => public_path('cover/tokoh.png'),
+                'cover_path' => public_path('cover/cover_tokoh.png'),
                 'field_rules' => [
-                    "tampilan" => "1",
+                    "tampilan" => "0",
                     "sampulvideo" => "not_used",
                     "highlight" => "not_used",
                     "image" => "required",

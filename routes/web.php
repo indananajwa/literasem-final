@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +15,8 @@ use App\Http\Controllers\PengunjungController;
 // PENGUNJUNG: Resource controller per kategori
 use App\Http\Controllers\PemerintahController;
 use App\Http\Controllers\PariwisataController;
+use App\Http\Controllers\MasaKeMasaController;
+
 use App\Http\Controllers\ArsitekturController;
 use App\Http\Controllers\MakananController;
 use App\Http\Controllers\IbadahController;
@@ -117,11 +118,14 @@ Route::middleware(['auth'])->group(function () {
 
 // Landing Page dan Halaman Utama
 Route::get('/', [PengunjungController::class, 'index'])->name('home');
-Route::get('/masa-ke-masa', [PengunjungController::class, 'masaKeMasa'])->name('masa-ke-masa');
+// Route::get('/masa-ke-masa', [PengunjungController::class, 'masaKeMasa'])->name('masa-ke-masa');
 Route::get('/situs-kota-lama', [PengunjungController::class, 'situsKotaLama'])->name('situs-kota-lama');
-Route::get('/pemerintahan/foto/{periode}/{type?}', [PengunjungController::class, 'showFotoPemerintahan'])
-    ->name('pengunjung.pemerintahan.foto');
-    
+Route::get('/masa-lalu/image/{kode}/{type}', [PengunjungController::class, 'getMasaLaluImage'])
+    ->name('masa-lalu.image');
+
+// Route::get('/masa-ke-masa', [MasaKeMasaController::class, 'index'])->name('masa-ke-masa');
+// Route::get('/masa-lalu/image/{kode}/{type}', [MasaKeMasaController::class, 'getImage'])->name('masa-lalu.image');
+
 // Routes untuk pengunjung
 Route::get('/pemerintahan', [PemerintahController::class, 'timelinePemerintahan'])->name('pengunjung.pemerintahan.timeline');
 Route::get('/pemerintahan/current', [PemerintahController::class, 'currentPemerintahan'])->name('pengunjung.pemerintahan.current');

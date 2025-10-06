@@ -6,7 +6,7 @@
     </h2>
     
     <!-- Left Arrow Button -->
-    <button id="scroll-left" onclick="scrollLeft()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition-colors duration-300 shadow-lg z-20">
+    <button id="scroll-left" onclick="window.scrollLeft()" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition-colors duration-300 shadow-lg z-20">
         <i class="fas fa-chevron-left"></i>
     </button>
     
@@ -16,11 +16,10 @@
     </div>
     
     <!-- Right Arrow Button -->
-    <button id="scroll-right" onclick="scrollRight()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition-colors duration-300 shadow-lg z-20">
+    <button id="scroll-right" onclick="window.scrollRight()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition-colors duration-300 shadow-lg z-20">
         <i class="fas fa-chevron-right"></i>
     </button>
 </div>
 
 <!-- Add Font Awesome CDN if not already included -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-

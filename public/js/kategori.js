@@ -7,6 +7,19 @@ let tourData = [];
 let detailSection = null;
 let templateType = 'default'; // 'default' for kategori0, 'card' for kategori1
 
+// Export functions untuk akses global
+window.changeContent = changeContent;
+window.handleSearch = handleSearch;
+window.performSearch = performSearch;
+window.scrollToMenuSection = scrollToMenuSection;
+window.scrollToSection = scrollToSection;
+window.scrollLeft = scrollLeft;
+window.scrollRight = scrollRight;
+window.updateScrollButtons = updateScrollButtons;
+window.toggleReadMore = toggleReadMore;
+
+
+
 // Initialize data dari PHP
 function initializeData(kategoriDataFromPHP, fieldRulesFromPHP, tourDataFromPHP) {
     kategoriData = kategoriDataFromPHP || {};
@@ -490,25 +503,39 @@ function updateScrollButtons() {
 }
 
 function scrollLeft() {
+    console.log('scrollLeft called'); // Debug log
     const container = document.getElementById("tour-items");
-    if (!container) return; // Skip if highlight section not present
+    if (!container) {
+        console.error('tour-items container not found');
+        return;
+    }
     
     const scrollAmount = container.clientWidth * 0.8;
     container.scrollBy({
         left: -scrollAmount,
         behavior: 'smooth'
     });
+    
+    // Update buttons after scroll
+    setTimeout(updateScrollButtons, 300);
 }
 
 function scrollRight() {
+    console.log('scrollRight called'); // Debug log
     const container = document.getElementById("tour-items");
-    if (!container) return; // Skip if highlight section not present
+    if (!container) {
+        console.error('tour-items container not found');
+        return;
+    }
     
     const scrollAmount = container.clientWidth * 0.8;
     container.scrollBy({
         left: scrollAmount,
         behavior: 'smooth'
     });
+    
+    // Update buttons after scroll
+    setTimeout(updateScrollButtons, 300);
 }
 
 // Initialize the page
@@ -786,15 +813,4 @@ if (document.readyState === 'loading') {
     initializeModal();
 }
 
-
-// Export functions untuk akses global
-window.changeContent = changeContent;
-window.handleSearch = handleSearch;
-window.performSearch = performSearch;
-window.scrollToMenuSection = scrollToMenuSection;
-window.scrollToSection = scrollToSection;
-window.scrollLeft = scrollLeft;
-window.scrollRight = scrollRight;
-window.updateScrollButtons = updateScrollButtons;
-window.toggleReadMore = toggleReadMore;
 

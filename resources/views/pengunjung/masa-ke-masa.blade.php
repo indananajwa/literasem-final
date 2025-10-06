@@ -273,6 +273,7 @@
                     </button>
                 </div>
             </div>
+            
             <div id="past-present-section" class="mb-12">
                 <div class="text-center mb-12">
                     <div class="inline-block">
@@ -299,6 +300,7 @@
                 </div>
                 <div id="comparison-display" class="max-w-7xl mx-auto"></div>
             </div>
+            
             <div id="future-section" class="hidden mb-20">
                 <div class="text-center mb-12">
                     <h2 class="text-4xl md:text-5xl font-roboto font-bold text-white mb-4 tracking-tight">
@@ -307,90 +309,26 @@
                     <div class="w-24 h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent mx-auto mb-6"></div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
-                        <div class="relative aspect-video">
-                            <img src="https://i3.ytimg.com/vi/B4mLKcVIERs/maxresdefault.jpg" alt="Transportasi Modern" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('B4mLKcVIERs')">
-                                    <i class="fas fa-play"></i>
-                                </button>
+                    @if(isset($masaDepan) && $masaDepan->count() > 0)
+                        @foreach($masaDepan as $video)
+                        <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
+                            <div class="relative aspect-video">
+                                <img src="https://i3.ytimg.com/vi/{{ $video->video }}/maxresdefault.jpg" alt="{{ $video->judul }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('{{ $video->video }}')">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">{{ $video->judul }}</h3>
+                                <p class="text-gray-600 text-sm font-roboto font-normal">{{ $video->deskripsi }}</p>
                             </div>
                         </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">Transportasi Modern</h3>
-                            <p class="text-gray-600 text-sm font-roboto font-normal">Sistem MRT dan LRT terintegrasi yang akan menghubungkan seluruh wilayah Semarang.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
-                        <div class="relative aspect-video">
-                            <img src="https://i3.ytimg.com/vi/c48g-XFcLcU/maxresdefault.jpg" alt="Smart City" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('c48g-XFcLcU')">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">Smart City Infrastructure</h3>
-                            <p class="text-gray-600 text-sm font-roboto font-normal">Implementasi teknologi pintar untuk sistem manajemen kota yang lebih efisien.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
-                        <div class="relative aspect-video">
-                            <img src="https://i3.ytimg.com/vi/RYMQOcxeg6U/maxresdefault.jpg" alt="Green Building" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('RYMQOcxeg6U')">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">Green Building Development</h3>
-                            <p class="text-gray-600 text-sm font-roboto font-normal">Pembangunan gedung ramah lingkungan dengan teknologi hemat energi.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
-                        <div class="relative aspect-video">
-                            <img src="https://i3.ytimg.com/vi/c48g-XFcLcU/maxresdefault.jpg" alt="Digital Tourism" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('c48g-XFcLcU')">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">Digital Tourism</h3>
-                            <p class="text-gray-600 text-sm font-roboto font-normal">Pengembangan wisata digital dengan teknologi AR/VR untuk eksplorasi sejarah kota.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
-                        <div class="relative aspect-video">
-                            <img src="https://i3.ytimg.com/vi/B4mLKcVIERs/maxresdefault.jpg" alt="Waterfront City" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('B4mLKcVIERs')">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">Waterfront City</h3>
-                            <p class="text-gray-600 text-sm font-roboto font-normal">Pengembangan kawasan pesisir dengan konsep modern dan berkelanjutan.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg group">
-                        <div class="relative aspect-video">
-                            <img src="https://i3.ytimg.com/vi/RYMQOcxeg6U/maxresdefault.jpg" alt="Cultural Preservation" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('RYMQOcxeg6U')">
-                                    <i class="fas fa-play"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-roboto font-bold text-gray-800 mb-2">Cultural Preservation</h3>
-                            <p class="text-gray-600 text-sm font-roboto font-normal">Pelestarian budaya dengan teknologi modern untuk generasi mendatang.</p>
-                        </div>
-                    </div>
+                        @endforeach
+                    @else
+                        <p class="text-white text-center">Belum ada data masa depan.</p>
+                    @endif
                 </div>
                 <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
                     <div class="relative w-full max-w-4xl mx-4">
@@ -405,185 +343,27 @@
             </div>
         </div>
     </section>
+    
     <script>
+        // Data dari database
         const locations = [
+            @foreach($masaLalu as $item)
             {
-                id: "tugu-muda",
-                year: "1953",
-                location: "Tugu Muda",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/tugu-muda-1953.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/tugu-muda-2024.jpg') }}",
-                beforeLabel: "Vrijheidsmonument",
-                afterLabel: "Tugu Muda",
-                beforeYear: "1953",
-                afterYear: "2024",
-                title: "Tugu Muda",
-                description: [
-                    "<strong>Tugu Muda</strong> terletak di pusat Kota Semarang, di persimpangan lima jalan utama, menjadi monumen ikonik yang mengenang perjuangan kemerdekaan. Dibangun pada tahun 1953, tugu ini awalnya dikenal sebagai \"Vrijheidsmonument\" pada masa kolonial.",
-                    "Monumen ini didedikasikan untuk mengenang <strong>Pertempuran Lima Hari Semarang</strong> (14-19 Oktober 1945), di mana para pemuda berjuang melawan penjajah. Transformasi fisik dan maknanya mencerminkan semangat kemerdekaan Indonesia."
-                ]
-            },
-            {
-                id: "lawang-sewu",
-                year: "1930",
-                location: "Lawang Sewu",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/lawangsewutahun1930.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/lawangsewu2024.jpg') }}",
-                beforeLabel: "Kantor NIS",
-                afterLabel: "Museum Heritage",
-                beforeYear: "1930",
-                afterYear: "2024",
-                title: "Lawang Sewu",
-                description: [
-                    "<strong>Lawang Sewu</strong> adalah gedung bersejarah milik PT Kereta Api Indonesia (Persero), dibangun sebagai kantor pusat Nederlandsch-Indische Spoorweg Maatschappij (NIS). Dikenal dengan ratusan pintu dan jendelanya, bangunan ini adalah mahakarya arsitektur Art Nouveau.",
-                    "Dari masa kolonial hingga menjadi museum heritage, Lawang Sewu telah menyaksikan berbagai era, termasuk pendudukan Jepang dan perjuangan kemerdekaan, menjadikannya simbol ketahanan dan keindahan sejarah."
-                ]
-            },
-            {
-                id: "kota-lama",
-                year: "1900",
-                location: "Kota Lama",
-                beforeImage: "{{ asset('img/kota-lama-sejarah.jpg') }}",
-                afterImage: "{{ asset('img/kota-lama-sekarang.jpg') }}",
-                beforeLabel: "Pusat Dagang",
-                afterLabel: "Little Netherlands",
-                beforeYear: "1900",
-                afterYear: "2024",
-                title: "Kota Lama",
-                description: [
-                    "<strong>Kawasan Kota Lama</strong> adalah jantung perekonomian masa kolonial yang kini menjelma menjadi destinasi wisata heritage terpopuler. Dengan arsitektur Eropa yang autentik dan penataan kota yang terencana, kawasan ini dijuluki \"Little Netherlands\".",
-                    "Transformasi dari pusat perdagangan kolonial menjadi kawasan wisata budaya menunjukkan bagaimana warisan sejarah dapat dilestarikan sambil memberikan nilai ekonomi bagi masyarakat modern."
-                ]
-            },
-            {
-                id: "stasiun-tawang",
-                year: "1868",
-                location: "Stasiun Tawang",
-                beforeImage: "{{ asset('img/stasiun-tawang-lama.jpg') }}",
-                afterImage: "{{ asset('img/stasiun-tawang-sekarang.jpg') }}",
-                beforeLabel: "Stasiun Pertama",
-                afterLabel: "Heritage Station",
-                beforeYear: "1868",
-                afterYear: "2024",
-                title: "Stasiun Tawang",
-                description: [
-                    "<strong>Stasiun Tawang</strong> adalah pionir transportasi kereta api di Jawa Tengah, menjadi saksi hidup revolusi transportasi yang mengubah wajah perekonomian Nusantara. Sebagai stasiun tertua di Semarang, ia menjadi penghubung vital jalur Semarang-Yogyakarta-Solo.",
-                    "Keunikan Stasiun Tawang terletak pada kemampuannya mempertahankan fungsi operasional sambil melestarikan nilai historis. Hingga kini, stasiun ini tetap melayani perjalanan sambil menjadi destinasi wisata heritage yang memikat."
-                ]
-            },
-            {
-                id: "stasiun-semarang-nis",
-                year: "1905",
-                location: "Stasiun Semarang NIS",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/stasiunsemarangnis1905.png') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/KampungSpoorland2024.jpg') }}",
-                beforeLabel: "Stasiun Semarang NIS",
-                afterLabel: "Kampung Spoorland",
-                beforeYear: "1905",
-                afterYear: "2024",
-                title: "Stasiun Semarang NIS",
-                description: [
-                    "<strong>Stasiun Samarang NIS</strong>, atau dikenal sebagai Stasiun Kemidjen NIS, dibangun pada 17 Juni 1864 sebagai salah satu stasiun kereta api tertua di Indonesia. Stasiun ini menjadi pusat penting transportasi pada masa kolonial Belanda.",
-                    "Kini, lokasi ini telah bertransformasi menjadi <strong>Kampung Spoorland</strong>, sebuah kawasan wisata yang menggabungkan nilai sejarah dengan daya tarik modern, menawarkan pengalaman budaya dan edukasi bagi pengunjung."
-                ]
-            },
-            {
-                id: "mercusuar-willem",
-                year: "1915",
-                location: "Mercusuar Willem",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/mercusuar-willem-1915.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/mercusuar-willem-2024.jpg') }}",
-                beforeLabel: "Mercusuar Willem",
-                afterLabel: "Mercusuar Willem",
-                beforeYear: "1915",
-                afterYear: "2024",
-                title: "Mercusuar Willem",
-                description: [
-                    "<strong>Mercusuar Willem</strong> didirikan pada masa kolonial Belanda antara tahun 1879 hingga 1884, berfungsi sebagai penanda navigasi penting di pantai Semarang. Struktur ini menjadi saksi perkembangan pelabuhan kota.",
-                    "Hingga kini, mercusuar ini tetap berdiri sebagai simbol ketahanan maritim, menarik wisatawan yang ingin menelusuri warisan bahari Semarang."
-                ]
-            },
-            {
-                id: "wisma-perdamaian",
-                year: "1920",
-                location: "Wisma Perdamaian",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/wisma-perdamaian-1920.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/wisma-perdamaian-2024.jpg') }}",
-                beforeLabel: "Residence de Gubernur",
-                afterLabel: "Wisma Perdamaian",
-                beforeYear: "1920",
-                afterYear: "2024",
-                title: "Wisma Perdamaian",
-                description: [
-                    "<strong>Wisma Perdamaian</strong>, dahulu dikenal sebagai Residence de Gubernur van Java’s Noordoosthoek, adalah bangunan kolonial abad ke-19 yang mencerminkan keanggunan arsitektur Belanda.",
-                    "Kini, bangunan ini menjadi simbol warisan budaya, sering digunakan untuk acara resmi dan kunjungan wisata, mempertahankan pesona sejarahnya sambil relevan di era modern."
-                ]
-            },
-            {
-                id: "stasiun-poncol",
-                year: "1927",
-                location: "Stasiun Poncol",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/stasiun-poncol-1927.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/stasiun-poncol-2024.jpg') }}",
-                beforeLabel: "Stasiun Poncol",
-                afterLabel: "Stasiun Poncol",
-                beforeYear: "1927",
-                afterYear: "2024",
-                title: "Stasiun Poncol Semarang",
-                description: [
-                    "<strong>Stasiun Semarang Poncol</strong>, yang secara resmi bernama 'Semarang West', terletak di daerah Poncol, Semarang. Stasiun ini menjadi bagian penting dari jaringan kereta api sejak awal abad ke-20.",
-                    "Dengan arsitektur klasiknya, stasiun ini terus beroperasi sebagai penghubung transportasi sambil mempertahankan nilai historis sebagai salah satu warisan kolonial."
-                ]
-            },
-            {
-                id: "balai-kota",
-                year: "1920",
-                location: "Balai Kota",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/balai-kota-1920.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/balai-kota-2024.jpg') }}",
-                beforeLabel: "Villa Gimberg",
-                afterLabel: "Balai Kota",
-                beforeYear: "1920",
-                afterYear: "2024",
-                title: "Balai Kota Semarang",
-                description: [
-                    "<strong>Balai Kota Semarang</strong> awalnya merupakan villa milik keluarga Gimberg di Jalan Pemuda No. 148, dibangun pada era kolonial. Bangunan ini kemudian diubah menjadi pusat pemerintahan kota.",
-                    "Dengan arsitektur klasiknya, Balai Kota tetap menjadi landmark penting yang memadukan fungsi administratif dengan nilai sejarah yang kaya."
-                ]
-            },
-            {
-                id: "jalan-pahlawan",
-                year: "1920",
-                location: "Jalan Pahlawan",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/jalan-pahlawan-1920.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/jalan-pahlawan-2024.jpg') }}",
-                beforeLabel: "Oei Tiong Ham Weg",
-                afterLabel: "Jalan Pahlawan",
-                beforeYear: "1920",
-                afterYear: "2024",
-                title: "Jalan Pahlawan",
-                description: [
-                    "<strong>Jalan Pahlawan</strong>, yang dulu dikenal sebagai Oei Tiong Ham Weg di kawasan Candi Baru, Semarang, adalah salah satu arteri penting kota pada masa kolonial.",
-                    "Kini, jalan ini menjadi simbol modernitas dan sejarah, menghubungkan berbagai landmark penting sambil menyimpan kenangan masa lalu."
-                ]
-            },
-            {
-                id: "jalan-gombel",
-                year: "1920",
-                location: "Jalan Tanjakan Gombel",
-                beforeImage: "{{ asset('smg-masa-lalu-sekarang/jalan-gombel-1920.jpg') }}",
-                afterImage: "{{ asset('smg-masa-lalu-sekarang/jalan-gombel-2024.jpg') }}",
-                beforeLabel: "Makam Pecinan",
-                afterLabel: "Jalan Tanjakan Gombel",
-                beforeYear: "1920",
-                afterYear: "2024",
-                title: "Jalan Tanjakan Gombel",
-                description: [
-                    "<strong>Jalan Tanjakan Gombel</strong> awalnya merupakan kawasan makam pecinan leluhur para etnis Tionghoa di Semarang, mencerminkan kekayaan budaya masyarakat Tionghoa pada masa itu.",
-                    "Kini, jalan ini dikenal sebagai salah satu jalur ikonik dengan pemandangan kota yang menakjubkan, menjadi destinasi populer bagi warga lokal dan wisatawan."
-                ]
-            }
+                id: "{{ $item->kode_lokasi }}",
+                year: "{{ $item->tahun_sebelum }}",
+                location: "{{ $item->judul }}",
+                beforeImage: "{{ route('masa-lalu.image', ['kode' => $item->kode_lokasi, 'type' => 'sebelum']) }}",
+                afterImage: "{{ route('masa-lalu.image', ['kode' => $item->kode_lokasi, 'type' => 'sesudah']) }}",
+                beforeLabel: "{{ $item->label_sebelum }}",
+                afterLabel: "{{ $item->label_sesudah }}",
+                beforeYear: "{{ $item->tahun_sebelum }}",
+                afterYear: "{{ $item->tahun_sesudah }}",
+                title: "{{ $item->judul }}",
+                description: {!! json_encode(array_filter(preg_split('/\n\n+/', $item->deskripsi))) !!}
+            }{{ $loop->last ? '' : ',' }}
+            @endforeach
         ];
+
         function renderTimeline() {
             const timelineSlider = document.getElementById('timeline-slider');
             timelineSlider.innerHTML = locations.map((loc, index) => `
@@ -596,6 +376,7 @@
                 </div>
             `).join('');
         }
+
         function renderLocationDisplays() {
             const comparisonDisplay = document.getElementById('comparison-display');
             comparisonDisplay.innerHTML = locations.map((loc, index) => `
@@ -639,11 +420,14 @@
                 </div>
             `).join('');
         }
+
         document.addEventListener('DOMContentLoaded', () => {
             renderTimeline();
             renderLocationDisplays();
+
             const timelineItems = document.querySelectorAll('.timeline-item');
             const locationDisplays = document.querySelectorAll('.location-display');
+
             timelineItems.forEach(item => {
                 item.addEventListener('click', () => {
                     timelineItems.forEach(i => i.classList.remove('active'));
@@ -654,32 +438,39 @@
                     item.scrollIntoView({ behavior: 'smooth', inline: 'center' });
                 });
             });
+
             const sliders = document.querySelectorAll('.image-comparison-slider');
             sliders.forEach(slider => {
                 const handle = slider.querySelector('.slider-handle');
                 const beforeImage = slider.querySelector('.image-after');
                 let isDragging = false;
+
                 const updateSlider = (x, rect) => {
                     x = Math.max(0, Math.min(x, rect.width));
                     const percentage = (x / rect.width) * 100;
                     beforeImage.style.clipPath = `polygon(${percentage}% 0%, 100% 0%, 100% 100%, ${percentage}% 100%)`;
                     handle.style.left = `${percentage}%`;
                 };
+
                 handle.addEventListener('mousedown', () => {
                     isDragging = true;
                 });
+
                 document.addEventListener('mousemove', (e) => {
                     if (!isDragging) return;
                     const rect = slider.getBoundingClientRect();
                     updateSlider(e.clientX - rect.left, rect);
                 });
+
                 document.addEventListener('mouseup', () => {
                     isDragging = false;
                 });
+
                 handle.addEventListener('touchstart', (e) => {
                     isDragging = true;
                     e.preventDefault();
                 });
+
                 document.addEventListener('touchmove', (e) => {
                     if (!isDragging) return;
                     const touch = e.touches[0];
@@ -687,17 +478,21 @@
                     updateSlider(touch.clientX - rect.left, rect);
                     e.preventDefault();
                 });
+
                 document.addEventListener('touchend', () => {
                     isDragging = false;
                 });
             });
+
             document.getElementById('btnPastPresent').classList.add('bg-red-800', 'text-white');
         });
+
         function showSection(section) {
             const pastPresentSection = document.getElementById('past-present-section');
             const futureSection = document.getElementById('future-section');
             const btnPastPresent = document.getElementById('btnPastPresent');
             const btnFuture = document.getElementById('btnFuture');
+
             if (section === 'past-present') {
                 pastPresentSection.classList.remove('hidden');
                 futureSection.classList.add('hidden');
@@ -714,6 +509,7 @@
                 btnPastPresent.classList.remove('bg-red-800', 'text-white');
             }
         }
+
         function playVideo(videoId) {
             const modal = document.getElementById('videoModal');
             const videoFrame = document.getElementById('videoFrame');
@@ -721,6 +517,7 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+
         function closeVideo() {
             const modal = document.getElementById('videoModal');
             const videoFrame = document.getElementById('videoFrame');

@@ -18,7 +18,16 @@ class PengunjungController extends Controller
         // Ambil data pemerintahan untuk ditampilkan di halaman index
         $pemerintahan = Pemerintah::orderBy('periode', 'desc')->get();
         
-        return view('pengunjung.index', compact('pemerintahan'));
+        // Ambil data masa lalu
+        $masaLalu = DB::table('smgMasaLalu')
+            ->orderBy('tahun_sebelum')
+            ->get();
+
+        // Ambil data masa depan
+        $masaDepan = DB::table('smgMasaDepan')
+            ->get();
+        
+        return view('pengunjung.index', compact('pemerintahan', 'masaLalu', 'masaDepan'));
     }
 
     /**
@@ -89,26 +98,36 @@ class PengunjungController extends Controller
     }
 
     /**
-     * Method untuk menampilkan foto pemerintahan (untuk pengunjung)
+     * Menampilkan gambar masa lalu dari database (BLOB)
+     *
+     * @param string $kode
+     * @param string $type (sebelum|sesudah)
+     * @return \Illuminate\Http\Response
      */
-    public function showFotoPemerintahan($periode, $type = 'walikota')
+    public function getMasaLaluImage($kode, $type)
     {
-        $pemerintah = Pemerintah::findOrFail($periode);
-        
-        if ($type === 'wakil') {
-            $foto = $pemerintah->foto_wakil_walikota;
-            $mimeType = $pemerintah->mime_type_wakil_walikota;
-        } else {
-            $foto = $pemerintah->foto_walikota;
-            $mimeType = $pemerintah->mime_type_walikota;
-        }
+        $data = DB::table('smgMasaLalu')
+            ->where('kode_lokasi', $kode)
+            ->first();
 
-        if (!$foto) {
+        if (!$data) {
             abort(404);
         }
 
-        return response($foto)
+        if ($type === 'sebelum') {
+            $imageData = $data->foto_sebelum;
+            $mimeType = $data->mime_type_sebelum;
+        } else {
+            $imageData = $data->foto_sesudah;
+            $mimeType = $data->mime_type_sesudah;
+        }
+
+        if (!$imageData) {
+            abort(404);
+        }
+
+        return response($imageData)
             ->header('Content-Type', $mimeType)
-            ->header('Cache-Control', 'public, max-age=86400'); // 24 hours cache
+            ->header('Cache-Control', 'public, max-age=31536000');
     }
 }

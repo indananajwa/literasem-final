@@ -10,18 +10,18 @@ class Pemerintah extends Model
     use HasFactory;
 
     protected $table = 'pemerintah';
+    protected $primaryKey = 'periode';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
-        'nama', 
-        'jabatan', 
-        'tahun_awal', 
-        'tahun_akhir', 
-        'foto'
+        'periode',
+        'kode_kategori',
+        'nama_walikota',
+        'nama_wakil_walikota',
+        'foto_walikota',
+        'mime_type_walikota',
+        'foto_wakil_walikota',
+        'mime_type_wakil_walikota',
     ];
-
-    // Accessor untuk foto
-    public function getFotoAttribute($value)
-    {
-        return asset('storage/' . $value);
-    }
 }

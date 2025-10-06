@@ -39,7 +39,7 @@
 </head>
 <body>
     <!-- Section Pemerintahan -->
-    <section id="pemerintahan" class="bg-grey-50 py-16 opacity-0 translate-y-10 transition-all duration-700">
+    <section id="pemerintahan" class="bg-gray-50 py-16 opacity-0 translate-y-10 transition-all duration-700">
         <div class="min-h-screen bg-gradient-to-br from-grey-50 to-grey-100 py-8">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Header -->
@@ -103,8 +103,8 @@
                                                 <div class="text-center">
                                                     <div class="w-48 h-64 rounded-lg shadow-lg border-2 border-red-300 overflow-hidden">
                                                         @if($item->foto_wakil_walikota)
-                                                            <img src="{{ route('admin.pemerintah.foto', ['periode' => $item->periode, 'type' => 'wakil']) }}" 
-                                                                 alt="Foto {{ $item->nama_wakil_walikota }}" 
+                                                            <img src="{{ route('pengunjung.pemerintahan.foto', ['periode' => $item->periode, 'type' => 'wakil']) }}" 
+                                                                 alt="Foto {{ $item->nama_wakil_walikota }}"
                                                                  class="timeline-image">
                                                         @else
                                                             <div class="timeline-placeholder w-full h-full flex items-center justify-center text-white font-bold text-5xl">
@@ -131,8 +131,8 @@
                                             <div class="flex justify-center mb-6">
                                                 <div class="w-40 h-52 rounded-lg shadow-md overflow-hidden">
                                                     @if($item->foto_walikota)
-                                                        <img src="{{ route('admin.pemerintah.foto', ['periode' => $item->periode, 'type' => 'walikota']) }}" 
-                                                             alt="Foto {{ $item->nama_walikota }}" 
+                                                        <img src="{{ route('pengunjung.pemerintahan.foto', ['periode' => $item->periode, 'type' => 'walikota']) }}" 
+                                                            alt="Foto {{ $item->nama_walikota }}" 
                                                              class="timeline-image">
                                                     @else
                                                         <div class="timeline-placeholder w-full h-full flex items-center justify-center text-white font-bold text-4xl">
