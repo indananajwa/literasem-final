@@ -166,6 +166,10 @@
                             class="btn-contact bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md transition-all transform hover:scale-105">
                         Kontak
                     </button>
+                    <a href="https://docs.google.com/document/d/1lJe3y4EB0Xs8zcP7x7rlnZUSVyUMqFRu/edit" target="_blank"
+                    class="btn-contact bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-md transition-all transform hover:scale-105">
+                        <i class="fas fa-book mr-1"></i>HelpBook
+                    </a>
                 </div>
             </div>
         
@@ -234,6 +238,12 @@
                         class="flex items-center mt-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-colors btn-contact">
                     <i class="fas fa-envelope mr-3 w-5"></i>Kontak
                 </button>
+
+                <a href="https://docs.google.com/document/d/1lJe3y4EB0Xs8zcP7x7rlnZUSVyUMqFRu/edit" target="_blank"
+                class="btn-helpbook flex items-center bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all transform hover:scale-105 shadow-md ml-1">
+                    <i class="fas fa-book mr-1"></i>HelpBook
+                </a>
+
             </nav>
         </div>
     </div>

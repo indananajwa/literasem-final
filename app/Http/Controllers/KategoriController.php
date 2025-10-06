@@ -46,67 +46,71 @@ class KategoriController extends Controller
      * Simpan kategori baru.
      */
     public function store(Request $request)
-{
-    try {
-        // Validasi dengan pesan custom
-        $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'kode_kategori' => 'required|string|max:3|unique:kategori,kode_kategori',
-            'judul_kategori' => 'required|string|max:255',
-            'deskripsi_kategori' => 'required|string',
-            'gambar_cover' => 'required|image|max:10240',
-            'field_rules' => 'required|array'
-        ], [
-            'nama_kategori.required' => 'Nama kategori wajib diisi',
-            'kode_kategori.required' => 'Kode kategori wajib diisi',
-            'kode_kategori.unique' => 'Kode kategori sudah digunakan',
-            'judul_kategori.required' => 'Judul kategori wajib diisi',
-            'deskripsi_kategori.required' => 'Deskripsi wajib diisi',
-            'gambar_cover.required' => 'Gambar cover wajib diupload',
-            'gambar_cover.image' => 'File harus berupa gambar',
-            'gambar_cover.max' => 'Ukuran gambar maksimal 10MB',
-            'field_rules.required' => 'Aturan field wajib dipilih'
-        ]);
+    {
+        try {
+            // Validasi dengan pesan custom
+            $validated = $request->validate([
+                'nama_kategori' => 'required|string|max:255',
+                'kode_kategori' => 'required|string|max:3|unique:kategori,kode_kategori',
+                'judul_kategori' => 'required|string|max:255',
+                'deskripsi_kategori' => 'required|string',
+                'gambar_cover' => 'required|image|max:10240',
+                'field_rules' => 'required|array',
+                'highlight' => 'required|in:0,1',
+                'video_sampul.title' => 'required_with:video_sampul|string|max:255',
+                'video_sampul.description' => 'required_with:video_sampul|string',
+                'video_sampul.youtube_id' => 'required_with:video_sampul|string',
+            ], [
+                'nama_kategori.required' => 'Nama kategori wajib diisi',
+                'kode_kategori.required' => 'Kode kategori wajib diisi',
+                'kode_kategori.unique' => 'Kode kategori sudah digunakan',
+                'judul_kategori.required' => 'Judul kategori wajib diisi',
+                'deskripsi_kategori.required' => 'Deskripsi wajib diisi',
+                'gambar_cover.required' => 'Gambar cover wajib diupload',
+                'gambar_cover.image' => 'File harus berupa gambar',
+                'gambar_cover.max' => 'Ukuran gambar maksimal 10MB',
+                'field_rules.required' => 'Aturan field wajib dipilih',
+                'highlight.required' => 'Opsi highlight wajib dipilih'
+            ]);
 
-        // Proses gambar cover
-        $gambar = null;
-        $mimeType = null;
-        
-        if ($request->hasFile('gambar_cover')) {
-            $file = $request->file('gambar_cover');
-            $gambar = file_get_contents($file->getRealPath());
-            $mimeType = $file->getMimeType();
+            // Proses gambar cover
+            $gambar = null;
+            $mimeType = null;
+            
+            if ($request->hasFile('gambar_cover')) {
+                $file = $request->file('gambar_cover');
+                $gambar = file_get_contents($file->getRealPath());
+                $mimeType = $file->getMimeType();
+            }
+
+            // Simpan ke database
+            Kategori::create([
+                'kode_kategori' => strtoupper($validated['kode_kategori']),
+                'nama_kategori' => $validated['nama_kategori'],
+                'judul_kategori' => $validated['judul_kategori'],
+                'deskripsi_kategori' => $validated['deskripsi_kategori'],
+                'gambar_cover' => $gambar,
+                'mime_type' => $mimeType,
+                'field_rules' => $validated['field_rules'],
+                'highlight' => $validated['highlight'],
+                'video_sampul' => $request->has('video_sampul') ? json_encode($request->video_sampul) : null,            ]);
+
+            return redirect()->route('admin.kategori.index')
+                             ->with('success', 'Kategori berhasil ditambahkan!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                             ->withErrors($e->validator)
+                             ->withInput();
+                             
+        } catch (\Exception $e) {
+            Log::error('Error saat menyimpan kategori: ' . $e->getMessage());
+            
+            return redirect()->back()
+                             ->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.')
+                             ->withInput();
         }
-
-        // Simpan ke database
-        Kategori::create([
-            'kode_kategori' => strtoupper($validated['kode_kategori']),
-            'nama_kategori' => $validated['nama_kategori'],
-            'judul_kategori' => $validated['judul_kategori'],
-            'deskripsi_kategori' => $validated['deskripsi_kategori'],
-            'gambar_cover' => $gambar,
-            'mime_type' => $mimeType,
-            'field_rules' => $validated['field_rules']
-        ]);
-
-        return redirect()->route('admin.kategori.index')
-                         ->with('success', 'Kategori berhasil ditambahkan!');
-
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        // Error validasi - redirect back dengan error
-        return redirect()->back()
-                         ->withErrors($e->validator)
-                         ->withInput();
-                         
-    } catch (\Exception $e) {
-        // Error umum (database, dll)
-        Log::error('Error saat menyimpan kategori: ' . $e->getMessage());
-        
-        return redirect()->back()
-                         ->with('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.')
-                         ->withInput();
     }
-}
 
     /**
      * Tampilkan detail kategori.
@@ -138,9 +142,28 @@ class KategoriController extends Controller
             ->orderBy('kode_konten')
             ->get();
 
-        Log::info('Konten Data Debug', [
-            'kategori_code' => $kategori->kode_kategori,
-            'konten_count' => $kontenList->count(),
+        // === AMBIL KATEGORI HIGHLIGHT ===
+        $highlightKategori = DB::table('kategori')
+            ->where('highlight', 1)
+            ->get();
+
+        // Ambil konten untuk setiap kategori highlight
+        $highlightData = [];
+        foreach ($highlightKategori as $kat) {
+            $kontenHighlight = DB::table('konten')
+                ->where('kode_kategori', $kat->kode_kategori)
+                ->orderBy('kode_konten')
+                ->get();
+
+            $highlightData[] = [
+                'kategori' => $kat,
+                'konten' => $kontenHighlight
+            ];
+        }
+
+        Log::info('Highlight Data Debug', [
+            'highlight_count' => count($highlightKategori),
+            'highlight_kategori' => $highlightKategori->pluck('nama_kategori')->toArray()
         ]);
 
         // Fix: Ensure fieldRules is always an array
@@ -151,13 +174,6 @@ class KategoriController extends Controller
                 $fieldRules = $decodedRules;
             }
         }
-
-        Log::info('Field Rules Debug', [
-            'raw_field_rules' => $kategori->field_rules,
-            'decoded_field_rules' => $fieldRules,
-            'tampilan_value' => $fieldRules['tampilan'] ?? 'not_set',
-            'tampilan_type' => gettype($fieldRules['tampilan'] ?? null),
-        ]);
 
         $video_sampul = [];
         if (!empty($kategori->video_sampul)) {
@@ -188,7 +204,16 @@ class KategoriController extends Controller
 
         $tourDataForJS = $tourData->toArray();
 
-        // tambahkan $video_sampul ke compact()
+        // KIRIM DATA HIGHLIGHT KE VIEW
+        // Tentukan tampilan berdasarkan field_rules
+        $decodedRules = json_decode($kategori->field_rules, true);
+        $tampilan = isset($decodedRules['tampilan']) ? $decodedRules['tampilan'] : 0;
+
+        // Tentukan nama view sesuai tampilan
+        $viewName = $tampilan == 1
+            ? 'pengunjung.kategori.kategori1'
+            : 'pengunjung.kategori.kategori0';
+
         return view('pengunjung.kategori.page1', compact(
             'kategori',
             'kontenList',
@@ -196,11 +221,11 @@ class KategoriController extends Controller
             'tourData',
             'kategoriForJS',
             'tourDataForJS',
-            'video_sampul'
+            'video_sampul',
+            'highlightKategori',
+            'highlightData'
         ));
     }
-
-
 
     /**
      * Form edit kategori.
@@ -220,9 +245,14 @@ class KategoriController extends Controller
 
         $request->validate([
             'nama_kategori' => 'required|string|max:255',
+            'judul_kategori' => 'required|string|max:255',
             'deskripsi_kategori' => 'nullable|string',
             'gambar_cover' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'field_rules' => 'nullable|array',
+            'highlight' => 'nullable|in:0,1',
+            'video_sampul.title' => 'nullable|string|max:255',
+            'video_sampul.description' => 'nullable|string',
+            'video_sampul.youtube_id' => 'nullable|string',
         ]);
 
         $data = $request->all();
@@ -236,6 +266,15 @@ class KategoriController extends Controller
 
         if (isset($data['field_rules'])) {
             $data['field_rules'] = json_encode($data['field_rules']);
+        }
+
+        // Encode field_rules & video_sampul
+        if (isset($validated['field_rules'])) {
+            $data['field_rules'] = json_encode($validated['field_rules']);
+        }
+
+        if ($request->has('video_sampul')) {
+            $data['video_sampul'] = json_encode($request->video_sampul);
         }
 
         $kategori->update($data);
@@ -306,6 +345,7 @@ class KategoriController extends Controller
             
         return response()->json($kontenList);
     }
+
     public function cover($kodeKategori)
     {
         $kategori = Kategori::where('kode_kategori', strtoupper($kodeKategori))->first();
@@ -315,9 +355,6 @@ class KategoriController extends Controller
                 ->header('Content-Type', $kategori->mime_type ?? 'image/jpeg');
         }
     
-        // fallback kalau nggak ada gambar
         return response()->file(public_path('images/no-image.png'));
     }
-    
-
 }

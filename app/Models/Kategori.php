@@ -23,7 +23,8 @@ class Kategori extends Model
         'gambar_cover',
         'mime_type',
         'field_rules',
-        'video_sampul'
+        'video_sampul',
+        'highlight',
     ];
 
     protected $casts = [

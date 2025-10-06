@@ -6,6 +6,7 @@
   <title>Tambah Kategori</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body { font-family: 'Inter', sans-serif; }
     .upload-area {
@@ -22,6 +23,13 @@
     }
     .btn-green-gradient {
       background: linear-gradient(to right, #48D92E, #267318);
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
@@ -44,7 +52,7 @@
       <a href="{{ route('admin.kategori.index') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 text-sm">
         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Kategori
       </a>
-      <h1 class="centertext-2xl font-bold text-gray-900 flex items-center">
+      <h1 class="text-2xl font-bold text-gray-900 flex items-center">
         Manajemen Kategori Konten
       </h1>
     </div>
@@ -181,13 +189,145 @@
           </div>
         </div>
 
-        <!-- Highlight Option -->
+        <!-- Highlight Option (REVISED) -->
         <div class="mb-8 mt-6">
-          <label class="inline-flex items-center">
-            <input type="checkbox" name="highlight" value="1"
-                  class="h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-red-500">
-            <span class="ml-2 text-sm font-medium text-gray-700">Jadikan kategori ini sebagai Highlight</span>
-          </label>
+          <div class="bg-red-gradient text-white px-6 py-3 -mx-6 mb-4">
+            <h3 class="font-semibold">Opsi Highlight</h3>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Jadikan kategori ini sebagai Highlight? <span class="text-red-600">*</span>
+            </label>
+            <div class="flex gap-6">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="highlight" value="1" required
+                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500">
+                <span class="ml-2 text-sm font-medium text-gray-700">Ya</span>
+              </label>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="highlight" value="0" required
+                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500">
+                <span class="ml-2 text-sm font-medium text-gray-700">Tidak</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Preview Tampilan Highlight -->
+          <div id="highlight-preview" class="hidden mt-6 p-6 bg-gradient-to-br from-yellow-50 to-red-50 rounded-lg border-2 border-yellow-400">
+            <div class="flex items-start gap-3 mb-4">
+              <i class="fas fa-info-circle text-yellow-600 text-xl mt-1"></i>
+              <div>
+                <h4 class="font-semibold text-gray-800 mb-2">Preview Tampilan Highlight</h4>
+                <p class="text-sm text-gray-600 mb-4">Kategori highlight akan ditampilkan dengan scrollable carousel di halaman utama seperti berikut:</p>
+              </div>
+            </div>
+            
+            <!-- Mini Preview -->
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h5 class="text-center font-bold text-xl mb-4">
+                Jelajah Budaya <span class="text-red-800">Semarang</span>
+              </h5>
+              
+              <div class="relative">
+                <!-- Left Arrow -->
+                <button type="button" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-3 py-2 rounded-full text-sm z-10">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Scrollable Items Preview -->
+                <div class="overflow-x-auto hide-scrollbar flex gap-3 px-10">
+                  <div class="min-w-[200px] bg-gray-100 rounded-lg p-3 text-center">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-2 flex items-center justify-center">
+                      <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">Item 1</p>
+                  </div>
+                  <div class="min-w-[200px] bg-gray-100 rounded-lg p-3 text-center">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-2 flex items-center justify-center">
+                      <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">Item 2</p>
+                  </div>
+                  <div class="min-w-[200px] bg-gray-100 rounded-lg p-3 text-center">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-2 flex items-center justify-center">
+                      <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">Item 3</p>
+                  </div>
+                </div>
+                
+                <!-- Right Arrow -->
+                <button type="button" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-3 py-2 rounded-full text-sm z-10">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              
+              <p class="text-xs text-gray-500 text-center mt-3">
+                <i class="fas fa-lightbulb text-yellow-500"></i> 
+                Konten dapat di-scroll horizontal dengan tombol panah
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Opsi Video Sampul -->
+        <div class="mb-8 mt-6">
+          <div class="bg-red-gradient text-white px-6 py-3 -mx-6 mb-4">
+            <h3 class="font-semibold">Opsi Video Sampul</h3>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Apakah mau menambahkan video sampul? <span class="text-red-600">*</span>
+            </label>
+            <div class="flex gap-6">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="use_video_sampul" value="1" required
+                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500">
+                <span class="ml-2 text-sm font-medium text-gray-700">Ya</span>
+              </label>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="use_video_sampul" value="0" required
+                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500">
+                <span class="ml-2 text-sm font-medium text-gray-700">Tidak</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Form Input Video -->
+          <div id="video-sampul-form" class="hidden mt-6 space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <h4 class="text-gray-800 font-semibold mb-2">Informasi Video Sampul</h4>
+            <p class="text-sm text-gray-600 mb-4">Masukkan detail video yang ingin ditampilkan sebagai sampul kategori ini.</p>
+
+            <div>
+              <label for="video_title" class="block text-sm font-medium text-gray-700 mb-2">
+                Judul Video <span class="text-red-600">*</span>
+              </label>
+              <input type="text" id="video_title" name="video_sampul[title]" 
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    placeholder="Masukkan judul video">
+            </div>
+
+            <div>
+              <label for="video_description" class="block text-sm font-medium text-gray-700 mb-2">
+                Deskripsi Video <span class="text-red-600">*</span>
+              </label>
+              <textarea id="video_description" name="video_sampul[description]" rows="3"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        placeholder="Tuliskan deskripsi singkat video..."></textarea>
+            </div>
+
+            <div>
+              <label for="youtube_id" class="block text-sm font-medium text-gray-700 mb-2">
+                YouTube Video ID <span class="text-red-600">*</span>
+              </label>
+              <input type="text" id="youtube_id" name="video_sampul[youtube_id]" 
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    placeholder="Contoh: dQw4w9WgXcQ">
+              <p class="text-xs text-gray-500 mt-1">Ambil dari URL YouTube setelah tanda “v=”.</p>
+            </div>
+          </div>
         </div>
 
         <!-- Opsi Tampilan -->
@@ -199,8 +339,8 @@
           <label class="cursor-pointer">
             <input type="radio" name="field_rules[tampilan]" value="0" class="hidden peer">
             <div class="border-2 border-gray-300 peer-checked:border-red-600 peer-checked:bg-red-50 rounded-lg p-4">
-              <div class="bg-gray-200 h-40 rounded-lg mb-3 flex items-center justify-center">
-                <i class="fas fa-image text-gray-400 text-4xl"></i>
+              <div class="h-40 rounded-lg mb-3 overflow-hidden flex items-center justify-center border bg-gray-200">
+                  <img src="{{ asset('img/tampilan1.png') }}" class="w-full h-full object-cover">
               </div>
               <p class="text-center text-sm font-medium">Tampilan 1</p>
             </div>
@@ -210,7 +350,9 @@
             <input type="radio" name="field_rules[tampilan]" value="1" class="hidden peer">
             <div class="border-2 border-gray-300 peer-checked:border-red-600 peer-checked:bg-red-50 rounded-lg p-4">
               <div class="bg-gray-200 h-40 rounded-lg mb-3 flex items-center justify-center">
-                <i class="fas fa-image text-gray-400 text-4xl"></i>
+                <div class="h-40 rounded-lg mb-3 overflow-hidden flex items-center justify-center border bg-gray-200">
+                  <img src="{{ asset('img/tampilan2.png') }}" class="w-full h-full object-cover">
+              </div>
               </div>
               <p class="text-center text-sm font-medium">Tampilan 2</p>
             </div>
@@ -227,6 +369,7 @@
       </form>
     </div>
   </div>
+</div>
 
   <!-- SweetAlert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -251,54 +394,68 @@
       }
     });
 
-    // Validasi form
-    // Validasi form
-document.getElementById('formKategori').addEventListener('submit', function(e) {
-  e.preventDefault();
-  let form = this;
-
-  // Cek manual field yang required
-  let gambar = document.getElementById('gambar_cover').files.length;
-  let nama = document.getElementById('nama_kategori').value.trim();
-  let judul = document.getElementById('judul_kategori').value.trim();
-  let deskripsi = document.getElementById('deskripsi_kategori').value.trim();
-  
-  // Cek apakah ada radio yang dipilih untuk setiap field rule
-  let fieldRulesValid = true;
-  let fieldNames = ['judul', 'deskripsi', 'gambar', 'video_url'];
-  fieldNames.forEach(field => {
-    let checked = document.querySelector(`input[name="field_rules[${field}]"]:checked`);
-    if (!checked) fieldRulesValid = false;
-  });
-
-  // Cek tampilan dipilih
-  let tampilanChecked = document.querySelector('input[name="field_rules[tampilan]"]:checked');
-
-  if (!gambar || !nama || !judul || !deskripsi || !fieldRulesValid || !tampilanChecked) {
-    Swal.fire({
-      title: 'Peringatan!',
-      text: 'Semua field wajib diisi, termasuk pilih gambar cover, aturan field, dan opsi tampilan.',
-      icon: 'warning',
-      confirmButtonColor: '#991B1B'
+    // Show/Hide Highlight Preview
+    document.querySelectorAll('input[name="highlight"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        const preview = document.getElementById('highlight-preview');
+        if (this.value === '1') {
+          preview.classList.remove('hidden');
+        } else {
+          preview.classList.add('hidden');
+        }
+      });
     });
-    return;
-  }
 
-  Swal.fire({
-    title: 'Simpan data?',
-    text: "Data kategori akan ditambahkan.",
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonColor: '#48D92E',
-    cancelButtonColor: '#6b7280',
-    confirmButtonText: 'Ya, simpan',
-    cancelButtonText: 'Batal'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      form.submit();
-    }
-  });
-});
+    // Validasi form
+    document.getElementById('formKategori').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let form = this;
+
+      // Cek manual field yang required
+      let gambar = document.getElementById('gambar_cover').files.length;
+      let nama = document.getElementById('nama_kategori').value.trim();
+      let judul = document.getElementById('judul_kategori').value.trim();
+      let deskripsi = document.getElementById('deskripsi_kategori').value.trim();
+      
+      // Cek apakah ada radio yang dipilih untuk setiap field rule
+      let fieldRulesValid = true;
+      let fieldNames = ['judul', 'deskripsi', 'gambar', 'video_url'];
+      fieldNames.forEach(field => {
+        let checked = document.querySelector(`input[name="field_rules[${field}]"]:checked`);
+        if (!checked) fieldRulesValid = false;
+      });
+
+      // Cek tampilan dipilih
+      let tampilanChecked = document.querySelector('input[name="field_rules[tampilan]"]:checked');
+      
+      // Cek highlight dipilih
+      let highlightChecked = document.querySelector('input[name="highlight"]:checked');
+
+      if (!gambar || !nama || !judul || !deskripsi || !fieldRulesValid || !tampilanChecked || !highlightChecked) {
+        Swal.fire({
+          title: 'Peringatan!',
+          text: 'Semua field wajib diisi, termasuk pilih gambar cover, opsi highlight, aturan field, dan opsi tampilan.',
+          icon: 'warning',
+          confirmButtonColor: '#991B1B'
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: 'Simpan data?',
+        text: "Data kategori akan ditambahkan.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#48D92E',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Ya, simpan',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
   </script>
 
   <!-- SweetAlert Success -->
@@ -342,6 +499,19 @@ Swal.fire({
 });
 </script>
 @endif
+<script>
+  // Tampilkan form video jika "Ya" dipilih
+  document.querySelectorAll('input[name="use_video_sampul"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const form = document.getElementById('video-sampul-form');
+      if (this.value === '1') {
+        form.classList.remove('hidden');
+      } else {
+        form.classList.add('hidden');
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
