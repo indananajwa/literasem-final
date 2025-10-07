@@ -6,6 +6,7 @@
   <title>Edit Kategori</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body { font-family: 'Inter', sans-serif; }
     .upload-area {
@@ -19,6 +20,13 @@
     }
     .bg-red-gradient {
       background: linear-gradient(to right, #991B1B, #330909);
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
@@ -83,11 +91,10 @@
           <div class="upload-area rounded-lg p-12 text-center cursor-pointer" onclick="document.getElementById('gambar_cover').click()">
             <div id="preview-container" class="{{ $kategori->gambar_cover ? '' : 'hidden' }}">
               @if($kategori->gambar_cover)
-    <img id="preview-image" 
-         src="{{ route('kategori.cover', $kategori->kode_kategori) }}" 
-         class="max-h-64 mx-auto rounded-lg mb-4">
-@endif
-
+              <img id="preview-image" 
+                   src="{{ route('kategori.cover', $kategori->kode_kategori) }}" 
+                   class="max-h-64 mx-auto rounded-lg mb-4">
+              @endif
             </div>
             <div id="upload-placeholder" class="{{ $kategori->gambar_cover ? 'hidden' : '' }}">
               <i class="fas fa-cloud-upload-alt text-gray-400 text-5xl mb-4"></i>
@@ -180,109 +187,33 @@
           </div>
         </div>
 
-        <!-- Opsi Video Sampul -->
-        <div class="mb-8 mt-6">
-          <div class="bg-red-gradient text-white px-6 py-3 -mx-6 mb-4">
-            <h3 class="font-semibold">Opsi Video Sampul</h3>
-          </div>
-
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-3">
-              Tampilkan video sampul pada kategori ini? <span class="text-red-600">*</span>
-            </label>
-            <div class="flex gap-6">
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" id="video_yes" name="use_video" value="1" required
-                  class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500"
-                  {{ old('use_video', $kategori->video_sampul ? 1 : 1) == 1 ? 'checked' : '' }}>
-                <span class="ml-2 text-sm font-medium text-gray-700">Ya</span>
-              </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" id="video_no" name="use_video" value="0" required
-                  class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500"
-                  {{ old('use_video', $kategori->video_sampul ? 1 : 1) == 0 ? 'checked' : '' }}>
-                <span class="ml-2 text-sm font-medium text-gray-700">Tidak</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Form Input Video (mirip create) -->
-          <div id="video-sampul-form"
-              class="{{ old('use_video', $kategori->video_sampul ? 1 : 1) == 1 ? '' : 'hidden' }} mt-6 space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
-            <h4 class="text-gray-800 font-semibold mb-2">Informasi Video Sampul</h4>
-            <p class="text-sm text-gray-600 mb-4">Masukkan detail video yang ingin ditampilkan sebagai sampul kategori ini.</p>
-
-            <div>
-              <label for="video_title" class="block text-sm font-medium text-gray-700 mb-2">
-                Judul Video <span class="text-red-600">*</span>
-              </label>
-              <input type="text" id="video_title" name="video_sampul[title]" 
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    placeholder="Masukkan judul video"
-                    value="{{ old('video_sampul.title', $kategori->video_sampul_title ?? '') }}">
-            </div>
-
-            <div>
-              <label for="video_description" class="block text-sm font-medium text-gray-700 mb-2">
-                Deskripsi Video <span class="text-red-600">*</span>
-              </label>
-              <textarea id="video_description" name="video_sampul[description]" rows="3"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
-                        placeholder="Tuliskan deskripsi singkat video...">{{ old('video_sampul.description', $kategori->video_sampul_description ?? '') }}</textarea>
-            </div>
-
-            <div>
-              <label for="youtube_id" class="block text-sm font-medium text-gray-700 mb-2">
-                YouTube Video ID <span class="text-red-600">*</span>
-              </label>
-              <input type="text" id="youtube_id" name="video_sampul[youtube_id]" 
-                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    placeholder="Contoh: dQw4w9WgXcQ"
-                    value="{{ old('video_sampul.youtube_id', $kategori->video_url ?? '') }}">
-              <p class="text-xs text-gray-500 mt-1">Ambil dari URL YouTube setelah tanda “v=”.</p>
-            </div>
-
-            <!-- Preview video lama (jika ada) -->
-            @if($kategori->video_sampul)
-              <div class="mt-4">
-                <p class="text-sm text-gray-600 mb-2">Preview video saat ini:</p>
-                <video controls class="w-full rounded-lg shadow-sm max-h-64">
-                  <source src="{{ asset('storage/video_sampul/' . $kategori->video_sampul) }}" type="video/mp4">
-                  Browser Anda tidak mendukung tag video.
-                </video>
-              </div>
-            @endif
-          </div>
-        </div>
-
-        <!-- Highlight Option (REVISED) -->
+        <!-- Highlight Option (DIPERBAIKI) -->
         <div class="mb-8 mt-6">
           <div class="bg-red-gradient text-white px-6 py-3 -mx-6 mb-4">
             <h3 class="font-semibold">Opsi Highlight</h3>
           </div>
-
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-3">
-              Jadikan kategori ini sebagai Highlight? <span class="text-red-600">*</span>
+          
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Tampilkan di Highlight?
             </label>
             <div class="flex gap-6">
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" id="highlight_yes" name="highlight" value="1" required
-                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500"
-                      {{ old('highlight', $kategori->highlight) == 1 ? 'checked' : '' }}>
-                <span class="ml-2 text-sm font-medium text-gray-700">Ya</span>
+              <label class="inline-flex items-center">
+                <input type="radio" name="field_rules[highlight]" value="required" class="text-red-600 focus:ring-red-500" required
+                       {{ ($kategori->field_rules['highlight'] ?? '') === 'required' ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">Ya</span>
               </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" id="highlight_no" name="highlight" value="0" required
-                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500"
-                      {{ old('highlight', $kategori->highlight) == 0 ? 'checked' : '' }}>
-                <span class="ml-2 text-sm font-medium text-gray-700">Tidak</span>
+
+              <label class="inline-flex items-center">
+                <input type="radio" name="field_rules[highlight]" value="not_used" class="text-red-600 focus:ring-red-500" required
+                       {{ ($kategori->field_rules['highlight'] ?? '') === 'not_used' ? 'checked' : '' }}>
+                <span class="ml-2 text-gray-700">Tidak</span>
               </label>
             </div>
           </div>
 
           <!-- Preview Tampilan Highlight -->
-          <div id="highlight-preview" class="{{ old('highlight', $kategori->highlight) == 1 ? '' : 'hidden' }} mt-6 p-6 bg-gradient-to-br from-yellow-50 to-red-50 rounded-lg border-2 border-yellow-400">
+          <div id="highlight-preview" class="{{ ($kategori->field_rules['highlight'] ?? '') === 'required' ? '' : 'hidden' }} mt-6 p-6 bg-gradient-to-br from-yellow-50 to-red-50 rounded-lg border-2 border-yellow-400">
             <div class="flex items-start gap-3 mb-4">
               <i class="fas fa-info-circle text-yellow-600 text-xl mt-1"></i>
               <div>
@@ -290,26 +221,131 @@
                 <p class="text-sm text-gray-600 mb-4">Kategori highlight akan ditampilkan dengan scrollable carousel di halaman utama seperti berikut:</p>
               </div>
             </div>
-            <!-- Example preview card -->
-            <div class="flex gap-4 overflow-x-auto">
-              <div class="min-w-[220px] p-4 rounded-lg bg-white shadow-sm border">
-                <div class="h-32 bg-gray-100 rounded mb-3 flex items-center justify-center">
-                  <i class="fas fa-image text-gray-300 text-3xl"></i>
+            
+            <!-- Mini Preview -->
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h5 class="text-center font-bold text-xl mb-4">
+                Jelajah Budaya <span class="text-red-800">Semarang</span>
+              </h5>
+              
+              <div class="relative">
+                <!-- Left Arrow -->
+                <button type="button" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-3 py-2 rounded-full text-sm z-10">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Scrollable Items Preview -->
+                <div class="overflow-x-auto hide-scrollbar flex gap-3 px-10">
+                  <div class="min-w-[200px] bg-gray-100 rounded-lg p-3 text-center">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-2 flex items-center justify-center">
+                      <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">Item 1</p>
+                  </div>
+                  <div class="min-w-[200px] bg-gray-100 rounded-lg p-3 text-center">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-2 flex items-center justify-center">
+                      <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">Item 2</p>
+                  </div>
+                  <div class="min-w-[200px] bg-gray-100 rounded-lg p-3 text-center">
+                    <div class="bg-gray-200 h-32 rounded-lg mb-2 flex items-center justify-center">
+                      <i class="fas fa-image text-gray-400 text-2xl"></i>
+                    </div>
+                    <p class="text-xs font-medium text-gray-700">Item 3</p>
+                  </div>
                 </div>
-                <h5 class="font-semibold text-gray-800">Judul Highlight</h5>
-                <p class="text-sm text-gray-600">Deskripsi singkat highlight untuk memberi konteks.</p>
+                
+                <!-- Right Arrow -->
+                <button type="button" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-800 text-white px-3 py-2 rounded-full text-sm z-10">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
               </div>
-              <div class="min-w-[220px] p-4 rounded-lg bg-white shadow-sm border">
-                <div class="h-32 bg-gray-100 rounded mb-3 flex items-center justify-center">
-                  <i class="fas fa-image text-gray-300 text-3xl"></i>
-                </div>
-                <h5 class="font-semibold text-gray-800">Contoh Lain</h5>
-                <p class="text-sm text-gray-600">Preview untuk tampilan carousel.</p>
-              </div>
+              
+              <p class="text-xs text-gray-500 text-center mt-3">
+                <i class="fas fa-lightbulb text-yellow-500"></i> 
+                Konten dapat di-scroll horizontal dengan tombol panah
+              </p>
             </div>
           </div>
         </div>
 
+        <!-- Opsi Video Sampul (DIPERBAIKI) -->
+        <div class="mb-8 mt-6">
+          <div class="bg-red-gradient text-white px-6 py-3 -mx-6 mb-4">
+            <h3 class="font-semibold">Opsi Video Sampul</h3>
+          </div>
+
+          @php
+              // Parse video sampul jika ada
+              $videoSampul = null;
+              $hasVideo = false;
+              
+              if ($kategori->video_sampul && is_array($kategori->video_sampul) && count($kategori->video_sampul) > 0) {
+                  $videoSampul = $kategori->video_sampul[0];
+                  $hasVideo = true;
+              }
+          @endphp
+          
+          <!-- Radio button use_video_sampul -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Apakah mau menambahkan video sampul? <span class="text-red-600">*</span>
+            </label>
+            <div class="flex gap-6">
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="use_video_sampul" value="1" required
+                       class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500"
+                       {{ old('use_video_sampul', $hasVideo ? 1 : 0) == 1 ? 'checked' : '' }}>
+                <span class="ml-2 text-sm font-medium text-gray-700">Ya</span>
+              </label>
+              <label class="inline-flex items-center cursor-pointer">
+                <input type="radio" name="use_video_sampul" value="0" required
+                       class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500"
+                       {{ old('use_video_sampul', $hasVideo ? 1 : 0) == 0 ? 'checked' : '' }}>
+                <span class="ml-2 text-sm font-medium text-gray-700">Tidak</span>
+              </label>
+            </div>
+          </div>
+            
+          <!-- Form Input Video -->
+          <div id="video-sampul-form"
+              class="{{ old('use_video_sampul', $hasVideo ? 1 : 0) == 1 ? '' : 'hidden' }} mt-6 space-y-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <h4 class="text-gray-800 font-semibold mb-2">Informasi Video Sampul</h4>
+            <p class="text-sm text-gray-600 mb-4">Masukkan detail video yang ingin ditampilkan sebagai sampul kategori ini.</p>
+            
+            <div>
+              <label for="video_title" class="block text-sm font-medium text-gray-700 mb-2">
+                Judul Video <span class="text-red-600">*</span>
+              </label>
+              <input type="text" id="video_title" name="video_sampul[title]" 
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    placeholder="Masukkan judul video"
+                    value="{{ old('video_sampul.title', $videoSampul['title'] ?? '') }}">
+            </div>
+            
+            <div>
+              <label for="video_description" class="block text-sm font-medium text-gray-700 mb-2">
+                Deskripsi Video <span class="text-red-600">*</span>
+              </label>
+              <textarea id="video_description" name="video_sampul[description]" rows="3"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                        placeholder="Tuliskan deskripsi singkat video...">{{ old('video_sampul.description', $videoSampul['description'] ?? '') }}</textarea>
+            </div>
+            
+            <div>
+              <label for="youtube_url" class="block text-sm font-medium text-gray-700 mb-2">
+                Link YouTube Video <span class="text-red-600">*</span>
+              </label>
+              <input type="url" id="youtube_url" name="video_sampul[youtube_url]" 
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                    placeholder="Contoh: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                    value="{{ old('video_sampul.youtube_url', $videoSampul ? 'https://www.youtube.com/watch?v=' . $videoSampul['youtube_id'] : '') }}">
+              <p class="text-xs text-gray-500 mt-1">Masukkan URL lengkap video YouTube, nanti akan otomatis dikonversi ke ID.</p>
+              <input type="hidden" id="youtube_id" name="video_sampul[youtube_id]" 
+                     value="{{ old('video_sampul.youtube_id', $videoSampul['youtube_id'] ?? '') }}">
+            </div>
+          </div>
         <!-- Opsi Tampilan -->
         <div class="bg-red-gradient text-white px-6 py-3 -mx-6 mb-6">
           <h3 class="font-semibold">Opsi Tampilan</h3>
@@ -320,8 +356,8 @@
             <input type="radio" name="field_rules[tampilan]" value="0" class="hidden peer"
                    {{ ($kategori->field_rules['tampilan'] ?? '') == '0' ? 'checked' : '' }}>
             <div class="border-2 border-gray-300 peer-checked:border-red-600 peer-checked:bg-red-50 rounded-lg p-4">
-              <div class="bg-gray-200 h-40 rounded-lg mb-3 flex items-center justify-center">
-                <i class="fas fa-image text-gray-400 text-4xl"></i>
+              <div class="h-40 rounded-lg mb-3 overflow-hidden flex items-center justify-center border bg-gray-200">
+                  <img src="{{ asset('img/tampilan1.png') }}" class="w-full h-full object-cover">
               </div>
               <p class="text-center text-sm font-medium">Tampilan 1</p>
             </div>
@@ -331,8 +367,8 @@
             <input type="radio" name="field_rules[tampilan]" value="1" class="hidden peer"
                    {{ ($kategori->field_rules['tampilan'] ?? '') == '1' ? 'checked' : '' }}>
             <div class="border-2 border-gray-300 peer-checked:border-red-600 peer-checked:bg-red-50 rounded-lg p-4">
-              <div class="bg-gray-200 h-40 rounded-lg mb-3 flex items-center justify-center">
-                <i class="fas fa-image text-gray-400 text-4xl"></i>
+              <div class="h-40 rounded-lg mb-3 overflow-hidden flex items-center justify-center border bg-gray-200">
+                <img src="{{ asset('img/tampilan2.png') }}" class="w-full h-full object-cover">
               </div>
               <p class="text-center text-sm font-medium">Tampilan 2</p>
             </div>
@@ -370,7 +406,6 @@ if (gambarInput) {
         if (previewImg) {
           previewImg.src = e.target.result;
         } else {
-          // create image if not exists
           const img = document.createElement('img');
           img.id = 'preview-image';
           img.src = e.target.result;
@@ -389,33 +424,69 @@ if (gambarInput) {
   });
 }
 
-// Toggle highlight preview based on radio selection
-function toggleHighlightPreview() {
-  const preview = document.getElementById('highlight-preview');
-  if (!preview) return;
-  const checked = document.querySelector('input[name="highlight"]:checked');
+// Show/Hide Highlight Preview
+document.querySelectorAll('input[name="field_rules[highlight]"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const preview = document.getElementById('highlight-preview');
+    if (this.value === 'required') {
+      preview.classList.remove('hidden');
+    } else {
+      preview.classList.add('hidden');
+    }
+  });
+});
+
+// Toggle video form
+function toggleVideoForm() {
+  const videoForm = document.getElementById('video-sampul-form');
+  const checked = document.querySelector('input[name="use_video_sampul"]:checked');
   if (checked && checked.value === '1') {
-    preview.classList.remove('hidden');
+    videoForm.classList.remove('hidden');
   } else {
-    preview.classList.add('hidden');
+    videoForm.classList.add('hidden');
   }
 }
 
-const highlightRadios = document.querySelectorAll('input[name="highlight"]');
-highlightRadios.forEach(r => r.addEventListener('change', toggleHighlightPreview));
-// run on load
-document.addEventListener('DOMContentLoaded', toggleHighlightPreview);
-
-function toggleVideoForm() {
-  const videoForm = document.getElementById('video-sampul-form');
-  const checked = document.querySelector('input[name="use_video"]:checked');
-  if (checked && checked.value === '1') videoForm.classList.remove('hidden');
-  else videoForm.classList.add('hidden');
-}
-
-document.querySelectorAll('input[name="use_video"]').forEach(r => r.addEventListener('change', toggleVideoForm));
+document.querySelectorAll('input[name="use_video_sampul"]').forEach(r => r.addEventListener('change', toggleVideoForm));
 document.addEventListener('DOMContentLoaded', toggleVideoForm);
 
+// Convert YouTube URL ke ID
+function extractYouTubeID(url) {
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes("youtube.com")) {
+      return parsed.searchParams.get("v");
+    } else if (parsed.hostname.includes("youtu.be")) {
+      return parsed.pathname.substring(1);
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Form submit handler
+document.getElementById('formKategori').addEventListener('submit', function(e) {
+  const ytInput = document.getElementById('youtube_url');
+  const ytHidden = document.getElementById('youtube_id');
+  const useVideo = document.querySelector('input[name="use_video_sampul"]:checked');
+
+  if (useVideo && useVideo.value === '1' && ytInput && ytInput.value.trim() !== "") {
+    const videoId = extractYouTubeID(ytInput.value.trim());
+    if (videoId) {
+      ytHidden.value = videoId;
+    } else {
+      e.preventDefault();
+      Swal.fire({
+        title: 'Link YouTube tidak valid!',
+        text: 'Pastikan URL YouTube dalam format yang benar.',
+        icon: 'error',
+        confirmButtonColor: '#991B1B'
+      });
+      return false;
+    }
+  }
+});
 </script>
 </body>
 </html>

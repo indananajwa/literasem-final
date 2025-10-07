@@ -195,20 +195,20 @@
             <h3 class="font-semibold">Opsi Highlight</h3>
           </div>
           
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-3">
-              Jadikan kategori ini sebagai Highlight? <span class="text-red-600">*</span>
+          
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Tampilkan di Highlight?
             </label>
             <div class="flex gap-6">
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="highlight" value="1" required
-                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500">
-                <span class="ml-2 text-sm font-medium text-gray-700">Ya</span>
+              <label class="inline-flex items-center">
+                <input type="radio" name="field_rules[highlight]" value="required" class="text-red-600 focus:ring-red-500" required>
+                <span class="ml-2 text-gray-700">Ya</span>
               </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="highlight" value="0" required
-                      class="h-5 w-5 text-red-600 border-gray-300 focus:ring-red-500">
-                <span class="ml-2 text-sm font-medium text-gray-700">Tidak</span>
+
+              <label class="inline-flex items-center">
+                <input type="radio" name="field_rules[highlight]" value="not_used" class="text-red-600 focus:ring-red-500" required>
+                <span class="ml-2 text-gray-700">Tidak</span>
               </label>
             </div>
           </div>
@@ -317,16 +317,18 @@
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
                         placeholder="Tuliskan deskripsi singkat video..."></textarea>
             </div>
-
             <div>
-              <label for="youtube_id" class="block text-sm font-medium text-gray-700 mb-2">
-                YouTube Video ID <span class="text-red-600">*</span>
+              <label for="youtube_url" class="block text-sm font-medium text-gray-700 mb-2">
+                Link YouTube Video <span class="text-red-600">*</span>
               </label>
-              <input type="text" id="youtube_id" name="video_sampul[youtube_id]" 
+              <input type="url" id="youtube_url" name="video_sampul[youtube_url]" 
                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-red-500"
-                    placeholder="Contoh: dQw4w9WgXcQ">
-              <p class="text-xs text-gray-500 mt-1">Ambil dari URL YouTube setelah tanda “v=”.</p>
+                    placeholder="Contoh: https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+              <p class="text-xs text-gray-500 mt-1">Masukkan URL lengkap video YouTube, nanti akan otomatis dikonversi ke ID.</p>
+              <!-- Hidden field untuk simpan hasil convert ID -->
+              <input type="hidden" id="youtube_id" name="video_sampul[youtube_id]">
             </div>
+
           </div>
         </div>
 
@@ -395,10 +397,10 @@
     });
 
     // Show/Hide Highlight Preview
-    document.querySelectorAll('input[name="highlight"]').forEach(radio => {
+    document.querySelectorAll('input[name="field_rules[highlight]"').forEach(radio => {
       radio.addEventListener('change', function() {
         const preview = document.getElementById('highlight-preview');
-        if (this.value === '1') {
+        if (this.value === 'required') {
           preview.classList.remove('hidden');
         } else {
           preview.classList.add('hidden');
@@ -429,7 +431,7 @@
       let tampilanChecked = document.querySelector('input[name="field_rules[tampilan]"]:checked');
       
       // Cek highlight dipilih
-      let highlightChecked = document.querySelector('input[name="highlight"]:checked');
+      let highlightChecked = document.querySelector('input[name="field_rules[highlight]"]:checked');
 
       if (!gambar || !nama || !judul || !deskripsi || !fieldRulesValid || !tampilanChecked || !highlightChecked) {
         Swal.fire({
@@ -510,6 +512,43 @@ Swal.fire({
         form.classList.add('hidden');
       }
     });
+  });
+
+  // === Convert link YouTube ke ID otomatis ===
+  function extractYouTubeID(url) {
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname.includes("youtube.com")) {
+        return parsed.searchParams.get("v");
+      } else if (parsed.hostname.includes("youtu.be")) {
+        return parsed.pathname.substring(1);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Saat submit form, ubah URL jadi ID dulu
+  document.getElementById('formKategori').addEventListener('submit', function(e) {
+    const ytInput = document.getElementById('youtube_url');
+    const ytHidden = document.getElementById('youtube_id');
+
+    if (ytInput && ytInput.value.trim() !== "") {
+      const videoId = extractYouTubeID(ytInput.value.trim());
+      if (videoId) {
+        ytHidden.value = videoId;
+      } else {
+        e.preventDefault();
+        Swal.fire({
+          title: 'Link YouTube tidak valid!',
+          text: 'Pastikan URL YouTube dalam format yang benar (misal: https://www.youtube.com/watch?v=XXXX).',
+          icon: 'error',
+          confirmButtonColor: '#991B1B'
+        });
+        return false;
+      }
+    }
   });
 </script>
 

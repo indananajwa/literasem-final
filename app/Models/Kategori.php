@@ -24,11 +24,11 @@ class Kategori extends Model
         'mime_type',
         'field_rules',
         'video_sampul',
-        'highlight',
     ];
 
     protected $casts = [
-        'field_rules' => 'array'
+        'field_rules' => 'array',
+        'video_sampul' => 'array'
     ];
 
     // Relasi umum ke tabel "konten"

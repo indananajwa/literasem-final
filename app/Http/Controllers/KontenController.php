@@ -58,6 +58,8 @@ class KontenController extends Controller
                     $validationRules[$field] = 'required|image|max:10240';
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'required|url|max:255';
+                } elseif ($field === 'highlight') {
+                    $validationRules[$field] = 'nullable|in:0,1'; // ✅ tidak ganggu form
                 } else {
                     $validationRules[$field] = 'required|string|max:1000';
                 }
@@ -66,11 +68,14 @@ class KontenController extends Controller
                     $validationRules[$field] = 'nullable|image|max:10240';
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'nullable|url|max:255';
+                } elseif ($field === 'highlight') {
+                    $validationRules[$field] = 'nullable|in:0,1';
                 } else {
                     $validationRules[$field] = 'nullable|string|max:1000';
                 }
             }
         }
+
 
         $validated = $request->validate($validationRules);
 
@@ -152,9 +157,11 @@ class KontenController extends Controller
             $rule = strtolower(trim($rule));
             if ($rule === 'required') {
                 if (in_array($field, ['gambar', 'sampulvideo'])) {
-                    $validationRules[$field] = 'nullable|image|max:10240'; // pas edit, biar boleh kosong
+                    $validationRules[$field] = 'required|image|max:10240';
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'required|url|max:255';
+                } elseif ($field === 'highlight') {
+                    $validationRules[$field] = 'nullable|in:0,1'; // ✅ tidak ganggu form
                 } else {
                     $validationRules[$field] = 'required|string|max:1000';
                 }
@@ -163,12 +170,15 @@ class KontenController extends Controller
                     $validationRules[$field] = 'nullable|image|max:10240';
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'nullable|url|max:255';
+                } elseif ($field === 'highlight') {
+                    $validationRules[$field] = 'nullable|in:0,1';
                 } else {
                     $validationRules[$field] = 'nullable|string|max:1000';
                 }
             }
         }
 
+    
         $validated = $request->validate($validationRules);
 
         // update data

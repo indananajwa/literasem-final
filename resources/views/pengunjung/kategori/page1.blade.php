@@ -82,10 +82,10 @@
                 <input 
                     id="search-bar" 
                     type="text" 
-                    placeholder="Search destinations..." 
+                    placeholder="Search konten..." 
                     class="flex-1 w-full sm:w-auto border-none bg-gray-100 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500" 
                     oninput="handleSearch()" 
-                    aria-label="Search destinations"
+                    aria-label="Search konten"
                 />
                 <button onclick="performSearch()" 
                     class="bg-red-600 text-white font-semibold rounded-md px-6 py-2 mt-2 sm:mt-0 sm:ml-3 hover:bg-red-700 transition">
