@@ -14,12 +14,10 @@ class KontenController extends Controller
             return [];
         }
 
-        // kalau udah array (karena cast di model), langsung return
         if (is_array($fieldRules)) {
             return $fieldRules;
         }
 
-        // kalau string JSON → decode
         if (is_string($fieldRules)) {
             $decoded = json_decode($fieldRules, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
@@ -31,23 +29,32 @@ class KontenController extends Controller
     }
 
     public function index($kodeKategori)
-{
-    $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
-    $kontenList = Konten::where('kode_kategori', $kodeKategori)->get();
+    {
+        $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
+        $kontenList = Konten::where('kode_kategori', $kodeKategori)->get();
+        $fieldRules = $this->parseFieldRules($kategori->field_rules);
+        $kategoris  = Kategori::all();
 
-    // ✅ PERBAIKAN: Gunakan parseFieldRules seperti di method lain
-    $fieldRules = $this->parseFieldRules($kategori->field_rules);
-
-    $kategoris  = Kategori::all();
-
-    return view('admin.konten.index', compact('kategori', 'kontenList', 'fieldRules', 'kategoris'));
-}
-
+        return view('admin.konten.index', compact('kategori', 'kontenList', 'fieldRules', 'kategoris'));
+    }
 
     public function store(Request $request, $kodeKategori)
     {
         $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
         $fieldRules = $this->parseFieldRules($kategori->field_rules);
+
+        // ✅ CEK DUPLIKAT BERDASARKAN JUDUL
+        if (isset($fieldRules['judul']) && $fieldRules['judul'] !== 'not_used') {
+            $existingKonten = Konten::where('kode_kategori', $kodeKategori)
+                ->where('judul', $request->judul)
+                ->first();
+
+            if ($existingKonten) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['judul' => 'Konten dengan judul ini sudah ada di kategori ini!']);
+            }
+        }
 
         // Build validation rules dynamically
         $validationRules = [];
@@ -59,7 +66,7 @@ class KontenController extends Controller
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'required|url|max:255';
                 } elseif ($field === 'highlight') {
-                    $validationRules[$field] = 'nullable|in:0,1'; // ✅ tidak ganggu form
+                    $validationRules[$field] = 'nullable|in:0,1';
                 } else {
                     $validationRules[$field] = 'required|string|max:1000';
                 }
@@ -75,7 +82,6 @@ class KontenController extends Controller
                 }
             }
         }
-
 
         $validated = $request->validate($validationRules);
 
@@ -126,16 +132,6 @@ class KontenController extends Controller
             ->with('success', 'Konten berhasil dihapus!');
     }
 
-    public function tampilanPariwisata()
-    {
-        return view('admin.konten.tampilan_pariwisata');
-    }
-
-    public function tampilanPemerintah()
-    {
-        return view('admin.konten.tampilan_pemerintah');
-    }
-
     public function edit($kodeKategori, $kodeKonten)
     {
         $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
@@ -151,6 +147,20 @@ class KontenController extends Controller
         $konten     = Konten::where('kode_konten', $kodeKonten)->firstOrFail();
         $fieldRules = $this->parseFieldRules($kategori->field_rules);
 
+        // ✅ CEK DUPLIKAT JUDUL (kecuali konten yang sedang diedit)
+        if (isset($fieldRules['judul']) && $fieldRules['judul'] !== 'not_used') {
+            $existingKonten = Konten::where('kode_kategori', $kodeKategori)
+                ->where('judul', $request->judul)
+                ->where('kode_konten', '!=', $kodeKonten)
+                ->first();
+
+            if ($existingKonten) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['judul' => 'Konten dengan judul ini sudah ada di kategori ini!']);
+            }
+        }
+
         // Build validation rules dynamically
         $validationRules = [];
         foreach ($fieldRules as $field => $rule) {
@@ -161,7 +171,7 @@ class KontenController extends Controller
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'required|url|max:255';
                 } elseif ($field === 'highlight') {
-                    $validationRules[$field] = 'nullable|in:0,1'; // ✅ tidak ganggu form
+                    $validationRules[$field] = 'nullable|in:0,1';
                 } else {
                     $validationRules[$field] = 'required|string|max:1000';
                 }
@@ -178,7 +188,6 @@ class KontenController extends Controller
             }
         }
 
-    
         $validated = $request->validate($validationRules);
 
         // update data

@@ -25,6 +25,28 @@
             <!-- Header -->
             @include('admin.layouts.header')
             
+            <!-- ✅ SUCCESS/ERROR ALERT -->
+            @if(session('success'))
+                <div class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if(session('info'))
+                <div class="mb-4 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <span>{{ session('info') }}</span>
+                </div>
+            @endif
+            
             <div class="flex justify-between items-center mb-6 px-6 py-3">
                 <div class="flex items-center">
                     <h1 class="text-2xl font-bold text-gray-900">Umpan Balik Pengunjung Website</h1>
@@ -33,7 +55,7 @@
                 </div>
             </div>
 
-            <!-- Search -->
+            <!-- Search & Download -->
             <div class="flex justify-between items-center mb-6 ml-4">
                 <div class="relative w-72">
                     <i class="fas fa-search absolute left-4 top-3 text-gray-400"></i>
@@ -44,6 +66,20 @@
                         class="w-full pl-12 pr-4 py-2 rounded-full border border-gray-300 focus:ring-2 focus:ring-red-500 focus:outline-none text-sm"
                     >
                 </div>
+
+                <!-- ✅ TOMBOL DOWNLOAD -->
+                <div class="flex space-x-2">
+                    <a href="{{ route('feedback.download') }}" 
+                       class="px-5 py-2 text-sm font-medium text-white rounded-full bg-gradient-to-r from-green-600 to-green-700 hover:opacity-90 transition flex items-center shadow-sm">
+                        <i class="fas fa-download mr-2"></i> Unduh CSV
+                    </a>
+                    
+                    <!-- Badge Total -->
+                    <div class="inline-flex items-center bg-white px-4 py-2 rounded-full border border-gray-200 text-sm shadow-sm">
+                        <span class="text-gray-600">Total:</span>
+                        <span class="ml-2 font-semibold text-gray-900">{{ count($feedback) }}</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Table Container -->
@@ -52,6 +88,9 @@
                     <table class="min-w-full">
                         <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    No
+                                </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Nama <i class="fas fa-sort text-gray-400 ml-1"></i>
                                 </th>
@@ -70,37 +109,52 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100" id="tableBody">
-                            @foreach ($feedback as $item)
+                            @forelse ($feedback as $index => $item)
                                 <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 text-sm text-gray-500">{{ $index + 1 }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900 nama-pengunjung">{{ $item->nama_pengunjung }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900 email-pengunjung">{{ $item->email }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900 email-pengunjung">{{ $item->email ?? '-' }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-900">
-                                        <div class="max-w-md truncate" title="{{ $item->pesan }}">
-                                            {{ Str::limit($item->pesan, 50) }}
+                                        <div class="max-w-md">
+                                            <button type="button" 
+                                                    onclick="showFullMessage('{{ addslashes($item->pesan) }}')"
+                                                    class="text-left hover:text-red-600 transition">
+                                                {{ Str::limit($item->pesan, 50) }}
+                                                @if(strlen($item->pesan) > 50)
+                                                    <span class="text-red-600 font-medium ml-1">Lihat selengkapnya...</span>
+                                                @endif
+                                            </button>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">
+                                    <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                         {{ \Carbon\Carbon::parse($item->tanggal_kirim)->format('d M Y, H:i') }}
                                     </td>
                                     <td class="px-6 py-4 text-sm">
                                         <form action="{{ route('feedback.destroy', $item->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn-delete text-gray-500 hover:text-red-600" title="Hapus">
+                                            <button type="button" class="btn-delete text-gray-500 hover:text-red-600 transition" title="Hapus">
                                                 <i class="far fa-trash-alt"></i>
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-6 py-12 text-center">
+                                        <i class="fas fa-inbox text-gray-300 text-5xl mb-4"></i>
+                                        <p class="text-gray-500">Belum ada feedback dari pengunjung</p>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
                 
                 <!-- No Result Message -->
-                <div id="noResult" class="hidden text-center py-8">
-                    <i class="fas fa-search text-gray-300 text-4xl mb-2"></i>
-                    <p class="text-gray-500">Tidak ada hasil yang ditemukan</p>
+                <div id="noResult" class="hidden text-center py-12">
+                    <i class="fas fa-search text-gray-300 text-5xl mb-4"></i>
+                    <p class="text-gray-500 text-lg">Tidak ada hasil yang ditemukan</p>
                 </div>
             </div>
         </div>
@@ -110,19 +164,19 @@
 <!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@if(session('success'))
 <script>
-Swal.fire({
-    title: "Berhasil!",
-    text: "{{ session('success') }}",
-    icon: "success",
-    timer: 2000,
-    showConfirmButton: false
-});
-</script>
-@endif
+// ✅ SHOW FULL MESSAGE MODAL
+function showFullMessage(message) {
+    Swal.fire({
+        title: 'Pesan Lengkap',
+        html: `<div class="text-left whitespace-pre-wrap">${message}</div>`,
+        icon: 'info',
+        confirmButtonText: 'Tutup',
+        confirmButtonColor: '#991B1B',
+        width: '600px'
+    });
+}
 
-<script>
 // Search functionality
 const searchInput = document.getElementById('searchInput');
 const tableBody = document.getElementById('tableBody');
@@ -171,8 +225,8 @@ document.querySelectorAll('.btn-delete').forEach(button => {
             text: "Data akan dihapus permanen!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#991B1B',
+            cancelButtonColor: '#6B7280',
             confirmButtonText: 'Ya, hapus!',
             cancelButtonText: 'Batal'
         }).then((result) => {
@@ -182,6 +236,18 @@ document.querySelectorAll('.btn-delete').forEach(button => {
         });
     });
 });
+
+// ✅ AUTO HIDE ALERTS AFTER 5 SECONDS
+@if(session('success') || session('error') || session('info'))
+    setTimeout(function(){
+        const alert = document.querySelector('.bg-green-50, .bg-red-50, .bg-blue-50');
+        if(alert) {
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        }
+    }, 5000);
+@endif
 </script>
 </body>
 </html>

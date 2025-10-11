@@ -79,13 +79,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/konten/{kode_kategori}/{kode_konten}/edit', [KontenController::class, 'edit'])
         ->name('admin.konten.edit');
 
-
-
-    // Feedback admin panel
-    Route::prefix('admin/feedback')->name('admin.feedback.')->group(function () {
-        Route::get('/', [FeedbackController::class, 'index'])->name('index');
-        Route::get('/download', [FeedbackController::class, 'download'])->name('download');
-        Route::delete('/{id}', [FeedbackController::class, 'destroy'])->name('destroy');
+    Route::prefix('admin')->group(function () {
+        Route::get('/feedback', [FeedbackController::class, 'index'])->name('admin.feedback.index');
+        Route::get('/feedback/download', [FeedbackController::class, 'download'])->name('feedback.download');
+        Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
     });
 
     // Route untuk pariwisata

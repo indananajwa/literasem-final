@@ -28,6 +28,30 @@
         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Kategori
       </a>
 
+      <!-- ✅ SUCCESS/ERROR ALERT -->
+      @if(session('success'))
+        <div class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
+          <i class="fas fa-check-circle mr-2"></i>
+          <span>{{ session('success') }}</span>
+        </div>
+      @endif
+
+      @if($errors->any())
+        <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+          <div class="flex items-start">
+            <i class="fas fa-exclamation-circle mr-2 mt-0.5"></i>
+            <div>
+              <p class="font-semibold mb-1">Terjadi kesalahan:</p>
+              <ul class="list-disc list-inside text-sm">
+                @foreach($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+        </div>
+      @endif
+
       <!-- Header Section -->
       <div class="flex justify-between items-center mb-8 max-w-6xl mx-auto">
         <div class="flex items-center">
@@ -168,9 +192,12 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Judul
             @if(($rules['judul'] ?? '') === 'required')<span class="text-red-500">*</span>@endif
           </label>
-          <input type="text" name="judul"
-                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"
+          <input type="text" name="judul" value="{{ old('judul') }}"
+                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 @error('judul') border-red-500 @enderror"
                  @if(($rules['judul'] ?? '') === 'required') required @endif>
+          @error('judul')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
       @endif
 
@@ -181,8 +208,11 @@
             @if(($rules['deskripsi'] ?? '') === 'required')<span class="text-red-500">*</span>@endif
           </label>
           <textarea name="deskripsi" rows="4"
-                    class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"
-                    @if(($rules['deskripsi'] ?? '') === 'required') required @endif></textarea>
+                    class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 @error('deskripsi') border-red-500 @enderror"
+                    @if(($rules['deskripsi'] ?? '') === 'required') required @endif>{{ old('deskripsi') }}</textarea>
+          @error('deskripsi')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
       @endif
 
@@ -193,8 +223,11 @@
             @if(($rules['gambar'] ?? '') === 'required')<span class="text-red-500">*</span>@endif
           </label>
           <input type="file" name="gambar" accept="image/*"
-                 class="w-full text-sm"
+                 class="w-full text-sm @error('gambar') border border-red-500 rounded @enderror"
                  @if(($rules['gambar'] ?? '') === 'required') required @endif>
+          @error('gambar')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
       @endif
 
@@ -204,15 +237,18 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Video URL
             @if(($rules['video_url'] ?? '') === 'required')<span class="text-red-500">*</span>@endif
           </label>
-          <input type="url" name="video_url"
-                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"
+          <input type="url" name="video_url" value="{{ old('video_url') }}"
+                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500 @error('video_url') border-red-500 @enderror"
                  @if(($rules['video_url'] ?? '') === 'required') required @endif>
+          @error('video_url')
+            <p class="text-red-500 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+          @enderror
         </div>
       @endif
 
       <div class="flex space-x-2 mt-6">
-        <button type="button" onclick="closeAddModal()" class="flex-1 bg-gray-200 px-4 py-2 rounded-lg">Batal</button>
-        <button type="submit" class="flex-1 bg-red-800 text-white px-4 py-2 rounded-lg">Simpan</button>
+        <button type="button" onclick="closeAddModal()" class="flex-1 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">Batal</button>
+        <button type="submit" class="flex-1 bg-red-800 text-white px-4 py-2 rounded-lg hover:bg-red-900 transition">Simpan</button>
       </div>
     </form>
   </div>
@@ -231,36 +267,40 @@
 
       @if(($rules['judul'] ?? 'not_used') !== 'not_used')
         <div class="mb-4">
-          <label class="block text-sm">Judul</label>
-          <input type="text" id="edit-judul" name="judul" class="w-full border rounded-lg px-3 py-2 text-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Judul</label>
+          <input type="text" id="edit-judul" name="judul" 
+                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500">
         </div>
       @endif
 
       @if(($rules['deskripsi'] ?? 'not_used') !== 'not_used')
         <div class="mb-4">
-          <label class="block text-sm">Deskripsi</label>
-          <textarea id="edit-deskripsi" name="deskripsi" rows="4" class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
+          <textarea id="edit-deskripsi" name="deskripsi" rows="4" 
+                    class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500"></textarea>
         </div>
       @endif
 
       @if(($rules['gambar'] ?? 'not_used') !== 'not_used')
         <div class="mb-4">
-          <label class="block text-sm">Gambar Saat Ini</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
           <div id="edit-current-image" class="mb-2"></div>
+          <label class="block text-sm font-medium text-gray-700 mb-1 mt-2">Upload Gambar Baru (Opsional)</label>
           <input type="file" name="gambar" accept="image/*" class="w-full text-sm">
         </div>
       @endif
 
       @if(($rules['video_url'] ?? 'not_used') !== 'not_used')
         <div class="mb-4">
-          <label class="block text-sm">Video URL</label>
-          <input type="url" id="edit-video_url" name="video_url" class="w-full border rounded-lg px-3 py-2 text-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Video URL</label>
+          <input type="url" id="edit-video_url" name="video_url" 
+                 class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-500">
         </div>
       @endif
 
       <div class="flex space-x-2 mt-6">
-        <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-200 px-4 py-2 rounded-lg">Batal</button>
-        <button type="submit" class="flex-1 bg-red-800 text-white px-4 py-2 rounded-lg">Simpan</button>
+        <button type="button" onclick="closeEditModal()" class="flex-1 bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 transition">Batal</button>
+        <button type="submit" class="flex-1 bg-red-800 text-white px-4 py-2 rounded-lg hover:bg-red-900 transition">Simpan</button>
       </div>
     </form>
   </div>
@@ -268,6 +308,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+  // ✅ AUTO-OPEN MODAL JIKA ADA ERROR (untuk keep modal terbuka)
+  @if($errors->any() && old('_token'))
+    document.addEventListener('DOMContentLoaded', function() {
+      openAddModal();
+    });
+  @endif
+
   // Dropdown toggle
   document.querySelectorAll('.dropdown-toggle').forEach(btn=>{
     btn.addEventListener('click', e=>{
@@ -337,10 +384,23 @@
         showCancelButton:true,
         confirmButtonColor:'#991B1B',
         cancelButtonColor:'#6B7280',
-        confirmButtonText:'Ya, hapus!'
+        confirmButtonText:'Ya, hapus!',
+        cancelButtonText:'Batal'
       }).then(result=>{if(result.isConfirmed){form.submit();}});
     });
   });
+
+  // ✅ AUTO HIDE SUCCESS ALERT AFTER 5 SECONDS
+  @if(session('success'))
+    setTimeout(function(){
+      const alert = document.querySelector('.bg-green-50');
+      if(alert) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      }
+    }, 5000);
+  @endif
 </script>
 </body>
 </html>

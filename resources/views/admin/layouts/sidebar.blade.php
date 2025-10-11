@@ -55,7 +55,7 @@
       <a href="{{ route('admin.feedback.index') }}" 
          class="sidebar-menu-item {{ request()->routeIs('admin.feedback.*') ? 'active' : '' }} flex items-center gap-3 px-4 py-3 text-gray-700 group">
         <i data-lucide="megaphone" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-        <span>Laporan Aduan</span>
+        <span>Umpan Balik</span>
       </a>
     </nav>
   </div>
