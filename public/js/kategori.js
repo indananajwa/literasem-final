@@ -681,6 +681,135 @@ function viewBookmarks() {
     window.location.href = '/bookmark';
 }
 
+// ===== HELPER: Create tour card HTML (consistent for both render & search)
+function createTourCardHTML(tour) {
+    const hasVideo = tour.video && getYouTubeVideoId(tour.video);
+    const hasImages = tour.images && tour.images.length > 0;
+    const totalContent = (hasImages ? tour.images.length : 0) + (hasVideo ? 1 : 0);
+    const shouldShowThumbnails = totalContent > 1;
+    
+    const mainContent = createMainContent(tour);
+    const showMedia = hasImages || hasVideo;
+    
+    // Create tour JSON safely (escaped)
+    const tourJsonEscaped = encodeURIComponent(JSON.stringify(tour));
+    
+    // Layout berbeda untuk konten dengan/tanpa media
+    if (!showMedia) {
+        // Layout tanpa media - card dengan proporsi serupa media layout
+        return `
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+            <div class="grid grid-cols-1 lg:grid-cols-[500px_1fr] gap-6 p-6">
+                <!-- Bagian kiri: ikon besar -->
+                <div class="flex items-center justify-center bg-red-50 rounded-xl h-[300px]">
+                    <div class="flex items-center justify-center w-32 h-32 bg-red-100 rounded-2xl shadow-inner">
+                        <svg class="w-16 h-16 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                </div>
+        
+                <!-- Bagian kanan: deskripsi -->
+                <div class="flex flex-col justify-between py-2">
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-4 leading-tight">${tour.name}</h3>
+                        <div class="prose prose-gray max-w-none mb-6">
+                            <p class="text-base text-gray-700 leading-relaxed text-justify">${tour.description}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 pt-4">
+                        <button 
+                            class="flex items-center gap-2 px-5 py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 active:bg-amber-700 transition-all duration-200 shadow-sm hover:shadow-md font-medium bookmark-btn"
+                            data-tour-json="${tourJsonEscaped}"
+                        >
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                            </svg>
+                            Bookmark
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+    
+    // Layout dengan media - tetap gunakan grid layout
+    return `
+    <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+        <div class="grid grid-cols-1 lg:grid-cols-[500px_1fr] gap-6 p-6">
+            <div class="flex flex-col">
+                <div class="w-full rounded-lg overflow-hidden bg-gray-50">
+                    <div id="content-container-${tour.id}">
+                        ${mainContent}
+                    </div>
+                </div>
+            
+                ${shouldShowThumbnails ? `
+                <div class="flex flex-wrap gap-2 mt-4">
+                    ${hasVideo ? `
+                        <div 
+                            class="thumbnail w-20 h-20 rounded-lg border-2 border-gray-200 shadow-sm cursor-pointer hover:scale-105 hover:border-red-500 transition-all duration-200 relative overflow-hidden"
+                            data-change-content
+                            data-tour-id="${tour.id}"
+                            data-type="video"
+                            data-src="${tour.video}"
+                        >
+                            <img 
+                                src="https://img.youtube.com/vi/${getYouTubeVideoId(tour.video)}/mqdefault.jpg"
+                                alt="Video Thumbnail"
+                                class="w-full h-full object-cover"
+                            >
+                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                                <svg class="w-8 h-8 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${hasImages ? tour.images.map((img, index) => `
+                        <img 
+                            class="thumbnail w-20 h-20 rounded-lg border-2 border-gray-200 shadow-sm cursor-pointer hover:scale-105 hover:border-red-500 transition-all duration-200 object-cover" 
+                            src="${img}" 
+                            alt="${tour.name} ${index + 1}"
+                            data-change-content
+                            data-tour-id="${tour.id}"
+                            data-type="image"
+                            data-src="${img}"
+                        >
+                    `).join('') : ''}
+                </div>
+                ` : ''}
+            </div>
+                    
+            <div class="flex flex-col justify-between py-2">
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4 leading-tight">${tour.name}</h3>
+                    <div class="prose prose-gray max-w-none mb-6">
+                        <p class="text-base text-gray-700 leading-relaxed text-justify">${tour.description}</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-3 pt-4">
+                    <button 
+                        class="flex items-center gap-2 px-5 py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 active:bg-amber-700 transition-all duration-200 shadow-sm hover:shadow-md font-medium bookmark-btn"
+                        data-tour-json="${tourJsonEscaped}"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        Bookmark
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+}
+
 // Make functions globally available
 window.addToBookmark = addToBookmark;
 window.closeModal = closeModal;

@@ -16,73 +16,56 @@ class PariwisataSeeder extends Seeder
                 'deskripsi' => 'Kota Lama merupakan pusat perdagangan penting, dan untuk melindungi warga serta wilayahnya, dibangunlah benteng Vijfhoek. Jalan utama di dalam benteng tersebut diberi nama Heerenstraat, yang kini dikenal sebagai Jalan Letjen Soeprapto. Kota Lama dijuluki "Little Netherland" karena lanskapnya yang terpisah dan mirip dengan kota-kota di Eropa, serta kanal-kanal air yang mengelilinginya. Arsitektur bangunan di kawasan ini mengusung gaya Eropa dengan pintu utama dan jendela besar, elemen dekoratif, dan langit-langit tinggi.',
                 'foto' => file_get_contents(public_path('pariwisata/kotalama.jpg')),
                 'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9667,
-                'lng' => 110.4289
+                'url_maps' => 'https://maps.app.goo.gl/Y8GbbTvxr45orH7YA',
+                'lat' => -6.9680668841051565,
+                'lng' => 110.42838301834843
             ],
             [
                 'nama' => 'Lawang Sewu',
                 'deskripsi' => 'Lawang Sewu adalah bangunan bersejarah di Semarang yang dibangun pada masa kolonial Belanda. Bangunan ini memiliki banyak pintu dan jendela, sehingga dinamakan Lawang Sewu yang berarti "seribu pintu". Arsitektur bangunan ini sangat indah dengan gaya kolonial yang khas.',
                 'foto' => file_get_contents(public_path('pariwisata/lawangsewu.jpg')),
                 'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9833,
-                'lng' => 110.4156
+                'url_maps' => 'https://maps.app.goo.gl/NMhMrqKEmexaMdeW7',
+                'lat' => -6.9838581084117495, 
+                'lng' => 110.4107483230353
             ],
             [
                 'nama' => 'Sam Poo Kong',
                 'deskripsi' => 'Sam Poo Kong adalah kelenteng tertua di Semarang yang dibangun untuk menghormati Laksamana Cheng Ho. Tempat ini menjadi destinasi wisata religi dan budaya yang populer di Semarang.',
-                'foto' => file_get_contents(public_path('pariwisata/kotalama.jpg')),
+                'foto' => file_get_contents(public_path('ibadah/sampokong.jpg')),
                 'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9889,
-                'lng' => 110.4078
+                'url_maps' => 'https://maps.app.goo.gl/fGqEy6FriFrFWvEVA',
+                'lat' => -6.995334262597111, 
+                'lng' => 110.39848030795409
             ],
             [
                 'nama' => 'Gereja Blenduk',
                 'deskripsi' => 'Gereja Blenduk adalah gereja tertua di Jawa Tengah yang memiliki arsitektur khas dengan kubah tembaga yang menjadi ciri khasnya. Bangunan ini menjadi ikon kawasan Kota Lama Semarang.',
-                'foto' => file_get_contents(public_path('pariwisata/lawangsewu.jpg')),
+                'foto' => file_get_contents(public_path('smg-masa-lalu-sekarang/gereja-blenduk-sekarang.jpg')),
                 'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9678,
-                'lng' => 110.4278
+                'url_maps' => 'https://maps.app.goo.gl/mEYjKnuJd7WrzCP16',
+                'lat' => -6.968157082489774, 
+                'lng' => 110.42755176438092
             ],
             [
-                'nama' => 'Tugu Muda',
-                'deskripsi' => 'Tugu Muda adalah monumen bersejarah yang dibangun untuk mengenang jasa para pahlawan dalam Pertempuran Lima Hari di Semarang. Monumen ini menjadi landmark kota Semarang.',
-                'foto' => file_get_contents(public_path('pariwisata/kotalama.jpg')),
+                'nama' => 'Puri Maerokoco',
+                'deskripsi' => 'Puri Maerokoco merupakan salah satu destinasi wisata edukatif dan rekreatif di Kota Semarang yang sering disebut sebagai "Taman Mini Jawa Tengah". Tempat ini menampilkan miniatur 35 anjungan dari kabupaten dan kota di seluruh Jawa Tengah, lengkap dengan arsitektur khas daerah, hasil kerajinan, dan potensi pariwisatanya. Selain sebagai pusat informasi budaya dan promosi daerah, Puri Maerokoco juga dilengkapi dengan danau buatan tempat wisatawan dapat berkeliling menggunakan perahu. Suasana taman yang rindang, area bermain anak, hingga spot foto di tepi air menjadikan tempat ini cocok untuk wisata keluarga. Pada waktu-waktu tertentu, lokasi ini juga digunakan untuk berbagai pameran, festival budaya, dan kegiatan edukasi sekolah.',
+                'foto' => file_get_contents(public_path('pariwisata/purimaerokoco.jpg')),
                 'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9845,
-                'lng' => 110.4134
-            ],
-            [
-                'nama' => 'Brown Canyon',
-                'deskripsi' => 'Brown Canyon adalah destinasi wisata alam yang menawarkan pemandangan mirip Grand Canyon dengan tebing-tebing coklat yang indah. Tempat ini menjadi spot foto favorit wisatawan.',
-                'foto' => file_get_contents(public_path('pariwisata/lawangsewu.jpg')),
-                'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -7.0456,
-                'lng' => 110.4267
+                'url_maps' => 'https://maps.app.goo.gl/UkNTKJ7gqBuRMwTAA',
+                'lat' => -6.960854148225545,
+                'lng' => 110.38928573678972
             ],
             [
                 'nama' => 'Kampung Batik Semarang',
-                'deskripsi' => 'Kampung Batik adalah kawasan yang melestarikan budaya membatik di Semarang. Di sini wisatawan dapat melihat proses pembuatan batik dan membeli berbagai produk batik khas Semarang.',
-                'foto' => file_get_contents(public_path('pariwisata/kotalama.jpg')),
+                'deskripsi' => 'Kampung Batik Semarang merupakan kawasan wisata budaya yang menjadi pusat pelestarian dan pengembangan seni membatik khas Semarang. Di tempat ini, pengunjung dapat menyaksikan langsung proses pembuatan batik mulai dari tahap menggambar motif, mencanting, hingga pewarnaan. Selain itu, banyak rumah warga yang beralih fungsi menjadi galeri dan toko batik yang menjual berbagai produk unik dengan motif yang terinspirasi dari ikon-ikon Kota Semarang seperti Lawang Sewu dan Tugu Muda. Suasana kampung yang penuh warna dengan mural bertema batik di dinding-dinding rumah menjadikan kawasan ini menarik untuk spot foto dan wisata edukatif. Kampung Batik juga kerap menjadi lokasi pelatihan, pameran, serta festival batik yang melibatkan perajin lokal dan pelajar sebagai bentuk upaya melestarikan warisan budaya tradisional.',
+                'foto' => file_get_contents(public_path('pariwisata/Kampung-Batik-Gedong.jpg')),
                 'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9756,
-                'lng' => 110.4123
+                'url_maps' => 'https://maps.app.goo.gl/uqYd8L7wxNv8Qkq4A',
+                'lat' => -6.968626503203061, 
+                'lng' => 110.43186919446188
             ],
-            [
-                'nama' => 'Masjid Agung Jawa Tengah',
-                'deskripsi' => 'Masjid Agung Jawa Tengah adalah masjid megah dengan arsitektur modern yang memadukan unsur Jawa, Islam, dan Romawi. Masjid ini memiliki menara setinggi 99 meter yang menjadi daya tarik utama.',
-                'foto' => file_get_contents(public_path('pariwisata/lawangsewu.jpg')),
-                'mime_type' => 'image/jpeg',
-                'url_maps' => 'https://goo.gl/maps/B9gQ5BfLLh62',
-                'lat' => -6.9823,
-                'lng' => 110.4512
-            ],
+
         ];
 
         // Insert data dengan kode otomatis

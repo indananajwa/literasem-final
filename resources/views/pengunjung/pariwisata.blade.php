@@ -44,21 +44,29 @@
     <button class="bg-red-800 text-white font-bold rounded-md px-6 py-2 hover:bg-yellow-600 transition-colors">Search</button>
 </div>
 
-<!-- Top 5 Wisata -->
-<section class="container mx-auto px-4 py-12">
-    <h2 class="text-4xl font-bold mb-8 text-center">Jelajah Wisata <span class="text-red-800">Semarang</span></h2>
-    <div id="highlight-scroll-wrapper" class="flex space-x-6 overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory px-1">
-        @foreach($highlight as $item)
-        <div class="flex-shrink-0 w-64 h-80 snap-start rounded-lg relative cursor-pointer overflow-hidden group">
-            <img src="{{ route('pariwisata.gambar', $item->kodePariwisata) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-            <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-end text-center px-4 pb-4">
-                <h3 class="text-xl font-bold text-white drop-shadow-md shadow-black">{{ $item->nama }}</h3>
-                <div class="flex gap-2 mt-3">
-                    <button onclick="scrollToSection('detail-{{ $item->kodePariwisata }}')" class="text-sm bg-white text-red-800 px-3 py-1 rounded hover:bg-yellow-500 transition">Detail</button>
+<!-- Top 5 Wisata / Highlight -->
+<section class="w-full py-12">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8 text-center">Wisata <span class="text-red-800">Populer</span></h2>
+        
+        <div class="flex justify-center">
+            <div id="highlight-scroll-wrapper" class="flex space-x-6 overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory">
+                @foreach($highlight as $item)
+                <div class="flex-shrink-0 w-64 h-80 snap-start rounded-lg relative cursor-pointer overflow-hidden group">
+                    <img src="{{ route('pariwisata.gambar', $item->kodePariwisata) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-end text-center px-4 pb-4">
+                        <h3 class="text-xl font-bold text-white drop-shadow-md">{{ $item->nama }}</h3>
+                        <button 
+                            onclick="scrollToSection('detail-{{ $item->kodePariwisata }}')" 
+                            class="text-sm bg-white text-red-800 px-4 py-2 rounded font-semibold hover:bg-yellow-500 transition mt-3"
+                        >
+                            Detail
+                        </button>
+                    </div>
                 </div>
+                @endforeach
             </div>
         </div>
-        @endforeach
     </div>
 </section>
 
@@ -71,12 +79,12 @@
             <div class="md:w-1/3 w-full">
                 <img src="{{ route('pariwisata.gambar', $item->kodePariwisata) }}" alt="{{ $item->nama }}" class="w-full h-64 object-cover rounded border border-gray-300">
             </div>
-            <div class="flex-1">
-                <div class="flex items-center gap-2 mb-2">
-                    <h3 class="text-3xl font-bold text-red-800">{{ $item->nama }}</h3>
+            <div class="flex-1 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-3xl font-bold text-red-800 mb-4">{{ $item->nama }}</h3>
+                    <p class="text-gray-700 text-justify mb-4">{{ $item->deskripsi }}</p>
                 </div>
-                <p class="text-gray-700 text-justify mb-4">{{ $item->deskripsi }}</p>
-                <div class="flex gap-3">
+                <div class="flex flex-wrap gap-3">
                     <button onclick="showOnMap({{ $item->lat }}, {{ $item->lng }}, '{{ $item->nama }}')" 
                             class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-red-800 transition-colors">
                         📍 Lihat di Peta
@@ -88,6 +96,26 @@
                         🗺️ Google Maps
                     </a>
                     @endif
+
+                    <!-- TOMBOL BOOKMARK -->
+                    <button 
+                        class="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors duration-200 bookmark-btn"
+                        data-tour-json="{{ urlencode(json_encode([
+                            'id' => $item->kodePariwisata,
+                            'name' => $item->nama,
+                            'description' => $item->deskripsi,
+                            'lat' => $item->lat,
+                            'lng' => $item->lng,
+                            'url_maps' => $item->url_maps,
+                            'images' => [route('pariwisata.gambar', $item->kodePariwisata)],
+                            'video' => null
+                        ])) }}"
+                    >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                        </svg>
+                        Bookmark
+                    </button>
                 </div>
             </div>
         </div>
@@ -213,10 +241,196 @@
             el.style.display = (nama.includes(query) || desk.includes(query)) ? 'flex' : 'none';
         });
     }
+
+    // ===== BOOKMARK FUNCTIONS =====
     
-    // Inisialisasi peta saat halaman dimuat
+    // Attach bookmark listeners
+    function attachBookmarkListeners() {
+        document.querySelectorAll('.bookmark-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tourJson = decodeURIComponent(btn.dataset.tourJson);
+                const tour = JSON.parse(tourJson);
+                addToBookmark(tour);
+            });
+        });
+    }
+
+    // Add to bookmark
+    function addToBookmark(tour) {
+        initializeModal();
+        
+        try {
+            let bookmarks = JSON.parse(localStorage.getItem('literasem_bookmarks')) || [];
+            
+            const exists = bookmarks.some(b => b.id === tour.id);
+            if (exists) {
+                showErrorModal('Konten ini sudah ada di daftar bookmark Anda.', 'duplicate');
+                return;
+            }
+            
+            const newBookmark = {
+                id: tour.id,
+                name: tour.name,
+                description: tour.description || '',
+                url: window.location.href + '#' + tour.id,
+                category: 'Pariwisata',
+                dateAdded: new Date().toISOString(),
+                images: tour.images || [],
+                video: tour.video || null
+            };
+            
+            bookmarks.push(newBookmark);
+            localStorage.setItem('literasem_bookmarks', JSON.stringify(bookmarks));
+            
+            showSuccessModal(tour);
+            
+        } catch (error) {
+            console.error('Gagal menyimpan bookmark:', error);
+            showErrorModal('Gagal menyimpan bookmark. Silakan coba lagi.', 'error');
+        }
+    }
+
+    // Modal functions
+    function createModalHTML() {
+        return `
+            <div id="bookmark-modal" class="fixed inset-0 z-50 hidden">
+                <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300"></div>
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div id="modal-content" class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all duration-300 scale-95 opacity-0">
+                        <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <div id="modal-body" class="p-8"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function initializeModal() {
+        if (!document.getElementById('bookmark-modal')) {
+            document.body.insertAdjacentHTML('beforeend', createModalHTML());
+            
+            const modal = document.getElementById('bookmark-modal');
+            const closeBtn = document.getElementById('close-modal');
+            const backdrop = modal.querySelector('.absolute.inset-0');
+            
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        }
+    }
+
+    function showModal() {
+        const modal = document.getElementById('bookmark-modal');
+        const modalContent = document.getElementById('modal-content');
+        
+        modal.classList.remove('hidden');
+        
+        setTimeout(() => {
+            modalContent.classList.remove('scale-95', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('bookmark-modal');
+        const modalContent = document.getElementById('modal-content');
+        
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-95', 'opacity-0');
+        
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    function showSuccessModal(tour) {
+        const modalBody = document.getElementById('modal-body');
+        modalBody.innerHTML = `
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Bookmark Berhasil Disimpan!</h3>
+                
+                <p class="text-gray-600 mb-6">
+                    <strong>${tour.name}</strong> telah berhasil ditambahkan ke daftar bookmark Anda.
+                </p>
+                
+                <div class="flex gap-3">
+                    <button onclick="closeModal()" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors">
+                        Tutup
+                    </button>
+                    <button onclick="viewBookmarks()" class="flex-1 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
+                        Lihat Bookmark
+                    </button>
+                </div>
+            </div>
+        `;
+        showModal();
+    }
+
+    function showErrorModal(message, type = 'duplicate') {
+        const modalBody = document.getElementById('modal-body');
+        
+        const iconColor = type === 'duplicate' ? 'text-amber-500' : 'text-red-500';
+        const bgColor = type === 'duplicate' ? 'bg-amber-100' : 'bg-red-100';
+        const title = type === 'duplicate' ? 'Sudah Ada di Bookmark' : 'Terjadi Kesalahan';
+        
+        modalBody.innerHTML = `
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center w-16 h-16 ${bgColor} rounded-full mb-4">
+                    ${type === 'duplicate' ? `
+                        <svg class="w-8 h-8 ${iconColor}" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    ` : `
+                        <svg class="w-8 h-8 ${iconColor}" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                    `}
+                </div>
+                
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">${title}</h3>
+                
+                <p class="text-gray-600 mb-6">${message}</p>
+                
+                <div class="flex gap-3">
+                    <button onclick="closeModal()" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors">
+                        Tutup
+                    </button>
+                    ${type === 'duplicate' ? `
+                        <button onclick="viewBookmarks()" class="flex-1 bg-amber-500 text-white py-2 px-4 rounded-lg hover:bg-amber-600 transition-colors">
+                            Lihat Bookmark
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        showModal();
+    }
+
+    function viewBookmarks() {
+        closeModal();
+        window.location.href = '/bookmark';
+    }
+    
+    // Initialize pada DOMContentLoaded
     document.addEventListener('DOMContentLoaded', function() {
         initMap();
+        attachBookmarkListeners();
+        initializeModal();
     });
 </script>
 
