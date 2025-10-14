@@ -48,12 +48,7 @@
         @enderror
       </div>
 
-      <!-- Remember Me -->
-      <div class="flex items-center mb-4">
-        <input type="checkbox" id="remember" name="remember" class="text-blue-500">
-        <label for="remember" class="ml-2 text-sm text-white">Remember me</label>
-      </div>
-
+      
       <!-- Submit -->
       <button type="submit" class="w-full px-4 py-2 text-white bg-red-800 rounded-lg hover:bg-red-600 transition-all">
         Sign in

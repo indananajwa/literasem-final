@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Manajemen Konten - Pemerintah</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
 <body class="bg-white">
 <div class="flex min-h-screen">
@@ -180,14 +186,51 @@
         document.getElementById('editContentModal').classList.add('hidden');
     }
 
-    // Show success/error messages if any
+    // Delete confirmation
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            Swal.fire({
+                title: 'Yakin hapus?',
+                text: 'Data tidak bisa dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#991B1B',
+                cancelButtonColor: '#6B7280',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // ✅ POPUP SUCCESS
     @if(session('success'))
-        alert('{{ session('success') }}');
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true
+    });
     @endif
 
+    // ✅ POPUP ERROR (misal duplikat data)
     @if(session('error'))
-        alert('{{ session('error') }}');
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}',
+        confirmButtonColor: '#991B1B',
+        confirmButtonText: 'OK'
+    });
     @endif
+
 </script>
 
 </body>

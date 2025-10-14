@@ -315,9 +315,13 @@
                             <div class="relative aspect-video">
                                 <img src="https://i3.ytimg.com/vi/{{ $video->video }}/maxresdefault.jpg" alt="{{ $video->judul }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
                                 <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <button class="p-3 bg-blue-500 rounded-full text-white" onclick="playVideo('{{ $video->video }}')">
-                                        <i class="fas fa-play"></i>
-                                    </button>
+                                    <iframe 
+                                        src="https://www.youtube.com/embed/{{ $video->video }}?autoplay=0&mute=0&controls=1&rel=0"
+                                        class="w-full h-full rounded-lg"
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen>
+                                    </iframe>
                                 </div>
                             </div>
                             <div class="p-4">

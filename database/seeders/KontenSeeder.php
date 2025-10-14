@@ -15,32 +15,32 @@ class KontenSeeder extends Seeder
             [
                 'judul' => 'Dugderan',
                 'gambar' => 'budayaa/DUGDERAN .jpg',
-                'video' => 'https://youtu.be/B4mLKcVIERs?si=M0_LI27XiNACFyqW',
-                'deskripsi' => "Dugderan adalah festival tahunan di Semarang yang dimulai pada abad ke-19 untuk menyambut bulan Ramadan. Nama 'Dugderan' berasal dari suara drum..."
+                'video' => 'https://youtu.be/-CiTUcMFTno?si=qVEoBChTqibq5a8K',
+                'deskripsi' => "Dugderan adalah festival tahunan khas Kota Semarang yang diselenggarakan menjelang bulan Ramadan. Tradisi ini sudah ada sejak abad ke-19 pada masa Bupati Semarang Kanjeng Bupati RMTA Purbaningrat. Nama 'Dugderan' berasal dari bunyi 'dug' bedug dan 'der' suara meriam yang menandai dimulainya puasa. Acara ini diisi dengan kirab budaya, pasar rakyat, dan ikon maskot Warak Ngendog yang melambangkan keberagaman etnis Jawa, Arab, dan Tionghoa di Semarang."
             ],
             [
                 'judul' => 'Sesaji Rewanda',
                 'gambar' => 'budayaa/SESAJI REWANDA.png',
                 'video' => null,
-                'deskripsi' => "Sesaji Rewanda adalah tradisi ritual syukur masyarakat Semarang, khususnya di Kampung Melayu..."
+                'deskripsi' => "Sesaji Rewanda adalah tradisi tahunan masyarakat Semarang, khususnya di kawasan Kampung Melayu dan sekitar Sungai Semarang. Tradisi ini dilakukan sebagai bentuk ungkapan syukur kepada Tuhan sekaligus doa agar terhindar dari bencana banjir. Dalam upacara ini, warga mengarak berbagai sesaji menuju Sungai Semarang dan melarungkannya ke air. Kata 'Rewanda' merujuk pada sosok kera dalam legenda yang dipercaya menjaga wilayah Semarang."
             ],
             [
                 'judul' => 'Gebyuran',
                 'gambar' => 'budayaa/GEBYURAN.jpg',
                 'video' => null,
-                'deskripsi' => "Gebyuran adalah tradisi unik di Semarang yang dilakukan pada Hari Raya Idul Fitri, di mana warga saling melemparkan air..."
+                'deskripsi' => "Gebyuran adalah tradisi khas masyarakat Semarang yang dilakukan pada Hari Raya Idul Fitri, di mana warga saling menyiramkan air satu sama lain sebagai simbol penyucian diri dan kebersamaan setelah sebulan berpuasa. Tradisi ini biasanya dilakukan di daerah pesisir atau perkampungan tua. Makna filosofisnya adalah membersihkan diri dari dosa dan mempererat tali silaturahmi antarwarga."
             ],
             [
                 'judul' => 'Semarang Night Carnival',
                 'gambar' => 'budayaa/SEMARANG NIGHT CARNIVAL.jpg',
-                'video' => 'https://youtu.be/fiufDc9AUWA?si=GWVIOAMEIf_8AwV6',
-                'deskripsi' => "Semarang night carnival merupakan ajang karnaval pertama yang digelar malam hari..."
+                'video' => 'https://youtu.be/gqD2oPOcEaA?si=qsdzh-lc10rfWrLm',
+                'deskripsi' => "Semarang Night Carnival adalah ajang karnaval malam terbesar di Kota Semarang yang menampilkan parade kostum, tari, dan musik dengan tema berbeda setiap tahun. Pertama kali digelar pada tahun 2011, acara ini menjadi ikon pariwisata kota yang menunjukkan kreativitas masyarakat Semarang. Peserta mengenakan busana bertema budaya, alam, hingga modern, berjalan di jalan-jalan utama dengan cahaya lampu yang memukau."
             ],
             [
                 'judul' => 'Tari Gambang Semarangan',
                 'gambar' => 'budayaa/TARI SEMARANGAN.jpg',
                 'video' => null,
-                'deskripsi' => "Tari Gambang Semarangan adalah seni tradisional Semarang yang memadukan budaya Tionghoa dan Jawa..."
+                'deskripsi' => "Tari Gambang Semarangan adalah tarian tradisional khas Kota Semarang yang terinspirasi dari musik Gambang Semarang, perpaduan budaya Jawa dan Tionghoa. Gerakannya lincah, ceria, dan energik, menggambarkan karakter masyarakat pesisir yang terbuka dan dinamis. Tarian ini biasanya diiringi alat musik tradisional seperti gambang, kendang, dan gong, serta sering ditampilkan pada acara-acara kebudayaan maupun penyambutan tamu kehormatan."
             ],
         ];
 

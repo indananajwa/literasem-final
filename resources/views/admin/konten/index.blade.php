@@ -120,7 +120,7 @@
               <div class="flex flex-col items-end justify-between h-full">
                 <div class="flex items-center space-x-2">
                   <span class="text-xs text-gray-500">
-                      {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d M Y') : 'Tanggal Upload' }}
+                      
                   </span>
                   <div class="relative dropdown-container">
                     <button type="button" 

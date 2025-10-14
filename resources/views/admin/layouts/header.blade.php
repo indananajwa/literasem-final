@@ -32,11 +32,8 @@
 
       <!-- Dropdown Menu -->
       <div id="user-menu" class="absolute right-0 mt-3 w-48 bg-white rounded-lg shadow-xl py-2 hidden z-50 border border-gray-200">
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+        <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
           <span class="font-medium">👤 Profil</span>
-        </a>
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-          <span class="font-medium">⚙️ Pengaturan</span>
         </a>
         
         <div class="border-t border-gray-200 my-1"></div>

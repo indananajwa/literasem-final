@@ -58,8 +58,13 @@ Route::middleware('admin')->prefix('admin')->group(function () {
         'destroy' => 'admin.kategori.destroy',
     ]);
 
+    Route::get('/admin/profile', function () {
+        return view('admin.profile');
+    })->middleware('auth')->name('admin.profile');
+
     // Konten per Kategori
-    Route::prefix('/kategori/{kode_kategori}/konten')->name('admin.konten.')->group(function () {
+   // Ubah prefix dari '/kategori/{kode_kategori}/konten' menjadi '/konten/{kode_kategori}'
+    Route::prefix('/konten/{kode_kategori}')->name('admin.konten.')->group(function () {
         Route::get('/', [KontenController::class, 'index'])->name('index');
         Route::get('/create', [KontenController::class, 'create'])->name('create');
         Route::post('/', [KontenController::class, 'store'])->name('store');

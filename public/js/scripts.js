@@ -4,11 +4,11 @@ function changeVideo(videoNumber) {
     const videoDescription = document.getElementById('videoDescription');
 
     if (videoNumber === 1) {
-        videoFrame.src = "https://www.youtube.com/embed/79fpUpJFtXM";
+        videoFrame.src = "https://www.youtube.com/embed/O8OmhOWLjAE?si=eKAdQCuExd_4yNWX" ;
         videoTitle.textContent = "Pertempuran 5 Hari Semarang";
         videoDescription.textContent = "Mengupas kisah heroik di balik Pertempuran 5 Hari di Semarang, perjuangan rakyat mempertahankan kemerdekaan dari ancaman penjajah. Saksikan bagaimana semangat juang para pahlawan tetap dikenang hingga hari ini.";
     } else if (videoNumber === 2) {
-        videoFrame.src = "https://www.youtube.com/embed/placeholder"; // Placeholder YouTube URL
+        videoFrame.src = "https://www.youtube.com/embed/fNwbMuPVUJk?si=5F_IuudlWVxeoflQ" ; // Placeholder YouTube URL
         videoTitle.textContent = "Kota Lama Dinas Arsip dan Perpustakaan Kota Semarang";
         videoDescription.textContent = "Mengungkap sejarah dan pesona Kota Lama Semarang, sebuah kawasan bersejarah yang penuh cerita dan keindahan.";
     }

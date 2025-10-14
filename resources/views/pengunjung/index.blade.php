@@ -42,7 +42,7 @@
                 <div class="video-container mb-6 shadow-lg rounded-xl overflow-hidden">
                     <iframe
                         id="videoFrame"
-                        src="https://www.youtube.com/embed/79fpUpJFtXM"
+                        src="https://www.youtube.com/embed/O8OmhOWLjAE?si=eKAdQCuExd_4yNWX"
                         title="Pertempuran 5 Hari Semarang"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

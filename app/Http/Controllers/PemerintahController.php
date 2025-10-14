@@ -25,6 +25,7 @@ class PemerintahController extends Controller
     // Simpan data baru
     public function store(Request $request)
     {
+        try{
         $request->validate([
             'periode' => 'required|string|max:9|unique:pemerintah,periode',
             'nama_walikota' => 'required|string|max:64',
@@ -57,6 +58,12 @@ class PemerintahController extends Controller
         Pemerintah::create($data);
 
         return redirect()->route('admin.pemerintah.konten')->with('success', 'Data berhasil ditambahkan!');
+    }   catch (\Illuminate\Validation\ValidationException $e) {
+        // ✅ Tambahkan ini agar SweetAlert bisa baca error
+        return redirect()->back()
+            ->with('error', 'Periode tersebut sudah terdaftar!')
+            ->withInput();
+    }
     }
 
     // Update data (dipanggil via form modal edit)

@@ -133,16 +133,6 @@ class KontenController extends Controller
             
     }
 
-    public function tampilanPariwisata()
-    {
-        return view('admin.konten.tampilan_pariwisata');
-    }
-
-    public function tampilanPemerintah()
-    {
-        return view('admin.konten.tampilan_pemerintah');
-    }
-
         public function tampilanPariwisata()
     {
         return view('admin.konten.tampilan_pariwisata');
@@ -163,16 +153,16 @@ class KontenController extends Controller
     }
 
     public function update(Request $request, $kodeKategori, $kodeKonten)
-    {
-        $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
-        $konten     = Konten::where('kode_konten', $kodeKonten)->firstOrFail();
-        $fieldRules = $this->parseFieldRules($kategori->field_rules);
+{
+    $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
+    $konten     = Konten::where('kode_konten', $kodeKonten)->firstOrFail();
+    $fieldRules = $this->parseFieldRules($kategori->field_rules);
 
-        // ✅ CEK DUPLIKAT JUDUL (kecuali konten yang sedang diedit)
-        if (isset($fieldRules['judul']) && $fieldRules['judul'] !== 'not_used') {
+    // ✅ CEK DUPLIKAT JUDUL (hanya jika judul berubah)
+    if (isset($fieldRules['judul']) && $fieldRules['judul'] !== 'not_used') {
+        if ($request->judul !== $konten->judul) {
             $existingKonten = Konten::where('kode_kategori', $kodeKategori)
                 ->where('judul', $request->judul)
-                ->where('kode_konten', '!=', $kodeKonten)
                 ->first();
 
             if ($existingKonten) {
@@ -181,55 +171,59 @@ class KontenController extends Controller
                     ->withErrors(['judul' => 'Konten dengan judul ini sudah ada di kategori ini!']);
             }
         }
-
-        // Build validation rules dynamically
-        $validationRules = [];
-        foreach ($fieldRules as $field => $rule) {
-            $rule = strtolower(trim($rule));
-            if ($rule === 'required') {
-                if (in_array($field, ['gambar', 'sampulvideo'])) {
-                    $validationRules[$field] = 'required|image|max:10240';
-                } elseif ($field === 'video_url') {
-                    $validationRules[$field] = 'required|url|max:255';
-                } elseif ($field === 'highlight') {
-                    $validationRules[$field] = 'nullable|in:0,1';
-                } else {
-                    $validationRules[$field] = 'required|string|max:1000';
-                }
-            } elseif ($rule === 'optional') {
-                if (in_array($field, ['gambar', 'sampulvideo'])) {
-                    $validationRules[$field] = 'nullable|image|max:10240';
-                } elseif ($field === 'video_url') {
-                    $validationRules[$field] = 'nullable|url|max:255';
-                } elseif ($field === 'highlight') {
-                    $validationRules[$field] = 'nullable|in:0,1';
-                } else {
-                    $validationRules[$field] = 'nullable|string|max:1000';
-                }
-            }
-        }
-
-        $validated = $request->validate($validationRules);
-
-        // update data
-        foreach (['judul', 'deskripsi', 'video_url', 'highlight'] as $field) {
-            if (isset($validated[$field])) {
-                $konten->$field = $validated[$field];
-            }
-        }
-
-        if ($request->hasFile('gambar')) {
-            $konten->gambar    = file_get_contents($request->file('gambar')->getRealPath());
-            $konten->mime_type = $request->file('gambar')->getMimeType();
-        }
-
-        if ($request->hasFile('sampulvideo')) {
-            $konten->sampulvideo = file_get_contents($request->file('sampulvideo')->getRealPath());
-        }
-
-        $konten->save();
-
-        return redirect()->route('admin.konten.index', $kodeKategori)
-            ->with('success', 'Konten berhasil diperbarui!');
     }
+
+    // Build validation rules dynamically
+    $validationRules = [];
+    foreach ($fieldRules as $field => $rule) {
+        $rule = strtolower(trim($rule));
+        if ($rule === 'required') {
+            // 🔥 PENTING: Saat edit, gambar jadi optional!
+            if (in_array($field, ['gambar', 'sampulvideo'])) {
+                $validationRules[$field] = 'nullable|image|max:10240'; // 👈 NULLABLE!
+            } elseif ($field === 'video_url') {
+                $validationRules[$field] = 'nullable|url|max:255'; // 👈 NULLABLE!
+            } elseif ($field === 'highlight') {
+                $validationRules[$field] = 'nullable|in:0,1';
+            } else {
+                $validationRules[$field] = 'required|string|max:1000';
+            }
+        } elseif ($rule === 'optional') {
+            if (in_array($field, ['gambar', 'sampulvideo'])) {
+                $validationRules[$field] = 'nullable|image|max:10240';
+            } elseif ($field === 'video_url') {
+                $validationRules[$field] = 'nullable|url|max:255';
+            } elseif ($field === 'highlight') {
+                $validationRules[$field] = 'nullable|in:0,1';
+            } else {
+                $validationRules[$field] = 'nullable|string|max:1000';
+            }
+        }
+    }
+
+    $validated = $request->validate($validationRules);
+
+    // Update data
+    foreach (['judul', 'deskripsi', 'video_url', 'highlight'] as $field) {
+        if (isset($validated[$field])) {
+            $konten->$field = $validated[$field];
+        }
+    }
+
+    // Update gambar hanya jika ada file baru
+    if ($request->hasFile('gambar')) {
+        $konten->gambar    = file_get_contents($request->file('gambar')->getRealPath());
+        $konten->mime_type = $request->file('gambar')->getMimeType();
+    }
+
+    // Update sampul video hanya jika ada file baru
+    if ($request->hasFile('sampulvideo')) {
+        $konten->sampulvideo = file_get_contents($request->file('sampulvideo')->getRealPath());
+    }
+
+    $konten->save();
+
+    return redirect()->route('admin.konten.index', $kodeKategori)
+        ->with('success', 'Konten berhasil diperbarui!');
+}
 }
