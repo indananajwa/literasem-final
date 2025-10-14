@@ -195,7 +195,7 @@
           
           <div class="mt-4">
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              Tampilkan di Highlight?
+              Tampilkan Highlight Konten?
             </label>
             <div class="flex gap-6">
               <label class="inline-flex items-center">

@@ -19,8 +19,6 @@
     <style>
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -36,7 +34,6 @@
         <p class="text-xl mb-6">Temukan Pesona Tersembunyi Semarang</p>
         <div class="flex gap-4">
             <button onclick="scrollToSection('detail-section')" class="bg-red-800 hover:bg-yellow-600 text-white px-6 py-3 rounded-full shadow-lg transition-colors">View More</button>
-            <!-- <button onclick="scrollToSection('map-section')" class="bg-yellow-600 hover:bg-red-800 text-white px-6 py-3 rounded-full shadow-lg transition-colors">Lihat Peta</button> -->
         </div>
     </div>
 </div>
@@ -53,12 +50,11 @@
     <div id="highlight-scroll-wrapper" class="flex space-x-6 overflow-x-auto hide-scrollbar scroll-smooth snap-x snap-mandatory px-1">
         @foreach($highlight as $item)
         <div class="flex-shrink-0 w-64 h-80 snap-start rounded-lg relative cursor-pointer overflow-hidden group">
-            <img src="{{ route('pariwisata.gambar', $item->id) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <img src="{{ route('pariwisata.gambar', $item->kodePariwisata) }}" alt="{{ $item->nama }}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
             <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-end text-center px-4 pb-4">
                 <h3 class="text-xl font-bold text-white drop-shadow-md shadow-black">{{ $item->nama }}</h3>
                 <div class="flex gap-2 mt-3">
-                    <button onclick="scrollToSection('detail-{{ $item->id }}')" class="text-sm bg-white text-red-800 px-3 py-1 rounded hover:bg-yellow-500 transition">Detail</button>
-                    <!-- <button onclick="showOnMap({{ $item->lat }}, {{ $item->lng }}, '{{ $item->nama }}')" class="text-sm bg-yellow-600 text-white px-3 py-1 rounded hover:bg-red-800 transition">Peta</button> -->
+                    <button onclick="scrollToSection('detail-{{ $item->kodePariwisata }}')" class="text-sm bg-white text-red-800 px-3 py-1 rounded hover:bg-yellow-500 transition">Detail</button>
                 </div>
             </div>
         </div>
@@ -71,22 +67,27 @@
     <h2 class="text-4xl font-bold text-center mb-8 text-red-800">Detail Destinasi</h2>
     <div class="bg-white rounded-lg shadow p-8 space-y-10" id="detail-list">
         @foreach($data as $item)
-        <div id="detail-{{ $item->id }}" class="tour-detail flex flex-col md:flex-row gap-6" data-nama="{{ strtolower($item->nama) }}" data-deskripsi="{{ strtolower($item->deskripsi) }}">
+        <div id="detail-{{ $item->kodePariwisata }}" class="tour-detail flex flex-col md:flex-row gap-6" data-nama="{{ strtolower($item->nama) }}" data-deskripsi="{{ strtolower($item->deskripsi) }}">
             <div class="md:w-1/3 w-full">
-                <img src="{{ route('pariwisata.gambar', $item->id) }}" alt="{{ $item->nama }}" class="w-full h-64 object-cover rounded border border-gray-300">
+                <img src="{{ route('pariwisata.gambar', $item->kodePariwisata) }}" alt="{{ $item->nama }}" class="w-full h-64 object-cover rounded border border-gray-300">
             </div>
             <div class="flex-1">
-                <h3 class="text-3xl font-bold text-red-800 mb-4">{{ $item->nama }}</h3>
+                <div class="flex items-center gap-2 mb-2">
+                    <h3 class="text-3xl font-bold text-red-800">{{ $item->nama }}</h3>
+                </div>
                 <p class="text-gray-700 text-justify mb-4">{{ $item->deskripsi }}</p>
                 <div class="flex gap-3">
                     <button onclick="showOnMap({{ $item->lat }}, {{ $item->lng }}, '{{ $item->nama }}')" 
                             class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-red-800 transition-colors">
                         📍 Lihat di Peta
                     </button>
+                    
+                    @if($item->url_maps)
                     <a href="{{ $item->url_maps }}" target="_blank" 
                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
                         🗺️ Google Maps
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -101,12 +102,6 @@
         <div class="mb-4 flex flex-wrap gap-2">
             <button onclick="showAllMarkers()" class="bg-red-800 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-colors">Tampilkan Semua</button>
             <button onclick="centerToSemarang()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors">Pusat Semarang</button>
-            <!-- @foreach($data as $item)
-            <button onclick="focusLocation({{ $item->lat }}, {{ $item->lng }}, '{{ $item->nama }}')" 
-                    class="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-red-800 transition-colors">
-                {{ $item->nama }}
-            </button>
-            @endforeach -->
         </div>
         <div id="map" class="w-full h-96 rounded-lg border border-gray-300"></div>
         <div class="mt-4 text-sm text-gray-600">
@@ -114,8 +109,6 @@
         </div>
     </div>
 </section>
-
-
 
 <!-- Script -->
 <script>
@@ -126,7 +119,7 @@
     const wisataData = [
         @foreach($data as $item)
         {
-            id: {{ $item->id }},
+            kodePariwisata: '{{ $item->kodePariwisata }}',
             nama: '{{ $item->nama }}',
             lat: {{ $item->lat }},
             lng: {{ $item->lng }},
@@ -156,21 +149,20 @@
                 .addTo(map)
                 .bindPopup(`
                     <div class="text-center">
-                        <h3 class="font-bold text-lg text-red-800 mb-2">${item.nama}</h3>
+                        <h3 class="font-bold text-lg text-red-800 mb-2 mt-1">${item.nama}</h3>
                         <p class="text-sm text-gray-600 mb-3">${item.deskripsi}</p>
                         <div class="flex gap-2 justify-center">
-                            <button onclick="scrollToSection('detail-${item.id}')" 
+                            <button onclick="scrollToSection('detail-${item.kodePariwisata}')" 
                                     class="bg-red-800 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">
                                 Detail
                             </button>
-                            <a href="${item.url_maps}" target="_blank" 
-                               class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                            ${item.url_maps ? `<a href="${item.url_maps}" target="_blank" 
+                               class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700" style="color: white !important;">
                                 Google Maps
-                            </a>
+                            </a>` : ''}
                         </div>
                     </div>
                 `);
-            
             markers.push(marker);
         });
     }
@@ -202,11 +194,6 @@
     // Fungsi untuk fokus ke pusat Semarang
     function centerToSemarang() {
         map.setView([-6.9667, 110.4289], 12);
-    }
-    
-    // Fungsi untuk fokus ke lokasi tertentu
-    function focusLocation(lat, lng, nama) {
-        showOnMap(lat, lng, nama);
     }
     
     // Fungsi scroll ke section

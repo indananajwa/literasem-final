@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Pariwisata;
 use Illuminate\Http\Request;
-use App\Models\Kategori;
-use App\Models\Konten;
 
 class PariwisataController extends Controller
 {
@@ -21,7 +19,8 @@ class PariwisataController extends Controller
     public function adminView()
     {
         $pariwisataList = Pariwisata::all();
-    return view('admin.konten.tampilan_pariwisata', compact('pariwisataList'));    }
+        return view('admin.konten.tampilan_pariwisata', compact('pariwisataList'));
+    }
 
     // Tambah konten pariwisata
     public function store(Request $request)
@@ -29,13 +28,14 @@ class PariwisataController extends Controller
         $request->validate([
             'nama' => 'required|string|max:64',
             'deskripsi' => 'required|string',
-            'foto' => 'nullable|image',
+            'foto' => 'nullable|image|max:2048', // Max 2MB
             'url_maps' => 'nullable|url',
             'lat' => 'nullable|numeric',
             'lng' => 'nullable|numeric',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['nama', 'deskripsi', 'url_maps', 'lat', 'lng']);
+        $data['kodePariwisata'] = Pariwisata::generateKodePariwisata();
 
         if ($request->hasFile('foto')) {
             $data['foto'] = file_get_contents($request->file('foto')->getRealPath());
@@ -48,51 +48,47 @@ class PariwisataController extends Controller
     }
 
     // Update konten pariwisata via modal edit
-    public function update(Request $request, $id)
+    public function update(Request $request, $kodePariwisata)
     {
-        $item = Pariwisata::findOrFail($id);
+        $item = Pariwisata::where('kodePariwisata', $kodePariwisata)->firstOrFail();
 
         $request->validate([
             'nama' => 'required|string|max:64',
             'deskripsi' => 'required|string',
-            'foto' => 'nullable|image',
+            'foto' => 'nullable|image|max:2048',
             'url_maps' => 'nullable|url',
             'lat' => 'nullable|numeric',
             'lng' => 'nullable|numeric',
         ]);
 
+        $data = $request->only(['nama', 'deskripsi', 'url_maps', 'lat', 'lng']);
+
         if ($request->hasFile('foto')) {
-            $item->foto = file_get_contents($request->file('foto')->getRealPath());
-            $item->mime_type = $request->file('foto')->getClientMimeType();
+            $data['foto'] = file_get_contents($request->file('foto')->getRealPath());
+            $data['mime_type'] = $request->file('foto')->getClientMimeType();
         }
 
-        $item->nama = $request->nama;
-        $item->deskripsi = $request->deskripsi;
-        $item->url_maps = $request->url_maps;
-        $item->lat = $request->lat;
-        $item->lng = $request->lng;
-
-        $item->save();
+        $item->update($data);
 
         return redirect()->route('admin.pariwisata.konten')->with('success', 'Konten berhasil diperbarui');
     }
 
     // Hapus konten pariwisata
-    public function destroy($id)
+    public function destroy($kodePariwisata)
     {
-        $item = Pariwisata::findOrFail($id);
+        $item = Pariwisata::where('kodePariwisata', $kodePariwisata)->firstOrFail();
         $item->delete();
 
         return redirect()->route('admin.pariwisata.konten')->with('success', 'Konten berhasil dihapus');
     }
 
     // Gambar untuk frontend
-    public function gambar($id)
+    public function gambar($kodePariwisata)
     {
-        $item = Pariwisata::findOrFail($id);
+        $item = Pariwisata::where('kodePariwisata', $kodePariwisata)->firstOrFail();
 
-        if (!$item->foto) {
-            abort(404);
+        if (!$item->foto || !$item->mime_type) {
+            abort(404, 'Image not found');
         }
 
         return response($item->foto)->header('Content-Type', $item->mime_type);
