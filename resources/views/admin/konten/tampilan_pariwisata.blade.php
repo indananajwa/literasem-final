@@ -23,12 +23,34 @@
       <!-- Header -->
       @include('admin.layouts.header')
 
-      <!-- Header Section -->
-    <div >
       <!-- Back Button -->
       <a href="{{ route('admin.kategori.index') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4 text-sm">
         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Kategori
       </a>
+
+      <!-- Success/Error Alert -->
+      @if(session('success'))
+        <div class="mb-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
+          <i class="fas fa-check-circle mr-2"></i>
+          <span>{{ session('success') }}</span>
+        </div>
+      @endif
+
+      @if($errors->any())
+        <div class="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+          <div class="flex items-start">
+            <i class="fas fa-exclamation-circle mr-2 mt-0.5"></i>
+            <div>
+              <p class="font-semibold mb-1">Terjadi kesalahan:</p>
+              <ul class="list-disc list-inside text-sm">
+                @foreach($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          </div>
+        </div>
+      @endif
 
       <!-- Header Section -->
       <div class="flex justify-between items-center mb-8 max-w-6xl mx-auto">
@@ -52,7 +74,8 @@
 
         <div class="flex space-x-3">
           <a href="{{ route('pariwisata.index') }}" target="_blank"
-             class="px-5 py-2 text-sm font-medium text-white rounded-full bg-gradient-to-r from-[#F1DF40] to-[#8B8125] hover:opacity-90 transition flex items-center">            <i class="far fa-eye mr-2"></i> Preview
+             class="px-5 py-2 text-sm font-medium text-white rounded-full bg-gradient-to-r from-[#F1DF40] to-[#8B8125] hover:opacity-90 transition flex items-center">
+            <i class="far fa-eye mr-2"></i> Preview
           </a>
           <button onclick="openAddModal()" 
                   class="px-5 py-2 text-sm font-medium text-white rounded-full bg-gradient-to-r from-[#991B1B] to-[#330909] hover:opacity-90 transition flex items-center">
@@ -76,18 +99,17 @@
           <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition p-4 content-item">
             <div class="flex items-start space-x-4">
               <!-- Thumbnail -->
-                <div class="flex-shrink-0">
+              <div class="flex-shrink-0">
                 @if($item->foto)
-                    <img src="data:{{ $item->mime_type }};base64,{{ base64_encode($item->foto) }}" 
-                        alt="Foto {{ $item->nama }}" 
-                        class="w-32 h-24 object-cover rounded-lg border border-gray-200">
+                  <img src="{{ route('pariwisata.gambar', $item->kodePariwisata) }}" 
+                       alt="Foto {{ $item->nama }}" 
+                       class="w-32 h-24 object-cover rounded-lg border border-gray-200">
                 @else
-                    <div class="w-32 h-24 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div class="w-32 h-24 bg-gray-100 rounded-lg flex items-center justify-center">
                     <i class="fas fa-image text-gray-400 text-2xl"></i>
-                    </div>
+                  </div>
                 @endif
-                </div>
-
+              </div>
 
               <!-- Content Info -->
               <div class="flex-1 min-w-0">
@@ -98,8 +120,10 @@
                 <div class="flex flex-wrap gap-2">
                   <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Lat: {{ $item->lat }}</span>
                   <span class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Lng: {{ $item->lng }}</span>
-                  <a href="{{ $item->url_maps }}" target="_blank" 
-                     class="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">Maps</a>
+                  @if($item->url_maps)
+                    <a href="{{ $item->url_maps }}" target="_blank" 
+                       class="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full hover:bg-blue-200">Maps</a>
+                  @endif
                 </div>
               </div>
 
@@ -107,28 +131,28 @@
               <div class="flex flex-col items-end justify-between h-full">
                 <div class="flex items-center space-x-2">
                   <span class="text-xs text-gray-500">
-                      {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d M Y') : '' }}
+                    {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d M Y') : '' }}
                   </span>
                   <div class="relative dropdown-container">
-                    <button 
-                      type="button" 
-                      onclick="toggleDropdown({{ $index }})" 
-                      class="dropdown-toggle text-gray-400 hover:text-gray-600 p-1" 
-                      title="More options">
+                    <button type="button" 
+                            class="dropdown-toggle text-gray-400 hover:text-gray-600 p-1" 
+                            data-index="{{ $index }}">
                       <i class="fas fa-ellipsis-v"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
                     <div id="dropdown-{{ $index }}" class="dropdown-menu hidden absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                      <button type="button" onclick="openEditModal({{ $item->id }}, '{{ $item->nama }}', `{{ $item->deskripsi }}`, '{{ $item->url_maps }}', '{{ $item->lat }}', '{{ $item->lng }}')" 
+                      <button type="button" 
+                              onclick="openEditModal('{{ $item->kodePariwisata }}', '{{ addslashes($item->nama) }}', `{{ addslashes($item->deskripsi) }}`, '{{ $item->url_maps }}', '{{ $item->lat }}', '{{ $item->lng }}')" 
                               class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center text-sm text-gray-700 rounded-t-lg">
                         <i class="far fa-edit mr-3 text-gray-500"></i> Edit
                       </button>
-                      <form action="{{ route('admin.pariwisata.destroy', $item->id) }}" 
+                      <form action="{{ route('admin.pariwisata.destroy', $item->kodePariwisata) }}" 
                             method="POST" class="w-full">
                         @csrf
                         @method('DELETE')
-                        <button type="button" class="btn-delete w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center text-sm text-red-600 rounded-b-lg border-t border-gray-100">
+                        <button type="button" 
+                                class="btn-delete w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center text-sm text-red-600 rounded-b-lg border-t border-gray-100">
                           <i class="far fa-trash-alt mr-3"></i> Hapus
                         </button>
                       </form>
@@ -169,27 +193,51 @@
             @csrf
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">Nama <span class="text-red-500">*</span></label>
-              <input type="text" name="nama" required class="w-full border rounded-lg px-3 py-2">
+              <input type="text" name="nama" value="{{ old('nama') }}" required 
+                     class="w-full border rounded-lg px-3 py-2 @error('nama') border-red-500 @enderror">
+              @error('nama')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-              <textarea name="deskripsi" rows="3" class="w-full border rounded-lg px-3 py-2"></textarea>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi <span class="text-red-500">*</span></label>
+              <textarea name="deskripsi" rows="3" required 
+                        class="w-full border rounded-lg px-3 py-2 @error('deskripsi') border-red-500 @enderror">{{ old('deskripsi') }}</textarea>
+              @error('deskripsi')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
-              <input type="file" name="foto" class="w-full text-sm">
+              <input type="file" name="foto" accept="image/*" 
+                     class="w-full text-sm @error('foto') border border-red-500 rounded @enderror">
+              @error('foto')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">URL Maps</label>
-              <input type="url" name="url_maps" class="w-full border rounded-lg px-3 py-2">
+              <input type="url" name="url_maps" value="{{ old('url_maps') }}" 
+                     class="w-full border rounded-lg px-3 py-2 @error('url_maps') border-red-500 @enderror">
+              @error('url_maps')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
-              <input type="text" name="lat" class="w-full border rounded-lg px-3 py-2">
+              <input type="text" name="lat" value="{{ old('lat') }}" 
+                     class="w-full border rounded-lg px-3 py-2 @error('lat') border-red-500 @enderror">
+              @error('lat')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
-              <input type="text" name="lng" class="w-full border rounded-lg px-3 py-2">
+              <input type="text" name="lng" value="{{ old('lng') }}" 
+                     class="w-full border rounded-lg px-3 py-2 @error('lng') border-red-500 @enderror">
+              @error('lng')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+              @enderror
             </div>
             <div class="flex space-x-2 mt-6">
               <button type="button" onclick="closeAddModal()" class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition">Batal</button>
@@ -212,6 +260,11 @@
             @csrf
             @method('PUT')
             <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Kode</label>
+              <input type="text" id="edit_kode" readonly 
+                     class="w-full border rounded-lg px-3 py-2 bg-gray-100 text-gray-600 font-mono text-sm">
+            </div>
+            <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">Nama <span class="text-red-500">*</span></label>
               <input type="text" name="nama" id="edit_nama" required class="w-full border rounded-lg px-3 py-2">
             </div>
@@ -221,7 +274,7 @@
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">Foto (Opsional)</label>
-              <input type="file" name="foto" class="w-full text-sm">
+              <input type="file" name="foto" accept="image/*" class="w-full text-sm">
             </div>
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-1">URL Maps</label>
@@ -246,35 +299,41 @@
   </div>
 </div>
 
-<!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-  // Toggle Dropdown
-  function toggleDropdown(index) {
-    const dropdown = document.getElementById('dropdown-' + index);
-    const allDropdowns = document.querySelectorAll('[id^="dropdown-"]');
-    allDropdowns.forEach(d => {
-      if (d.id !== 'dropdown-' + index) {
-        d.classList.add('hidden');
-      }
+  // Auto-open modal jika ada error
+  @if($errors->any() && old('_token'))
+    document.addEventListener('DOMContentLoaded', function() {
+      openAddModal();
     });
-    dropdown.classList.toggle('hidden');
-  }
+  @endif
 
-  // Close dropdown when clicking outside
-  document.addEventListener('click', function(event) {
-    if (!event.target.closest('.relative')) {
-      const allDropdowns = document.querySelectorAll('[id^="dropdown-"]');
-      allDropdowns.forEach(d => d.classList.add('hidden'));
+  // Dropdown toggle
+  document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const index = btn.dataset.index;
+      const dd = document.getElementById('dropdown-' + index);
+      document.querySelectorAll('.dropdown-menu').forEach(d => {
+        if (d !== dd) d.classList.add('hidden');
+      });
+      dd.classList.toggle('hidden');
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.dropdown-container')) {
+      document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
     }
   });
 
   function openAddModal() { document.getElementById('addContentModal').classList.remove('hidden'); }
   function closeAddModal() { document.getElementById('addContentModal').classList.add('hidden'); }
-  function openEditModal(id, nama, deskripsi, url_maps, lat, lng) {
+
+  function openEditModal(kodePariwisata, nama, deskripsi, url_maps, lat, lng) {
     const form = document.getElementById('editForm');
-    form.action = `/admin/pariwisata/${id}`;
+    form.action = `/admin/pariwisata/${kodePariwisata}`;
+    document.getElementById('edit_kode').value = kodePariwisata;
     document.getElementById('edit_nama').value = nama;
     document.getElementById('edit_deskripsi').value = deskripsi;
     document.getElementById('edit_url_maps').value = url_maps;
@@ -282,27 +341,32 @@
     document.getElementById('edit_lng').value = lng;
     document.getElementById('editContentModal').classList.remove('hidden');
   }
+
   function closeEditModal() { document.getElementById('editContentModal').classList.add('hidden'); }
 
   // Search functionality
   const searchInput = document.getElementById('searchInput');
   const contentGrid = document.getElementById('contentGrid');
   const noResult = document.getElementById('noResult');
+  
   searchInput.addEventListener('keyup', function() {
-    const searchValue = this.value.toLowerCase();
+    const val = this.value.toLowerCase();
     const items = contentGrid.getElementsByClassName('content-item');
-    let hasResult = false;
+    let found = false;
+    
     for (let i = 0; i < items.length; i++) {
       const title = items[i].querySelector('.content-title').textContent.toLowerCase();
       const desc = items[i].querySelector('.content-desc').textContent.toLowerCase();
-      if (title.indexOf(searchValue) > -1 || desc.indexOf(searchValue) > -1) {
+      
+      if (title.includes(val) || desc.includes(val)) {
         items[i].style.display = '';
-        hasResult = true;
+        found = true;
       } else {
         items[i].style.display = 'none';
       }
     }
-    if (hasResult || searchValue === '') {
+    
+    if (found || val === '') {
       noResult.classList.add('hidden');
       contentGrid.classList.remove('hidden');
     } else {
@@ -312,25 +376,38 @@
   });
 
   // Delete confirmation
-  document.querySelectorAll('.btn-delete').forEach(button => {
-    button.addEventListener('click', function() {
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
       const form = this.closest('form');
       Swal.fire({
-        title: 'Apakah kamu yakin?',
-        text: "Konten akan dihapus permanen!",
+        title: 'Yakin hapus?',
+        text: 'Data tidak bisa dikembalikan!',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#991B1B',
         cancelButtonColor: '#6B7280',
         confirmButtonText: 'Ya, hapus!',
         cancelButtonText: 'Batal'
-      }).then((result) => {
+      }).then(result => {
         if (result.isConfirmed) {
           form.submit();
         }
       });
     });
   });
+
+  // Auto hide success alert
+  @if(session('success'))
+    setTimeout(function() {
+      const alert = document.querySelector('.bg-green-50');
+      if (alert) {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      }
+    }, 5000);
+  @endif
 
   // Close modal when clicking outside
   document.getElementById('addContentModal').addEventListener('click', function(e) {

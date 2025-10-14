@@ -26,12 +26,12 @@
       <!-- Title -->
       <h1 class="text-xl font-semibold text-center text-white mb-4">Admin Login</h1>
 
-      <!-- Email/NIP -->
+      <!-- Email -->
       <div class="mb-4">
-        <label for="email" class="block text-sm font-medium text-white">NIP atau Email</label>
+        <label for="email" class="block text-sm font-medium text-white">Email</label>
         <input type="text" id="email" name="email"
           class="w-full px-4 py-2 border border-white/30 rounded-lg bg-white/60 text-black placeholder-gray-700 focus:ring focus:ring-blue-300 @error('email') border-red-500 @enderror"
-          value="{{ old('email') }}" placeholder="Masukkan NIP (18 digit) atau email">
+          value="{{ old('email') }}" placeholder="Masukkan email">
         @error('email')
         <p class="mt-1 text-sm text-red-300">{{ $message }}</p>
         @enderror

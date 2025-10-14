@@ -11,11 +11,18 @@ class AuthController extends Controller
 {
     public function login()
     {
+        if (Auth::guard('web')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+        
         return view('auth.login');
     }
 
     public function register()
     {
+        if (Auth::guard('web')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
         return view('auth.register');
     }
 

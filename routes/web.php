@@ -44,7 +44,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 | ADMIN AREA
 |--------------------------------------------------------------------------
 */
-Route::middleware('auth')->prefix('admin')->group(function () {
+Route::middleware('admin')->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
     ->name('admin.dashboard');
@@ -72,31 +72,31 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/kategori/{kode}/cover', [KategoriController::class, 'cover'])->name('kategori.cover');
 
     Route::prefix('/kategori')->name('admin.kategori.')->group(function () {
-    Route::get('/', [KategoriController::class, 'index'])->name('index');
-});
+        Route::get('/', [KategoriController::class, 'index'])->name('index');
+    });
 
     // Gambar konten (khusus untuk admin)
     Route::get('/konten/gambar/{kode_konten}', [KontenController::class, 'showGambar'])->name('admin.konten.gambar');
     Route::get('/konten/{kode_kategori}/{kode_konten}/edit', [KontenController::class, 'edit'])
         ->name('admin.konten.edit');
 
-    Route::prefix('admin')->group(function () {
-        Route::get('/feedback', [FeedbackController::class, 'index'])->name('admin.feedback.index');
-        Route::get('/feedback/download', [FeedbackController::class, 'download'])->name('feedback.download');
-        Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy'])->name('feedback.destroy');
+    Route::prefix('feedback')->name('feedback.')->group(function () {
+        Route::get('/', [FeedbackController::class, 'index'])->name('index');
+        Route::get('/download', [FeedbackController::class, 'download'])->name('download');
+        Route::delete('/{id}', [FeedbackController::class, 'destroy'])->name('destroy');
     });
 
     // Route untuk pariwisata
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('')->name('admin.')->group(function () {
         Route::get('/pariwisata/konten', [PariwisataController::class, 'adminView'])->name('pariwisata.konten');
         Route::post('/kategori/pariwisata', [PariwisataController::class, 'store'])->name('pariwisata.store');
-        Route::put('/pariwisata/{id}', [PariwisataController::class, 'update'])->name('pariwisata.update');
-        Route::delete('/pariwisata/{id}', [PariwisataController::class, 'destroy'])->name('pariwisata.destroy');
+        Route::put('/pariwisata/{kodePariwisata}', [PariwisataController::class, 'update'])->name('pariwisata.update');
+        Route::delete('/pariwisata/{kodePariwisata}', [PariwisataController::class, 'destroy'])->name('pariwisata.destroy');
     });
 
     
     // Route untuk pemerintah
-    Route::prefix('admin')->name('admin.')->group(function () {
+    Route::prefix('')->name('admin.')->group(function () {
         // Route untuk halaman utama manajemen pemerintah
         Route::get('/pemerintah/konten', [PemerintahController::class, 'adminIndex'])->name('pemerintah.konten');
         
@@ -173,7 +173,7 @@ Route::get('/api/kategori/{kodeKategori}/search', [KategoriController::class, 's
 
 // // Pariwisata (khusus pengunjung)
 Route::get('/wisata', [PariwisataController::class, 'index'])->name('pariwisata.index');
-Route::get('/wisata/gambar/{id}', [PariwisataController::class, 'gambar'])->name('pariwisata.gambar');
+Route::get('/pariwisata/gambar/{kodePariwisata}', [PariwisataController::class, 'gambar'])->name('pariwisata.gambar');
 
 
 // Bookmark Page

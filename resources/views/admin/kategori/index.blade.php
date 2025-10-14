@@ -136,7 +136,7 @@
                         <td class="px-6 py-4 text-sm text-gray-900">Pariwisata</td>
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $pariwisataCount }}</td>
                         <td class="px-6 py-4 text-sm">
-                            <a href="{{ route('admin.konten.tampilan_pariwisata') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
+                            <a href="{{ route('admin.pariwisata.konten') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
                                 <i class="far fa-plus-square mr-1"></i> Tambah
                             </a>
                         </td>
@@ -146,7 +146,7 @@
                         <td class="px-6 py-4 text-sm text-gray-900">Pemerintah</td>
                         <td class="px-6 py-4 text-sm text-gray-900">{{ $pemerintahCount }}</td>
                         <td class="px-6 py-4 text-sm">
-                            <a href="{{ route('admin.konten.tampilan_pemerintah') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
+                            <a href="{{ route('admin.pemerintah.konten') }}" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
                                 <i class="far fa-plus-square mr-1"></i> Tambah
                             </a>
                         </td>

@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pariwisata', function (Blueprint $table) {
-            $table->id();
+            $table->string('kodePariwisata', 6)->primary(); // contoh: PAR001
             $table->string('nama', 64);
             $table->text('deskripsi');
             $table->binary('foto')->nullable();           
