@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Models\Admin;
 
 class AuthController extends Controller
 {
@@ -21,47 +21,69 @@ class AuthController extends Controller
 
     public function authenticate(Request $request)
     {
+        // Validasi input: bisa login dengan NIP atau Email
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required'],  // Bisa email atau NIP
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        // Cek apakah input adalah NIP (18 karakter) atau Email
+        $fieldToCheck = strlen($credentials['email']) == 18 ? 'nip' : 'email';
 
-            return redirect()->intended('/admin/dashboard'); // arahkan langsung ke dashboard
+        // Attempt login dengan field yang sesuai
+        if (Auth::attempt([$fieldToCheck => $credentials['email'], 'password' => $credentials['password']])) {
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+            'email' => 'NIP/Email atau password salah.',
+        ])->withInput();
     }
-
 
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:users,email',
+            'nip' => 'required|string|size:18|unique:admin,nip',
+            'name' => 'required|string|max:32',
+            'email' => 'required|email|max:32|unique:admin,email',
             'password' => 'required',
             'confirm-password' => 'required|same:password'
+        ], [
+            'nip.required' => 'NIP wajib diisi',
+            'nip.size' => 'NIP harus 18 karakter',
+            'nip.unique' => 'NIP sudah terdaftar',
+            'name.required' => 'Nama wajib diisi',
+            'name.max' => 'Nama maksimal 32 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.unique' => 'Email sudah terdaftar',
+            'password.required' => 'Password wajib diisi',
+            'confirm-password.same' => 'Password tidak sama',
         ]);
-        $data = $request->except('confirm-password', 'password');
-        $data['password'] = Hash::make($request->password);
-        User::create($data);
-        return redirect('/login');
+
+        try {
+            Admin::create([
+                'nip' => $validate['nip'],
+                'name' => $validate['name'],
+                'email' => $validate['email'],
+                'password' => Hash::make($validate['password']),
+            ]);
+
+            return redirect('/login')->with('success', 'Registrasi berhasil! Silakan login.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat registrasi.')
+                ->withInput();
+        }
     }
 
     public function logout(Request $request)
     {
-        {
-            Auth::logout();
-    
-            $request->session()->invalidate();
-    
-            $request->session()->regenerateToken();
-    
-            return redirect('/login');
-        }
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login');
     }
 }

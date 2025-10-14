@@ -132,6 +132,16 @@ class KontenController extends Controller
             ->with('success', 'Konten berhasil dihapus!');
     }
 
+        public function tampilanPariwisata()
+    {
+        return view('admin.konten.tampilan_pariwisata');
+    }
+
+    public function tampilanPemerintah()
+    {
+        return view('admin.konten.tampilan_pemerintah');
+    }
+
     public function edit($kodeKategori, $kodeKonten)
     {
         $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();

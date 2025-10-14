@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Tailwind CSS</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Login - Admin Panel</title>
   <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -25,14 +24,14 @@
       </div>
 
       <!-- Title -->
-      <h1 class="text-xl font-semibold text-center text-white mb-4">Please sign in</h1>
+      <h1 class="text-xl font-semibold text-center text-white mb-4">Admin Login</h1>
 
-      <!-- Email -->
+      <!-- Email/NIP -->
       <div class="mb-4">
-        <label for="email" class="block text-sm font-medium text-white">Email address</label>
-        <input type="email" id="email" name="email"
+        <label for="email" class="block text-sm font-medium text-white">NIP atau Email</label>
+        <input type="text" id="email" name="email"
           class="w-full px-4 py-2 border border-white/30 rounded-lg bg-white/60 text-black placeholder-gray-700 focus:ring focus:ring-blue-300 @error('email') border-red-500 @enderror"
-          value="{{ old('email') }}" placeholder="name@example.com">
+          value="{{ old('email') }}" placeholder="Masukkan NIP (18 digit) atau email">
         @error('email')
         <p class="mt-1 text-sm text-red-300">{{ $message }}</p>
         @enderror
@@ -51,7 +50,7 @@
 
       <!-- Remember Me -->
       <div class="flex items-center mb-4">
-        <input type="checkbox" id="remember" class="text-blue-500">
+        <input type="checkbox" id="remember" name="remember" class="text-blue-500">
         <label for="remember" class="ml-2 text-sm text-white">Remember me</label>
       </div>
 
@@ -62,8 +61,8 @@
 
       <!-- Link -->
       <p class="mt-4 text-xs text-center text-white">
-        Don't have an account?
-        <a href="/register" class="font-bold text-blue-200 hover:underline">SIGN UP</a>
+        Belum punya akun?
+        <a href="/register" class="font-bold text-blue-200 hover:underline">DAFTAR</a>
       </p>
 
     </form>
