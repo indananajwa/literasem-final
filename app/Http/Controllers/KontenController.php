@@ -60,8 +60,14 @@ class KontenController extends Controller
         $validationRules = [];
         foreach ($fieldRules as $field => $rule) {
             $rule = strtolower(trim($rule));
+            
+            // 🔥 SKIP VALIDASI UNTUK SAMPULVIDEO
+            if ($field === 'sampulvideo') {
+                continue; // Tidak menambahkan validasi untuk sampulvideo
+            }
+            
             if ($rule === 'required') {
-                if (in_array($field, ['gambar', 'sampulvideo'])) {
+                if ($field === 'gambar') {
                     $validationRules[$field] = 'required|image|max:10240';
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'required|url|max:255';
@@ -71,7 +77,7 @@ class KontenController extends Controller
                     $validationRules[$field] = 'required|string|max:1000';
                 }
             } elseif ($rule === 'optional') {
-                if (in_array($field, ['gambar', 'sampulvideo'])) {
+                if ($field === 'gambar') {
                     $validationRules[$field] = 'nullable|image|max:10240';
                 } elseif ($field === 'video_url') {
                     $validationRules[$field] = 'nullable|url|max:255';
@@ -105,7 +111,7 @@ class KontenController extends Controller
             $data['mime_type'] = $request->file('gambar')->getMimeType();
         }
 
-        // Handle sampulvideo
+        // Handle sampulvideo (OPTIONAL - tidak wajib)
         if ($request->hasFile('sampulvideo')) {
             $data['sampulvideo'] = file_get_contents($request->file('sampulvideo')->getRealPath());
         }
@@ -130,10 +136,9 @@ class KontenController extends Controller
 
         return redirect()->route('admin.konten.index', $kodeKategori)
             ->with('success', 'Konten berhasil dihapus!');
-            
     }
 
-        public function tampilanPariwisata()
+    public function tampilanPariwisata()
     {
         return view('admin.konten.tampilan_pariwisata');
     }
@@ -153,77 +158,81 @@ class KontenController extends Controller
     }
 
     public function update(Request $request, $kodeKategori, $kodeKonten)
-{
-    $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
-    $konten     = Konten::where('kode_konten', $kodeKonten)->firstOrFail();
-    $fieldRules = $this->parseFieldRules($kategori->field_rules);
+    {
+        $kategori   = Kategori::where('kode_kategori', $kodeKategori)->firstOrFail();
+        $konten     = Konten::where('kode_konten', $kodeKonten)->firstOrFail();
+        $fieldRules = $this->parseFieldRules($kategori->field_rules);
 
-    // ✅ CEK DUPLIKAT JUDUL (hanya jika judul berubah)
-    if (isset($fieldRules['judul']) && $fieldRules['judul'] !== 'not_used') {
-        if ($request->judul !== $konten->judul) {
-            $existingKonten = Konten::where('kode_kategori', $kodeKategori)
-                ->where('judul', $request->judul)
-                ->first();
+        // ✅ CEK DUPLIKAT JUDUL (hanya jika judul berubah)
+        if (isset($fieldRules['judul']) && $fieldRules['judul'] !== 'not_used') {
+            if ($request->judul !== $konten->judul) {
+                $existingKonten = Konten::where('kode_kategori', $kodeKategori)
+                    ->where('judul', $request->judul)
+                    ->first();
 
-            if ($existingKonten) {
-                return redirect()->back()
-                    ->withInput()
-                    ->withErrors(['judul' => 'Konten dengan judul ini sudah ada di kategori ini!']);
+                if ($existingKonten) {
+                    return redirect()->back()
+                        ->withInput()
+                        ->withErrors(['judul' => 'Konten dengan judul ini sudah ada di kategori ini!']);
+                }
             }
         }
-    }
 
-    // Build validation rules dynamically
-    $validationRules = [];
-    foreach ($fieldRules as $field => $rule) {
-        $rule = strtolower(trim($rule));
-        if ($rule === 'required') {
-            // 🔥 PENTING: Saat edit, gambar jadi optional!
-            if (in_array($field, ['gambar', 'sampulvideo'])) {
-                $validationRules[$field] = 'nullable|image|max:10240'; // 👈 NULLABLE!
-            } elseif ($field === 'video_url') {
-                $validationRules[$field] = 'nullable|url|max:255'; // 👈 NULLABLE!
-            } elseif ($field === 'highlight') {
-                $validationRules[$field] = 'nullable|in:0,1';
-            } else {
-                $validationRules[$field] = 'required|string|max:1000';
+        // Build validation rules dynamically
+        $validationRules = [];
+        foreach ($fieldRules as $field => $rule) {
+            $rule = strtolower(trim($rule));
+            
+            if ($field === 'sampulvideo') {
+                continue; // Tidak menambahkan validasi untuk sampulvideo
             }
-        } elseif ($rule === 'optional') {
-            if (in_array($field, ['gambar', 'sampulvideo'])) {
-                $validationRules[$field] = 'nullable|image|max:10240';
-            } elseif ($field === 'video_url') {
-                $validationRules[$field] = 'nullable|url|max:255';
-            } elseif ($field === 'highlight') {
-                $validationRules[$field] = 'nullable|in:0,1';
-            } else {
-                $validationRules[$field] = 'nullable|string|max:1000';
+            
+            if ($rule === 'required') {
+                if ($field === 'gambar') {
+                    $validationRules[$field] = 'nullable|image|max:10240';
+                } elseif ($field === 'video_url') {
+                    $validationRules[$field] = 'nullable|url|max:255';
+                } elseif ($field === 'highlight') {
+                    $validationRules[$field] = 'nullable|in:0,1';
+                } else {
+                    $validationRules[$field] = 'required|string|max:1000';
+                }
+            } elseif ($rule === 'optional') {
+                if ($field === 'gambar') {
+                    $validationRules[$field] = 'nullable|image|max:10240';
+                } elseif ($field === 'video_url') {
+                    $validationRules[$field] = 'nullable|url|max:255';
+                } elseif ($field === 'highlight') {
+                    $validationRules[$field] = 'nullable|in:0,1';
+                } else {
+                    $validationRules[$field] = 'nullable|string|max:1000';
+                }
             }
         }
-    }
 
-    $validated = $request->validate($validationRules);
+        $validated = $request->validate($validationRules);
 
-    // Update data
-    foreach (['judul', 'deskripsi', 'video_url', 'highlight'] as $field) {
-        if (isset($validated[$field])) {
-            $konten->$field = $validated[$field];
+        // Update data
+        foreach (['judul', 'deskripsi', 'video_url', 'highlight'] as $field) {
+            if (isset($validated[$field])) {
+                $konten->$field = $validated[$field];
+            }
         }
+
+        // Update gambar hanya jika ada file baru
+        if ($request->hasFile('gambar')) {
+            $konten->gambar    = file_get_contents($request->file('gambar')->getRealPath());
+            $konten->mime_type = $request->file('gambar')->getMimeType();
+        }
+
+        // Update sampul video hanya jika ada file baru (OPTIONAL)
+        if ($request->hasFile('sampulvideo')) {
+            $konten->sampulvideo = file_get_contents($request->file('sampulvideo')->getRealPath());
+        }
+
+        $konten->save();
+
+        return redirect()->route('admin.konten.index', $kodeKategori)
+            ->with('success', 'Konten berhasil diperbarui!');
     }
-
-    // Update gambar hanya jika ada file baru
-    if ($request->hasFile('gambar')) {
-        $konten->gambar    = file_get_contents($request->file('gambar')->getRealPath());
-        $konten->mime_type = $request->file('gambar')->getMimeType();
-    }
-
-    // Update sampul video hanya jika ada file baru
-    if ($request->hasFile('sampulvideo')) {
-        $konten->sampulvideo = file_get_contents($request->file('sampulvideo')->getRealPath());
-    }
-
-    $konten->save();
-
-    return redirect()->route('admin.konten.index', $kodeKategori)
-        ->with('success', 'Konten berhasil diperbarui!');
-}
 }
