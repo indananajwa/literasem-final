@@ -85,12 +85,16 @@
                     <p class="text-gray-700 text-justify mb-4">{{ $item->deskripsi }}</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
+                    <!-- Button Lihat di Peta - hanya tampil jika lat dan lng ada -->
+                    @if(!empty($item->lat) && !empty($item->lng))
                     <button onclick="showOnMap({{ $item->lat }}, {{ $item->lng }}, '{{ $item->nama }}')" 
                             class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-red-800 transition-colors">
                         📍 Lihat di Peta
                     </button>
+                    @endif
                     
-                    @if($item->url_maps)
+                    <!-- Button Google Maps - hanya tampil jika url_maps ada -->
+                    @if(!empty($item->url_maps))
                     <a href="{{ $item->url_maps }}" target="_blank" 
                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">
                         🗺️ Google Maps
@@ -146,14 +150,16 @@
     // Data wisata dari PHP
     const wisataData = [
         @foreach($data as $item)
+        @if(!empty($item->lat) && !empty($item->lng))
         {
             kodePariwisata: '{{ $item->kodePariwisata }}',
             nama: '{{ $item->nama }}',
             lat: {{ $item->lat }},
             lng: {{ $item->lng }},
             deskripsi: '{{ substr($item->deskripsi, 0, 150) }}...',
-            url_maps: '{{ $item->url_maps }}'
+            url_maps: '{{ $item->url_maps ?? '' }}'
         },
+        @endif
         @endforeach
     ];
     
