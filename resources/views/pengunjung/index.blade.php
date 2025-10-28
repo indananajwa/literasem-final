@@ -161,7 +161,7 @@
     </section>
 
     <!-- Icon Gallery Section -->
-    @include('pengunjung.layouts.icon-gallery')
+    <!-- @include('pengunjung.layouts.icon-gallery') -->
 
     <!-- Footer Section -->
     @include('pengunjung.layouts.footer')

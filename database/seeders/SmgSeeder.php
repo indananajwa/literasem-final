@@ -91,7 +91,7 @@ class SmgSeeder extends Seeder
                 'foto_sesudah' => 'smg-masa-lalu-sekarang/sam-poo-kong-sekarang.jpg',
                 'label_sebelum' => 'Sam Po Tay Djien',
                 'label_sesudah' => 'Sam Poo Kong',
-                'tahun_sebelum' => '1400',
+                'tahun_sebelum' => '1724',
                 'tahun_sesudah' => '2024',
             ],
             [

@@ -44,9 +44,6 @@
                 <img src="{{ Auth::user()->avatar ?? asset('img/icon.png') }}" 
                      alt="Avatar" 
                      class="w-32 h-32 rounded-full border-4 border-gray-100 shadow-lg object-cover">
-                <button class="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full shadow-lg hover:bg-blue-700 transition">
-                  <i class="fas fa-camera text-sm"></i>
-                </button>
               </div>
 
               <!-- User Info -->

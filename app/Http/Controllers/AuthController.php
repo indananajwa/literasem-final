@@ -44,7 +44,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'NIP/Email atau password salah.',
+            'email' => 'Email atau password salah.',
         ])->withInput();
     }
 
